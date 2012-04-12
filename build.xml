@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="PetriNet" basedir="." default="compile">
+
+<!-- clsspath="${lib}/dom4j-1.5.2.jar:${src}" -->
+
+    <!-- kompilace-->
+    <target name="compile">
+        <!-- vytvoreni slozek atp. -->
+        <mkdir dir="doc"/>
+        <mkdir dir="dest-server"/>
+        <mkdir dir="dest-client"/>
+        <copy todir="dest-server/">
+            <fileset dir=".">
+                <include name="lib/**"/>
+            </fileset>
+        </copy>
+
+        <!-- kompilace-->
+        <javac srcdir="src/" destdir="build" includeantruntime="false"
+            classpath="lib/dom4j-1.6.1.jar"/>
+
+
+        <!-- jar archiv klienta -->
+        <jar destfile="dest-client/ija2012-client.jar" basedir="build/">
+            <manifest>
+                <attribute name="Main-Class" value="client.Client"/>
+            </manifest>
+        </jar>
+
+        <!-- jar archiv serveru -->
+        <jar destfile="dest-server/ija2012-server.jar" basedir="build/">
+            <manifest>
+                <attribute name="Main-Class" value="server.Server" />
+                <attribute name="Class-Path" value="lib/dom4j-1.6.1.jar" />
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- spusteni klienta -->
+    <target name="client">
+        <java jar="dest-client/ija2012-client.jar" fork="true" />
+    </target>
+
+    <!-- spusteni serveru -->
+    <target name="server">
+        <java jar="dest-server/ija2012-server.jar" fork="true" 
+        classpath="lib/dom4j-1.5.2.jar" />
+    </target>
+
+    <!-- vygenerovani dokumentace -->
+    <target name="doc">
+        <javadoc packagenames="*"
+            sourcepath="src"
+            destdir="doc">
+        </javadoc>
+    </target>
+
+    <!-- poklizeni neporadku -->
+    <target name="clean">
+        <delete includeEmptyDirs="true">
+            <fileset dir="build" includes="**/*" defaultexcludes="no"/>
+            <fileset dir="doc" includes="**/*" defaultexcludes="no"/>
+            <fileset dir="dest-server" includes="**/*" defaultexcludes="no"/>
+            <fileset dir="dest-client" includes="**/*" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+</project>
