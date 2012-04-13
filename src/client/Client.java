@@ -149,6 +149,7 @@ public class Client implements Runnable
 	 */
 	public static void main(String[] args)
 	{
+        System.setProperty("file.encoding", "UTF-8");
 		SwingUtilities.invokeLater(new Client());
 	}
 
