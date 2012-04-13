@@ -55,23 +55,22 @@ public class Server implements Runnable
 		
 		// no a tady teda konecne budu prijimat zpravy a nejak to sezvejkavat
 		String msg;
+		// smycka zpracovani zprav
 		while((msg = protocol.getMessage()) != null){
-			// smyska zpracovani zprav 
-			System.out.println(msg);
+
 			// zpracovani typu zpravy
-			int type = 0;
-			switch(type) {
-				case 0:
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				default:
-					break;
+			String msgType = Protocol.getMessageType(msg);
+			if(msgType.equals("login")) {
+				// vycucat login a heslo a overit
+				System.out.println("Uzivatel se chce prihlasit... " + msg);
+			} else if(msgType.equals("...")) {
+				// pro kazdou zpravu nejaka akce...
+				System.out.println("Nechapu ..." + msg);
+			} else {
+				// Nerozumim takej zprave
 			}
 		}
-		
+
 		System.out.println("Client disconneted");
 		try {
 			protocol.close();
@@ -79,15 +78,15 @@ public class Server implements Runnable
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Metoda vyzaduje prijeti jmena a hesla k autentizaci, pripadne registraci noveho uzivatele.
 	 */
 	protected boolean authorize() {
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Server se spusti bud na portu zadanem jako parametr nebo na defaultnim.
 	 * Prijima klienty a vytvari pro ne instance serveru.
@@ -113,7 +112,7 @@ public class Server implements Runnable
         while(true) {
             Socket clientsck = socket.accept();
             service.execute(new Server(clientsck, users));
-        }			
+        }
 	}
-	
+
 }

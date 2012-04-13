@@ -68,13 +68,16 @@ public class Client implements Runnable
 		JMenuItem konecMenu = new JMenuItem("Konec");
 		konecMenu.addActionListener(new KonecTlacitko());
 		menuFile.add(konecMenu);
-		
-		JMenuItem pripojit = new JMenuItem("Pripojit");
+
+		JMenu menuServer = new JMenu("Server");
+		JMenuItem pripojit = new JMenuItem("Připojit");
 		pripojit.addActionListener(new ClientConnect());
-		menuFile.add(pripojit);
-		
+		menuServer.add(pripojit);
+
 		JMenu menuHelp = new JMenu("Nápověda");
+
 		menuBar.add(menuFile);
+		menuBar.add(menuServer);
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(menuHelp);
 		window.setJMenuBar(menuBar);
@@ -100,10 +103,12 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			// TODO: vytvorit okno s promptem na login a heslo
+			// na OK tlacitko pripojit
 			connect();
 		}
 	}
-	
+
 	/**
 	 * Tak tohle pobezi v tom threadu. Asi teda smycka prijimajici zpravy.
 	 */
@@ -117,7 +122,10 @@ public class Client implements Runnable
 		cont.add(new GPlace(100, 0));
 		window.validate();
 	}
-	
+
+	/**
+	 * Pripojeni na server.
+	 */
 	public void connect()
 	{
 		Socket sock;
@@ -141,9 +149,13 @@ public class Client implements Runnable
 	public void login()
 	{
 		protocol.sendMessage("<login> <name>alfa</name> \n <password>beta</password> </login>");
+	}
+
+	public void logout()
+	{
 		protocol.sendMessage("<logout/>");
 	}
-	
+
 	/**
 	 * Spousteci bod klienta.
 	 */

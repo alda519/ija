@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.DocumentException;
+
+
 /**
  * Trida zastresujici abstrakci nad komunikaci klienta se serverem.
  * 
@@ -41,13 +46,6 @@ public class Protocol
 	public String getMessage()
 	{
 		try {
-			/*
-			int len;
-			len = dis.readInt();
-			byte [] msg = new byte [len];
-			dis.read(msg);
-			*/
-			//return new String(msg);
 			return dis.readUTF();
 		} catch (IOException e) {
 			// proste uz dosla data na vstupu, tak to zamlcim a reknu, ze nic 
@@ -55,7 +53,7 @@ public class Protocol
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Odesle zpravu.
 	 * @param msg Zprava k odeslani.
@@ -63,18 +61,16 @@ public class Protocol
 	public void sendMessage(String msg)
 	{
 		try {
-			/*
-			byte [] msgBytes = msg.getBytes();  
-			int len = msgBytes.length;
-			dos.writeInt(len);
-			dos.write(msgBytes);
-			*/
 			dos.writeUTF(msg);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Ukonceni komunikace
+	 * @throws IOException
+	 */
 	public void close() throws IOException
 	{
 		socket.close();
@@ -82,4 +78,21 @@ public class Protocol
 		dis = null;
 		dos = null;
 	}
+
+	/**
+	 * Zjisti typ zpravy.
+	 * @param msg Zprava
+	 * @return Nazev root elementu ze zpravy
+	 */
+	public static String getMessageType(String msg)
+	{
+		try {
+			Document doc = DocumentHelper.parseText(msg);
+			return doc.getRootElement().getName();
+		} catch (DocumentException e) {
+			// blba zprava, nerozumim
+		}
+		return null;
+	}
+
 }
