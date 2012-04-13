@@ -21,9 +21,6 @@ import javax.swing.SwingUtilities;
 import protocol.Protocol;
 import client.petrinet.GPlace;
 
-/*
- * TODO: GUI - menu na prihlaseni atd.
- */
 
 /**
  * Trida klienta.
@@ -47,7 +44,8 @@ public class Client implements Runnable
 	protected Protocol protocol;
 	
 	protected JFrame window;
-	
+	protected JFrame dialog;
+
 	/**
 	 * Konstruktor.
 	 */
@@ -85,17 +83,18 @@ public class Client implements Runnable
 		// zobrazit a hura
 		window.setVisible(true);
 	}
-	
+
 	/**
 	 * Reakce na tlacitko ukonceni.
 	 */
 	class KonecTlacitko implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event	) {
-			window.dispose();
+			System.out.println("Ted by to melo chcipnout!");
+			dialog.dispose();
 		}
 	}
-	
+
 	/**
 	 * Udalost pripojeni.
 	 */
@@ -105,6 +104,66 @@ public class Client implements Runnable
 		{
 			// TODO: vytvorit okno s promptem na login a heslo
 			// na OK tlacitko pripojit
+			JFrame prompt = new JFrame("Připojit se ...");
+			dialog = prompt;
+			prompt.setLayout(new GridLayout(5, 2));
+			prompt.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			prompt.setAlwaysOnTop(true);
+			prompt.setResizable(false);
+			//prompt.setLocationRelativeTo(null);
+
+			JTextField addr = new JTextField(20);
+			JTextField port = new JTextField(5);
+			JTextField logn = new JTextField(20);
+			JPasswordField pass = new JPasswordField();
+
+			JLabel addrLab = new JLabel("Adresa:");
+			JLabel portLab = new JLabel("Port:");
+			JLabel textLab = new JLabel("Login:");
+			JLabel passLab = new JLabel("Heslo:");
+
+			prompt.add(addrLab);
+			prompt.add(addr);
+			prompt.add(portLab);
+			prompt.add(port);
+			prompt.add(textLab);
+			prompt.add(logn);
+			prompt.add(passLab);
+			prompt.add(pass);
+
+			JButton confirm = new JButton("Připojit");
+			confirm.addActionListener(new ClientReallyWannaConnect());
+			JButton cancel = new JButton("Zrušit");
+			cancel.addActionListener(new KillMePlease());
+
+			prompt.add(confirm);
+			prompt.add(cancel);
+
+			prompt.setVisible(true);
+			prompt.setSize(400, 100);
+
+			prompt.pack();
+		}
+	}
+
+	/**
+	 * Uzavre okynko.
+	 */
+	class KillMePlease implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			dialog.dispose();
+		}
+	}
+
+	/**
+	 * Tohle se stane po potvrzeni tlacitka pripojit.
+	 */
+	class ClientReallyWannaConnect implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
 			connect();
 		}
 	}
