@@ -55,7 +55,7 @@ public class Client implements Runnable
 	{
 		// vytvoreni hlavniho okna
 		window = new JFrame(APPLICATION_TITLE);
-		window.setSize(400, 400);
+		window.setSize(DEFAULT_WIDTH, DEFAULT_HEIGTH);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLocationRelativeTo(null);
 

@@ -1,0 +1,61 @@
+<net>
+  <name></name>
+
+  <place>
+    <id>1</id>
+    <token>3</token>
+    <token>8</token>
+    <token>10</token>
+  </place>
+
+  <place>
+    <id>2</id>
+    <token>5</token>
+  </place>
+
+  <place>
+    <id>3</id>
+    <token>2</token>
+    <token>1</token>
+  </place>
+
+  <place>
+    <id>4</id>
+  </place>
+
+  <arc>
+    <id>1</id>
+    <var>x</var>
+    <src>1</src>
+    <dst>5</dst>
+  </arc>
+
+  <arc>
+    <id>2</id>
+    <var>y</var>
+    <src>2</src>
+    <dst>5</dst>
+  </arc>
+
+  <arc>
+    <id>3</id>
+    <var>z</var>
+    <src>3</src>
+    <dst>5</dst>
+  </arc>
+
+  <arc>
+    <id>4</id>
+    <var>a</var>
+    <src>5</src>
+    <dst>4</dst>
+  </arc>
+
+  <transition>
+    <id>5</id>
+    <exp>a = x + y + z</exp>
+    <guard>x > y</guard>
+    <guard>z > 1</guard>
+  </transition>
+
+</net>
