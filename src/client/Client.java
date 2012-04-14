@@ -75,6 +75,16 @@ public class Client implements Runnable
 		JMenuItem pripojit = new JMenuItem("Připojit");
 		pripojit.addActionListener(new ClientConnect());
 		menuServer.add(pripojit);
+		menuServer.add(new JSeparator());
+		JMenuItem serDown= new JMenuItem("Stáhnou síť");
+		JMenuItem serUp = new JMenuItem("Nahrát síť");
+		JMenuItem serSim = new JMenuItem("Simulovat síť");
+		serDown.setEnabled(false);
+		serUp.setEnabled(false);
+		serSim.setEnabled(false);
+		menuServer.add(serDown);
+		menuServer.add(serUp);
+		menuServer.add(serSim);
 
 		JMenu menuHelp = new JMenu("Nápověda");
 		menuHelp.setEnabled(false);
