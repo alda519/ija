@@ -46,6 +46,8 @@ public class Client implements Runnable
 	protected JFrame window;
 	protected JFrame dialog;
 	
+	/** Zda uz jsem pripojen */
+	protected boolean connectedFlag = false;
 	/**
 	 * Konstruktor.
 	 */
@@ -55,7 +57,8 @@ public class Client implements Runnable
 		window = new JFrame(APPLICATION_TITLE);
 		window.setSize(400, 400);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		window.setLocationRelativeTo(null);
+
 		// menu bar
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuFile = new JMenu("Soubor");
@@ -72,9 +75,9 @@ public class Client implements Runnable
 		menuFile.add(konecMenu);
 
 		JMenu menuServer = new JMenu("Server");
-		JMenuItem pripojit = new JMenuItem("Připojit");
-		pripojit.addActionListener(new ClientConnect());
-		menuServer.add(pripojit);
+		connect = new JMenuItem("Připojit");
+		connect.addActionListener(new ClientConnect());
+		menuServer.add(connect);
 		menuServer.add(new JSeparator());
 		JMenuItem serDown= new JMenuItem("Stáhnou síť");
 		JMenuItem serUp = new JMenuItem("Nahrát síť");
@@ -114,6 +117,7 @@ public class Client implements Runnable
 	protected JTextField logn;
 	protected JPasswordField pass;
 	protected JCheckBox register;
+	protected JMenuItem connect;
 	/**
 	 * Udalost pripojeni.
 	 */
@@ -121,13 +125,21 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			// hackity hack, pokud uz jsem pripojen, nepujde to znovu
+			if(connectedFlag) {
+				try { protocol.close(); } catch (Exception e) {}
+				connectedFlag = false;
+				connect.setText("Připojit");
+				return;
+			}
+
 			JFrame prompt = new JFrame("Připojit se ...");
 			dialog = prompt;
 			prompt.setLayout(new GridLayout(6, 2));
 			prompt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			prompt.setAlwaysOnTop(true);
 			prompt.setResizable(false);
-			//prompt.setLocationRelativeTo(null);
+			prompt.setLocationRelativeTo(null);
 
 			addr = new JTextField(DEFAULT_HOSTNAME, 20);
 			port = new JTextField(""+DEFAULT_PORT, 5);
@@ -229,6 +241,18 @@ public class Client implements Runnable
 		}
 		
 		// tady pockam na odpoved a kdyztak to zavru?
+		String response = protocol.getMessage();
+		if(Protocol.getMessageType(response).equals("ok")) {
+			System.out.println("Hura, povedlo se.");
+			// TODO: zavrit to okno, ted jsem pripojen a muzu si simulovat co chci
+			connect.setText("Odpojit");
+			dialog.dispose();
+			connectedFlag = true;
+		} else {
+			System.out.println("Tak smula, konec!");
+			// TODO: nejaky ten alert a okno nechat otevrene
+			try { protocol.close(); } catch (Exception e) {}
+		}
 	}
 
 	/**

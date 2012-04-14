@@ -91,7 +91,7 @@ public class Users
     /**
      * Pridani uzivatele do kolekce.
      */
-    public void add(String name, String password)
+    protected void add(String name, String password)
     {
         //System.out.println("Pridavam " + name + ":" + password);
         users.put(name, password);
@@ -102,10 +102,14 @@ public class Users
      * Uzivatel bude pridan jako do prave nastene databaze, tak bude
      * zapsan do souboru, nejak.
      */
-    public void register(String name, String password)
+    public boolean register(String name, String password)
     {
-    	// TODO: aktualizace XML souboru?!
-    	add(name, password);
+        if(users.containsKey(name)) {
+            return false;
+        } else {
+            add(name, password);
+            return true;
+        }
     }
     
     /**

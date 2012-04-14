@@ -56,16 +56,27 @@ public class Server implements Runnable
 		// no a tady teda konecne budu prijimat zpravy a nejak to sezvejkavat
 		String msg;
 		// smycka zpracovani zprav
-		while((msg = protocol.getMessage()) != null){
-
+		while((msg = protocol.getMessage()) != null) {
 			// zpracovani typu zpravy
 			String msgType = Protocol.getMessageType(msg);
 			if(msgType.equals("login")) {
-				// vycucat login a heslo a overit
-				System.out.println("Uzivatel se chce prihlasit... " + msg);
+				String name = Protocol.getProperty(msg, "name");
+				String password = Protocol.getProperty(msg, "password");
+				// overeni uzivatele
+				if(users.authenticate(name, password)) {
+					protocol.sendMessage("<ok />");
+				} else {
+					protocol.sendMessage("<failed>Neexistující uživatel, nebo chybné heslo.</failed>");;
+				}
 			} else if(msgType.equals("register")) {
-				// pro kazdou zpravu nejaka akce...
-				System.out.println("Noo toz to bych ho mel registrovat ..." + msg);
+				String name = Protocol.getProperty(msg, "name");
+				String password = Protocol.getProperty(msg, "password");
+				// snad se ho povede registrovat
+				if(users.register(name, password)) {
+					protocol.sendMessage("<ok />");
+				} else {
+					protocol.sendMessage("<failed>Nebylo možné uživatele registrovat.</failed>");
+				}
 			} else if(msgType.equals("...")) {
 				// pro kazdou zpravu nejaka akce...
 				System.out.println("Nechapu ..." + msg);

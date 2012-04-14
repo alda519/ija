@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 
+import java.util.Iterator;
+import org.dom4j.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.DocumentException;
@@ -95,4 +97,21 @@ public class Protocol
 		return null;
 	}
 
+	public static String getProperty(String msg, String property)
+	{
+		try {
+			Document doc = DocumentHelper.parseText(msg);
+			Element root = doc.getRootElement();
+			Iterator i = root.elementIterator();
+			while(i.hasNext()) {
+				Element element = (Element)i.next();
+				if(element.getName().equals(property)) {
+					return element.getText();
+				}
+			}
+		} catch (DocumentException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 }
