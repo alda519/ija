@@ -45,7 +45,7 @@ public class Client implements Runnable
 	
 	protected JFrame window;
 	protected JFrame dialog;
-
+	
 	/**
 	 * Konstruktor.
 	 */
@@ -100,6 +100,11 @@ public class Client implements Runnable
 		}
 	}
 
+	protected JTextField addr;
+	protected JTextField port;
+	protected JTextField logn;
+	protected JPasswordField pass;
+	protected JCheckBox register;
 	/**
 	 * Udalost pripojeni.
 	 */
@@ -107,20 +112,18 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			// TODO: vytvorit okno s promptem na login a heslo
-			// na OK tlacitko pripojit
 			JFrame prompt = new JFrame("Připojit se ...");
 			dialog = prompt;
-			prompt.setLayout(new GridLayout(5, 2));
-			prompt.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			prompt.setLayout(new GridLayout(6, 2));
+			prompt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			prompt.setAlwaysOnTop(true);
 			prompt.setResizable(false);
 			//prompt.setLocationRelativeTo(null);
 
-			JTextField addr = new JTextField(20);
-			JTextField port = new JTextField(5);
-			JTextField logn = new JTextField(20);
-			JPasswordField pass = new JPasswordField();
+			addr = new JTextField(DEFAULT_HOSTNAME, 20);
+			port = new JTextField(""+DEFAULT_PORT, 5);
+			logn = new JTextField("loo", 20);
+			pass = new JPasswordField("pop");
 
 			JLabel addrLab = new JLabel("Adresa:");
 			JLabel portLab = new JLabel("Port:");
@@ -136,6 +139,10 @@ public class Client implements Runnable
 			prompt.add(passLab);
 			prompt.add(pass);
 
+			register = new JCheckBox("Registrovat nového uživatele");
+			prompt.add(register);
+			prompt.add(new JLabel("")); // hackity hack, jen vycpavka
+			
 			JButton confirm = new JButton("Připojit");
 			confirm.addActionListener(new ClientReallyWannaConnect());
 			JButton cancel = new JButton("Zrušit");
@@ -144,10 +151,9 @@ public class Client implements Runnable
 			prompt.add(confirm);
 			prompt.add(cancel);
 
-			prompt.setVisible(true);
-			prompt.setSize(400, 100);
-
 			prompt.pack();
+			prompt.setVisible(true);
+
 		}
 	}
 
@@ -169,7 +175,7 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			connect();
+			connect(addr.getText(), Integer.parseInt(port.getText()));
 		}
 	}
 
@@ -190,11 +196,11 @@ public class Client implements Runnable
 	/**
 	 * Pripojeni na server.
 	 */
-	public void connect()
+	public void connect(String hostname, int port)
 	{
 		Socket sock;
 		try {
-			sock = new Socket(DEFAULT_HOSTNAME, DEFAULT_PORT);
+			sock = new Socket(hostname, port);
 			protocol = new Protocol(sock);
 			
 		} catch (ConnectException e){ 
@@ -203,18 +209,38 @@ public class Client implements Runnable
 			System.err.println(e.getMessage());
 		}
 
-		System.out.println("Chci se pripojit na " + DEFAULT_PORT);
-		login();
+		System.out.println("Chci se pripojit na " + hostname + ":" + port);
+		
+		if(register.isSelected()) {
+			System.out.println("A chci se regnout!");
+			register(logn.getText(), new String(pass.getPassword()));
+		} else {
+			System.out.println("A chci se jen prihlasit");
+			login(logn.getText(), new String(pass.getPassword()));
+		}
+		
+		// tady pockam na odpoved a kdyztak to zavru?
 	}
 	
 	/**
 	 * Prihlaseni na server.
 	 */
-	public void login()
+	public void login(String login, String password)
 	{
-		protocol.sendMessage("<login> <name>alfa</name> \n <password>beta</password> </login>");
+		protocol.sendMessage("<login> <name>"+login+"</name> \n <password>"+password+"</password> </login>");
+	}
+	
+	/**
+	 * Registrace.
+	 */
+	public void register(String login, String password)
+	{
+		protocol.sendMessage("<register> <name>"+login+"</name> \n <password>"+password+"</password> </register>");
 	}
 
+	/**
+	 * Odhlaseni.
+	 */
 	public void logout()
 	{
 		protocol.sendMessage("<logout/>");

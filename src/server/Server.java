@@ -63,6 +63,9 @@ public class Server implements Runnable
 			if(msgType.equals("login")) {
 				// vycucat login a heslo a overit
 				System.out.println("Uzivatel se chce prihlasit... " + msg);
+			} else if(msgType.equals("register")) {
+				// pro kazdou zpravu nejaka akce...
+				System.out.println("Noo toz to bych ho mel registrovat ..." + msg);
 			} else if(msgType.equals("...")) {
 				// pro kazdou zpravu nejaka akce...
 				System.out.println("Nechapu ..." + msg);
