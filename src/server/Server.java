@@ -18,18 +18,18 @@ import protocol.Protocol;
 
 /**
  * Hlavni trida serveru.
- * Pripojuje klienty, precte od nich vsechny zpravy, nic neodpovida, zatim.
+ * Pripojuje klienty, precte od nich vsechny zpravy, obcas neco odpovi.
  */
 public class Server implements Runnable
 {
 	/** Implicitni cislo portu */
 	static final int DEFAULT_PORT = 3030;
 	
-	/** Server kunikuje pres Protocol */
+	/** Server komunikuje pres Protocol */
 	protected Protocol protocol;
 	/** Databaze uzivatelu */
 	protected Users users; 
-	
+
 	/**
 	 * Vytvoreni nove instance Serveru pro obsluhu klienta.
 	 * @param clientsock Socket, na kterem je pripojeny klient.
@@ -46,7 +46,7 @@ public class Server implements Runnable
 	}
 
 	/**
-	 * Tak a toooto je konecne bezici zpracovavac klienta.
+	 * Tak a toto je konecne obsluha klienta.
 	 */
 	@Override
 	public void run()
@@ -83,6 +83,7 @@ public class Server implements Runnable
 			} else {
 				// Nerozumim takej zprave
 			}
+			// getnets, getnet, putnet, simulate, -- neco jako <simstep>cislo</>
 		}
 
 		System.out.println("Client disconneted");
@@ -92,14 +93,6 @@ public class Server implements Runnable
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Metoda vyzaduje prijeti jmena a hesla k autentizaci, pripadne registraci noveho uzivatele.
-	 */
-	protected boolean authorize() {
-		return false;
-	}
-
 
 	/**
 	 * Server se spusti bud na portu zadanem jako parametr nebo na defaultnim.

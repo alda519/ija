@@ -230,7 +230,8 @@ public class Client implements Runnable
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-		
+
+		// podle zaskrtnuti checkboxu se registruje/prihlasuje
 		if(register.isSelected()) {
 			System.out.println("A chci se regnout!");
 			register(logn.getText(), new String(pass.getPassword()));
@@ -239,18 +240,14 @@ public class Client implements Runnable
 			login(logn.getText(), new String(pass.getPassword()));
 		}
 		
-		// tady pockam na odpoved a kdyztak to zavru?
+		// podle odpovedi se pozna, zda se prihlasit povedlo nebo ne
 		String response = protocol.getMessage();
 		if(Protocol.getMessageType(response).equals("ok")) {
-			System.out.println("Hura, povedlo se.");
-			// TODO: zavrit to okno, ted jsem pripojen a muzu si simulovat co chci
 			connect.setText("Odpojit");
 			dialog.dispose();
 			connectedFlag = true;
 		} else {
-			System.out.println("Tak smula, konec!");
-			// TODO: nejaky ten alert a okno nechat otevrene
-			JOptionPane.showMessageDialog(window, "Nešlo se přihlásit.\n" + Protocol.getContent(response), "Chyba", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + Protocol.getContent(response), "Chyba", JOptionPane.ERROR_MESSAGE);
 			try { protocol.close(); } catch (Exception e) {}
 		}
 	}
@@ -269,14 +266,6 @@ public class Client implements Runnable
 	public void register(String login, String password)
 	{
 		protocol.sendMessage("<register> <name>"+login+"</name> \n <password>"+password+"</password> </register>");
-	}
-
-	/**
-	 * Odhlaseni.
-	 */
-	public void logout()
-	{
-		protocol.sendMessage("<logout/>");
 	}
 
 	/**
