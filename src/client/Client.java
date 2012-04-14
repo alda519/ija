@@ -59,8 +59,12 @@ public class Client implements Runnable
 		// menu bar
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuFile = new JMenu("Soubor");
-		menuFile.add(new JMenuItem("Otevřít"));
-		menuFile.add(new JMenuItem("Uložit"));
+		JMenuItem openFile = new JMenuItem("Otevřít");
+		JMenuItem saveFile = new JMenuItem("Uložit");
+		openFile.setEnabled(false);
+		saveFile.setEnabled(false);
+		menuFile.add(openFile);
+		menuFile.add(saveFile);
 		menuFile.add(new JSeparator());
 		
 		JMenuItem konecMenu = new JMenuItem("Konec");
@@ -73,6 +77,7 @@ public class Client implements Runnable
 		menuServer.add(pripojit);
 
 		JMenu menuHelp = new JMenu("Nápověda");
+		menuHelp.setEnabled(false);
 
 		menuBar.add(menuFile);
 		menuBar.add(menuServer);
