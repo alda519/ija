@@ -97,6 +97,12 @@ public class Protocol
 		return null;
 	}
 
+	/**
+	 * Vrací obsah taky property, který je hned v root.
+	 * @param msg
+	 * @param property
+	 * @return
+	 */
 	public static String getProperty(String msg, String property)
 	{
 		try {
@@ -109,6 +115,22 @@ public class Protocol
 					return element.getText();
 				}
 			}
+		} catch (DocumentException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	/**
+	 * Vrací obsah root elementu
+	 * @param msg
+	 * @return
+	 */
+	public static String getContent(String msg)
+	{
+		try {
+			Document doc = DocumentHelper.parseText(msg);
+			return doc.getRootElement().getText();
 		} catch (DocumentException e) {
 			System.out.println(e.getMessage());
 		}

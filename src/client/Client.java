@@ -223,14 +223,13 @@ public class Client implements Runnable
 		try {
 			sock = new Socket(hostname, port);
 			protocol = new Protocol(sock);
-			
 		} catch (ConnectException e){ 
 			System.err.println(e.getMessage());
+			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
+			return;
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-
-		System.out.println("Chci se pripojit na " + hostname + ":" + port);
 		
 		if(register.isSelected()) {
 			System.out.println("A chci se regnout!");
@@ -251,6 +250,7 @@ public class Client implements Runnable
 		} else {
 			System.out.println("Tak smula, konec!");
 			// TODO: nejaky ten alert a okno nechat otevrene
+			JOptionPane.showMessageDialog(window, "Nešlo se přihlásit.\n" + Protocol.getContent(response), "Chyba", JOptionPane.ERROR_MESSAGE);
 			try { protocol.close(); } catch (Exception e) {}
 		}
 	}
