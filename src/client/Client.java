@@ -230,15 +230,15 @@ public class Client implements Runnable
 		
 		// tady pockam na odpoved a kdyztak to zavru?
 	}
-	
+
 	/**
 	 * Prihlaseni na server.
 	 */
 	public void login(String login, String password)
 	{
-		protocol.sendMessage("<login> <name>"+login+"</name> \n <password>"+password+"</password> </login>");
+		protocol.sendMessage("<login> <name>" + login + "</name> \n <password>" + password + "</password> </login>");
 	}
-	
+
 	/**
 	 * Registrace.
 	 */
