@@ -38,19 +38,19 @@
     </target>
 
     <!-- spusteni klienta -->
-    <target name="client">
+    <target name="client" depends="compile">
         <java jar="dest-client/ija2012-client.jar" fork="true" />
     </target>
 
     <!-- spusteni serveru -->
-    <target name="server">
+    <target name="server" depends="compile">
         <java jar="dest-server/ija2012-server.jar" fork="true" 
         classpath="lib/dom4j-1.5.2.jar" />
     </target>
 
     <!-- vygenerovani dokumentace -->
     <target name="doc">
-        <javadoc packagenames="*"
+        <javadoc packagenames="*" encoding="utf-8"
             sourcepath="src"
             destdir="doc">
         </javadoc>
