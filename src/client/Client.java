@@ -95,8 +95,7 @@ public class Client implements Runnable
 	class KonecTlacitko implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event	) {
-			System.out.println("Ted by to melo chcipnout!");
-			dialog.dispose();
+			window.dispose();
 		}
 	}
 
