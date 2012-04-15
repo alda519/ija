@@ -38,9 +38,17 @@ public class MovingScaling extends JPanel {
 
         addMouseMotionListener(ma);
         addMouseListener(ma);
-        
+
+        // vygenerovani nejakych elipsicek s careckama
+        ZEllipse oldE = new ZEllipse(0, 0, 80, 80, 255);
+        ellipses.add(oldE);
         for(int i=0; i < 10; ++i) {
-        	ellipses.add(new ZEllipse(50 + (i%5)*80, 70 + ((i+1)%2)*80, 80, 80, i*25));
+            ZEllipse newE = new ZEllipse(50 + (i%5)*80, 70 + ((i+1)%2)*80, 80, 80, i*25);
+            ZLine line = new ZLine(oldE.x+oldE.width/2, oldE.y+oldE.height/2, newE.x+newE.width/2, newE.y+newE.height/2);
+            oldE.addLineStart(line);
+            newE.addLineEnd(line);
+            ellipses.add(newE);
+            oldE = newE;
         }
 
         //setDoubleBuffered(true);
@@ -52,11 +60,19 @@ public class MovingScaling extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(new Color(0, 50, 190));
+        // prvne namalovat carecky
+        for(ZEllipse ell : ellipses) {
+            //  vsechny startovaci cary z kazde elipsicky, at to tam neni dvakrat
+            for(ZLine line : ell.lineStarts) {
+                g2d.draw(line);
+            }
+        }
         // vymalovat kazdou elipsicku
         for(ZEllipse ell : ellipses) {
         	g2d.setColor(new Color(ell.red, 200, 0));
         	g2d.fill(ell);
-        	g2d.draw(new ZLine(200,200,ell.x+ell.width/2, ell.y+ell.height/2));
         }
     }
 
@@ -65,11 +81,18 @@ public class MovingScaling extends JPanel {
      */
     class ZEllipse extends Ellipse2D.Float {
     	public int red;
+        private List<ZLine> lineStarts = new ArrayList<ZLine>();
+        private List<ZLine> lineEnds = new ArrayList<ZLine>();
         public ZEllipse(float x, float y, float width, float height, int color) {
             setFrame(x, y, width, height);
             red = color;
         }
-
+        public void addLineStart(ZLine line) {
+            lineStarts.add(line);
+        }
+        public void addLineEnd(ZLine line) {
+            lineEnds.add(line);
+        }
         public boolean isHit(float x, float y) {
             if (getBounds2D().contains(x, y)) {
                 return true;
@@ -77,18 +100,29 @@ public class MovingScaling extends JPanel {
                 return false;
             }
         }
-
         public void addX(float x) {
             this.x += x;
+            for(ZLine line : lineStarts) {
+                line.addX1(x);
+            }
+            for(ZLine line : lineEnds) {
+                line.addX2(x);
+            }
         }
 
         public void addY(float y) {
             this.y += y;
+            for(ZLine line : lineStarts) {
+                line.addY1(y);
+            }
+            for(ZLine line : lineEnds) {
+                line.addY2(y);
+            }
         }
     }
 
     /**
-     * Reprezentace cary
+     * Reprezentace cary, cara je posouvana spolu s koleckem ke kteremu patri
      */
     class ZLine extends Line2D.Float {
     	public ZLine(float x1, float y1, float x2, float y2) {
