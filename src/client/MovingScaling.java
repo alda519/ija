@@ -36,6 +36,7 @@ public class MovingScaling extends JPanel {
     	setPreferredSize(new Dimension(800, 600));
         MovingAdapter ma = new MovingAdapter();
 
+        //setBackground(new Color(220, 220, 220));
         addMouseMotionListener(ma);
         addMouseListener(ma);
 
@@ -196,7 +197,6 @@ public class MovingScaling extends JPanel {
     public static void main(String[] args) {
 
         JFrame frame = new JFrame("Moving and Scaling");
-        
         // obsah se obali skrolovatkem a muze se kreslit vsude, pro jednoduchost asi vynechame zatim
         JScrollPane scroo = new JScrollPane(new MovingScaling());
         JScrollPane scroo2 = new JScrollPane(new MovingScaling());

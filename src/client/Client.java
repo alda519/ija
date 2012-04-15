@@ -97,7 +97,9 @@ public class Client implements Runnable
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(menuHelp);
 		window.setJMenuBar(menuBar);
-		
+
+		// TODO: toto predelat na zalozky
+		window.add(new MovingScaling());
 		// zobrazit a hura
 		window.setVisible(true);
 	}
@@ -205,13 +207,6 @@ public class Client implements Runnable
 	 */
 	public void run()
 	{
-		//window.set
-		Container cont = window.getContentPane();
-		// TODO: tady to kresleni funguje nejak uplne blbe, 
-		cont.setLayout(new GridLayout(4,4));
-		cont.add(new GPlace(0, 0));
-		cont.add(new GPlace(100, 0));
-		window.validate();
 	}
 
 	/**
