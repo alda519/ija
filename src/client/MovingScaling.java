@@ -199,7 +199,13 @@ public class MovingScaling extends JPanel {
         
         // obsah se obali skrolovatkem a muze se kreslit vsude, pro jednoduchost asi vynechame zatim
         JScrollPane scroo = new JScrollPane(new MovingScaling());
-        frame.add(scroo);
+        JScrollPane scroo2 = new JScrollPane(new MovingScaling());
+
+        JTabbedPane tabbiky = new JTabbedPane();
+        tabbiky.addTab("zalozka 1", scroo);
+        tabbiky.addTab("zalozka 2", scroo2);
+
+        frame.add(tabbiky);
         
         // jak na ty taby blbe?
         
