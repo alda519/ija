@@ -15,6 +15,11 @@
                 <include name="lib/**"/>
             </fileset>
         </copy>
+        <copy todir="dest-client/">
+            <fileset dir=".">
+                <include name="lib/**"/>
+            </fileset>
+        </copy>
 
         <!-- kompilace-->
         <javac srcdir="src/" destdir="build" includeantruntime="false"
@@ -25,6 +30,7 @@
         <jar destfile="dest-client/ija2012-client.jar" basedir="build/">
             <manifest>
                 <attribute name="Main-Class" value="client.Client"/>
+                <attribute name="Class-Path" value="lib/dom4j-1.6.1.jar" />
             </manifest>
         </jar>
 
@@ -39,7 +45,8 @@
 
     <!-- spusteni klienta -->
     <target name="client" depends="compile">
-        <java jar="dest-client/ija2012-client.jar" fork="true" />
+        <java jar="dest-client/ija2012-client.jar" fork="true"
+        classpath="lib/dom4j-1.5.2.jar" />
     </target>
 
     <!-- spusteni serveru -->
