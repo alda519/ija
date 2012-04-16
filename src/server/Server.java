@@ -57,6 +57,7 @@ public class Server implements Runnable
 		String msg;
 		// smycka zpracovani zprav
 		while((msg = protocol.getMessage()) != null) {
+			System.out.println(msg);
 			// zpracovani typu zpravy
 			String msgType = Protocol.getMessageType(msg);
 			if(msgType.equals("login")) {

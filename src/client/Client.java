@@ -7,8 +7,9 @@ package client;
 
 import java.io.IOException;
 
-import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.InetSocketAddress;
 
 // grafika
 import javax.swing.*;
@@ -216,15 +217,19 @@ public class Client implements Runnable
 	{
 		Socket sock;
 		try {
-			sock = new Socket(hostname, port);
+			SocketAddress sockaddr = new InetSocketAddress(hostname, port);
+			sock = new Socket();
+			sock.connect(sockaddr, 5000);
+			//sock = new Socket(sockaddr, port);
 			protocol = new Protocol(sock);
-		} catch (ConnectException e){ 
+		} catch (IOException e){ 
 			System.err.println(e.getMessage());
 			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
 			return;
-		} catch (IOException e) {
+		} /*catch ( e) {
 			System.err.println(e.getMessage());
-		}
+			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
+		}*/
 
 		// podle zaskrtnuti checkboxu se registruje/prihlasuje
 		if(register.isSelected()) {

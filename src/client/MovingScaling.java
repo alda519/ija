@@ -41,7 +41,7 @@ public class MovingScaling extends JPanel {
         addMouseListener(ma);
 
         // vygenerovani nejakych elipsicek s careckama
-        ZEllipse oldE = new ZEllipse(0, 0, 80, 80, 255);
+        ZEllipse oldE = new ZEllipse(0, 0, 80, 80, 40);
         ellipses.add(oldE);
         for(int i=0; i < 10; ++i) {
             ZEllipse newE = new ZEllipse(50 + (i%5)*80, 70 + ((i+1)%2)*80, 80, 80, i*25);
@@ -72,7 +72,7 @@ public class MovingScaling extends JPanel {
         }
         // vymalovat kazdou elipsicku
         for(ZEllipse ell : ellipses) {
-        	g2d.setColor(new Color(ell.red, 200, 0));
+        	g2d.setColor(new Color(255, ell.red, 200));
         	g2d.fill(ell);
         }
     }
