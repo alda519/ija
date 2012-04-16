@@ -46,6 +46,7 @@ public class Client implements Runnable
 	
 	protected JFrame window;
 	protected JFrame dialog;
+	protected JTabbedPane tabs;
 	
 	/** Zda uz jsem pripojen */
 	protected boolean connectedFlag = false;
@@ -63,10 +64,13 @@ public class Client implements Runnable
 		// menu bar
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuFile = new JMenu("Soubor");
+		JMenuItem newFile = new JMenuItem("Nový");
 		JMenuItem openFile = new JMenuItem("Otevřít");
 		JMenuItem saveFile = new JMenuItem("Uložit");
+		newFile.addActionListener(new AddNetTab());
 		openFile.setEnabled(false);
 		saveFile.setEnabled(false);
+		menuFile.add(newFile);
 		menuFile.add(openFile);
 		menuFile.add(saveFile);
 		menuFile.add(new JSeparator());
@@ -99,10 +103,22 @@ public class Client implements Runnable
 		menuBar.add(menuHelp);
 		window.setJMenuBar(menuBar);
 
-		// TODO: toto predelat na zalozky
-		window.add(new MovingScaling());
+		tabs = new JTabbedPane();
+		window.add(tabs);
 		// zobrazit a hura
 		window.setVisible(true);
+	}
+
+	/**
+	 * Pridani nove zalozky
+	 */
+	public static int c = 0; // docasne pocitadlo zalozek
+	class AddNetTab implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event	) {
+			tabs.addTab("Síť " + c, new MovingScaling());
+			c += 1;
+		}
 	}
 
 	/**
