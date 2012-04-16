@@ -102,6 +102,7 @@ public class Server implements Runnable
 	 */
 	public static void main(String[] args) throws IOException
 	{
+        System.setProperty("file.encoding", "UTF-8");
         // nacte se databaze uzivatelu
         Users users = new Users();
         users.loadUsers("users.xml");
