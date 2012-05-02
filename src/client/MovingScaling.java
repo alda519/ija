@@ -170,8 +170,8 @@ public class MovingScaling extends JPanel {
             zell = null;
             
             // kdyz kliknu do pole, tak se prida kolesko
-            ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
-            repaint();
+            //ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
+            //repaint(); // repaint po pridani
         }
 
         // kompromis mezi rychle x pekne

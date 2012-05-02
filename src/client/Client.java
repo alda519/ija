@@ -115,7 +115,7 @@ public class Client implements Runnable
 	public static int c = 0; // docasne pocitadlo zalozek
 	class AddNetTab implements ActionListener
 	{
-		public void actionPerformed(ActionEvent event	) {
+		public void actionPerformed(ActionEvent event) {
 			tabs.addTab("Síť " + c, new MovingScaling());
 			c += 1;
 		}

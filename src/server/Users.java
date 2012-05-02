@@ -108,6 +108,7 @@ public class Users
             return false;
         } else {
             add(name, password);
+            // TODO: zapsat i do souboru
             return true;
         }
     }
