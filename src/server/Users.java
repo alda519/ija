@@ -7,6 +7,8 @@ package server;
 
 //import java.io.IOException;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 import java.util.*;
@@ -23,14 +25,15 @@ import org.dom4j.io.*;
  */
 public class Users
 {
-	
+	/** Jmeno souboru s uzivateli */
 	protected String filename;
 	
-    /**
-     * Mapa login -: heslo
-     */
+    /** Mapa login - heslo */
     protected Map<String, String> users;
-
+    
+    /** Dokument pro znovuulozeni pridanych uzivatelu. */
+    protected Document doc;
+    
     /**
      * Konstruktor
      */
@@ -42,46 +45,33 @@ public class Users
 
     /**
      * Nacte uzivatele ze souboru.
+     * @param filename jmeno souboru s uzivateli
      */
     public void loadUsers(String filename)
     {
     	this.filename = filename;
-
         File input = new File(filename);
-
         try {
-            // vytvoreni readeru
             SAXReader xmlReader = new SAXReader();
-            // precteni dokumentu
-            Document doc = xmlReader.read(input);
+            this.doc = xmlReader.read(input);
 
-            Element root = doc.getRootElement();
-            // TODO: root by mel byt users!
-
+            Element root = this.doc.getRootElement();
+            if(! root.getName().equals("users"))
+            	throw new DocumentException("Neplatny soubor s uzivateli");
             Iterator elementIterator = root.elementIterator();
-            // iterace pres obsah zpravy
+            // iterace pres obsah dokumentu
             while(elementIterator.hasNext()){
                 Element element = (Element) elementIterator.next();
-                // TODO: element ma byt user!
-
-                Iterator innerIt = element.elementIterator();
-
-                // jeden z jich je login a druhe heslo
-                Element inElem1 = (Element) innerIt.next();
-                Element inElem2 = (Element) innerIt.next();
-
-                if(inElem1.getName().equals("login")) {
-                    // prvni je login
-                    // TODO kontrola toho druheho
-                    add(inElem1.getText(), inElem2.getText());
-                } else if(inElem2.getName().equals("login")) {
-                    // prvni je heslo
-                    // TODO kontrola toho druheho
-                    add(inElem2.getText(), inElem1.getText());
-                }
-
-                // TODO: uz by tam nemel byt zadny binec navic
-                //innerIt.hasNext();
+                if(! element.getName().equals("user"))
+                	throw new DocumentException("Neplatny soubor s uzivateli");
+                
+                // zjisteni jmena a hesla z atributu
+                String login = element.attributeValue("login");
+                String password = element.attributeValue("password");
+                // pridani uzivatele do seznamu
+                if(login == null || password == null)
+                    throw new DocumentException("Neplatny soubor s uzivateli");
+                add(login, password);
             }
         } catch(DocumentException e) {
             System.out.println(e.getMessage());
@@ -99,8 +89,10 @@ public class Users
 
     /**
      * Registrace noveho uzivatele.
-     * Uzivatel bude pridan jako do prave nastene databaze, tak bude
-     * zapsan do souboru, nejak.
+     * Uzivatel bude pridan do prave nactene databaze, tak bude zapsan do souboru na disk.
+     * @param name jmeno noveho uzivatele
+     * @param password heslo noveho uzivatele
+     * @reutrn vraci true, pokud byl uzivatrel pridan, jinak false
      */
     public boolean register(String name, String password)
     {
@@ -108,16 +100,31 @@ public class Users
             return false;
         } else {
             add(name, password);
-            // TODO: zapsat i do souboru
+            // TODO: zapsat noveho uzivatele i do souboru
+            Element root = this.doc.getRootElement();
+            Element newUser = root.addElement("user");
+            newUser.addAttribute("login", name);
+            newUser.addAttribute("password", password);
+            
+    	    try {
+    	    	FileWriter out = new FileWriter(this.filename);
+    	        OutputFormat format = OutputFormat.createPrettyPrint();
+    	        XMLWriter writer = new XMLWriter(out, format);
+    	        writer.write(this.doc);
+    	    	out.close();    
+    	    } catch (IOException w) {
+    	    	System.out.println("Sit se nepovedlo ulozit!");
+    	    	return false;
+    	    }
             return true;
         }
     }
-    
+
     /**
      * Autentizace uzivatele.
      * @param name Pozadovane jmeno k overeni
      * @param password Zadane heslo k overeni
-     * @return true pokud zadany uzivatel existuje a odpovida heslo, jinak false 
+     * @return vraci true pokud zadany uzivatel existuje a odpovida heslo, jinak false 
      */
      public boolean authenticate(String name, String password)
      {
