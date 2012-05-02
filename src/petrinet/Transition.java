@@ -23,11 +23,11 @@ public class Transition {
 
 	}
 
-	public void addInArc()  {
+	public void addInArc(Arc a)  {
 	
 	}
 
-	public void addOutArc() {
+	public void addOutArc(Arc a) {
 		
 	}
 
@@ -35,7 +35,21 @@ public class Transition {
 		
 	}
 	
-	//public set
+	/**
+	 * Nastaveni vyrazu pro vypocet vystupu
+	 * @param expr vyraz
+	 */
+	public void setExpr(String expr) {
+		this.operation = expr;
+	}
+	
+	/**
+	 * Pridani nove straze.
+	 * @param c straz k pridani do prechodu
+	 */
+	public void addGuard(Condition c) {
+		this.conditions.add(c);
+	}
 
 	/** Vektor vybranych cisel z prechodu. */
 	protected int vector [];

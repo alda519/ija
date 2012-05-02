@@ -18,12 +18,15 @@
   <place id="4">
   </place>
 
-  <transition>
-    <exp>a = x + y + z</exp>
-    <guard>x > y</guard>
-    <guard>z > 1</guard>
+  <transition expr="a = x + y + z">
+    <guard src="x" op="<" dst="y" />
+    <guard src="y" op="==" dst="x" />
+    <guard src="z" op="!=" dst="4" />
+    <guard src="x" op=">=" dst="3" />
+
     <input name="x" place="2">
     <input name="15" place="1">
+
     <output name="4" place"2">
     <output name="a" place"3">
   </transition>

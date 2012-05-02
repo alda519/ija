@@ -36,6 +36,19 @@ public class PetriNet {
     }
 
     /**
+     * Vyhleda misto podle jeho identifikator
+     * @param id hledany identifikator
+     * @return Place pokud nalezeno, jinak null
+     */
+    public Place findPlace(int id) {
+    	for(Place place : this.places) {
+    		if(id == place.getId())
+    			return place; 
+    	}
+    	return null;
+    }
+    
+    /**
      * Konstruktor site z XML popisu.
      * @param xml
      */
@@ -45,6 +58,7 @@ public class PetriNet {
     		Element root = doc.getRootElement();
     		if(! root.getName().equals("petrinet"))
     			throw new DocumentException();
+    		// vlastnosti site
     		this.name = root.attributeValue("name");
     		this.author = root.attributeValue("author");
     		this.version = root.attributeValue("version");
@@ -64,8 +78,48 @@ public class PetriNet {
     		// prechody
     		List<Element> transitions = root.elements("transition");
     		for(Element transition : transitions) {
-    			// parse prechodu, to bude chutovka
+    			// vytvoreni noveho prechodu
+    			Transition newTransition = new Transition();
+    			// nastaveni vystupni operace
+    			newTransition.setExpr(transition.attributeValue("expr"));
+    			// nacteni strazi
+    			List <Element> guards = transition.elements("guard");
+    			for(Element guard : guards ) {
+    				newTransition.addGuard(new Condition(guard.attributeValue("src"), guard.attributeValue("op"), guard.attributeValue("dst")));
+    			}
+    			// nacteni vstupu
+    			List <Element> inputs = transition.elements("input");
+    			for(Element input : inputs) {
+    				Arc newArc;
+    				Place p = findPlace(Integer.parseInt(input.attributeValue("place")));
+    				// bud je hrana s promennou, nebo konstantou
+    				try {
+    					int v = Integer.parseInt(input.attributeValue("name"));
+    					newArc = new ConstArc(p, v);
+    				} catch (NumberFormatException e) {
+    					newArc = new VarArc(p, input.attributeValue("name"));
+    				}
+    				// pridat
+    				newTransition.addInArc(newArc);
+    			}
+    			// nacteni vystupu
+    			List <Element> outputs = transition.elements("output");
+    			for(Element output : outputs) {
+    				Arc newArc;
+    				Place p = findPlace(Integer.parseInt(output.attributeValue("place")));
+    				// bud je hrana s promennou, nebo konstantou
+    				try {
+    					int v = Integer.parseInt(output.attributeValue("name"));
+    					newArc = new ConstArc(p, v);
+    				} catch (NumberFormatException e) {
+    					newArc = new VarArc(p, output.attributeValue("name"));
+    				}
+    				// pridat
+    				newTransition.addOutArc(newArc);
+    			}
+    			this.transitions.add(newTransition);
     		}
+    		// vse ostatni se zahazuje
     	} catch (DocumentException e) {
     		System.err.println("Neplatny dokument se siti.");
     	}
