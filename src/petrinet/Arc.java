@@ -1,5 +1,7 @@
 package petrinet;
 
+import org.dom4j.Element;
+
 /**
  * Rozhrani hrany 
  */
@@ -20,4 +22,7 @@ public interface Arc {
 	
 	/** Vraci jmeno hrany */
 	public String getName();
+	
+	/** Generuje XML popis hrany */
+	public void toXML(Element t, String io);
 }

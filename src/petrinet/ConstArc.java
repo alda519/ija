@@ -1,5 +1,7 @@
 package petrinet;
 
+import org.dom4j.Element;
+
 /**
  * Reprezentace hrany s konstantou.
  */
@@ -45,5 +47,12 @@ public class ConstArc implements Arc {
 	/** Vraci vzdy null, nema jmeno */
 	public String getName() {
 		return null;
+	}
+	
+	/** Generuje XML popis hrany */
+	public void toXML(Element t, String io) {
+		t.addAttribute("io", io);
+		t.addAttribute("name", ""+this.value);
+		t.addAttribute("place", ""+this.place.getId());
 	}
 }

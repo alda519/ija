@@ -21,7 +21,10 @@ public class Place {
 	/** Identifikator mista. */
 	protected int id;
 	
-	/** Konstruktor */
+	/**
+	 * Konstruktor
+	 * @param id identifikator mista
+	 * */
 	public Place(int id) {
 		this.id = id;
 	}
@@ -34,6 +37,11 @@ public class Place {
 	/** Vraci hodnotu daneho indexu */
 	public int getValue(int index) {
 		return this.values.get(index);
+	}
+	
+	/** Vraci id */
+	public int getId() {
+		return id;
 	}
 	
 	/**

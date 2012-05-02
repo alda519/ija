@@ -1,5 +1,7 @@
 package petrinet;
 
+import org.dom4j.Element;
+
 
 /**
  * Reprezentace hrany s pojmenovanou promennou.
@@ -42,5 +44,12 @@ public class VarArc implements Arc {
 	
 	public String getName() {
 		return name;
+	}
+	
+	/** Generuje XML popis hrany */
+	public void toXML(Element t, String io){
+		t.addAttribute("io", io);
+		t.addAttribute("name", this.name);
+		t.addAttribute("place", ""+this.place.getId());
 	}
 }

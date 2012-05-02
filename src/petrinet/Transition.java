@@ -3,6 +3,8 @@ package petrinet;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.dom4j.Element;
+
 public class Transition {
 	
 	/** Seznam vstupnich hran */
@@ -94,5 +96,23 @@ public class Transition {
 		}
 		// mimo rozsah neni reseni
 		return false;
+	}
+	
+	/**
+	 * Generuje XML reprezentaci.
+	 * @param transitions Element dokumentu, kam se pridava obsah.
+	 */
+	public void toXML(Element transitions) {
+		// do seznamu prechodu, se prida dany prechod
+		Element transition = transitions.addElement("transition");
+		// k prechodu se pridaji podminky
+		// operace
+		// seznam vstupu a vystupu
+		for(Arc ina : in ) {
+			ina.toXML(transition, "in");			
+		}
+		for(Arc ina : in ) {
+			ina.toXML(transition, "out");			
+		}
 	}
 }
