@@ -20,6 +20,7 @@ public class PetriNet {
 	protected String author;
 	protected String name;
 	protected String description;
+	protected String version;
 	protected List<String> simulations = new ArrayList<String>();
 
     /**
@@ -39,7 +40,29 @@ public class PetriNet {
      * @param xml
      */
     public PetriNet(String xml) {
-    	// TODO: parsexml etc.
+    	try {
+    		Document doc = DocumentHelper.parseText(xml);
+    		Element root = doc.getRootElement();
+    		if(! root.getName().equals("petrinet"))
+    			throw new DocumentException();
+    		this.name = root.attributeValue("name");
+    		this.author = root.attributeValue("author");
+    		this.version = root.attributeValue("version");
+    		this.description = root.attributeValue("description");
+    		// mista
+    		List<Element> places =  root.elements("place");
+    		for(Element place : places) {
+    			// parse mista
+    			// id + spousta tokenu
+    		}
+    		// prechody
+    		List<Element> transitions = root.elements("transition");
+    		for(Element transition : transitions) {
+    			// parse prechodu, to bude chutovka
+    		}
+    	} catch (DocumentException e) {
+    		System.err.println("Neplatny dokument se siti.");
+    	}
     }
 
     /**

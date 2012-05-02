@@ -1,64 +1,31 @@
-<net>
-  <name></name>
-  <author></author>
-  <version></version>
-  <description></description>
+<petrinet name="pepova sit" author="pepa" version="1" description="prvni pokusna pepikova sit">
 
-  <place>
-    <id>1</id>
+  <place id="1">
     <token>3</token>
     <token>8</token>
     <token>10</token>
   </place>
 
-  <place>
-    <id>2</id>
+  <place id="2">
     <token>5</token>
   </place>
 
-  <place>
-    <id>3</id>
+  <place id="3">
     <token>2</token>
     <token>1</token>
   </place>
 
-  <place>
-    <id>4</id>
+  <place id="4">
   </place>
 
-  <arc>
-    <id>1</id>
-    <var>x</var>
-    <src>1</src>
-    <dst>5</dst>
-  </arc>
-
-  <arc>
-    <id>2</id>
-    <var>y</var>
-    <src>2</src>
-    <dst>5</dst>
-  </arc>
-
-  <arc>
-    <id>3</id>
-    <var>z</var>
-    <src>3</src>
-    <dst>5</dst>
-  </arc>
-
-  <arc>
-    <id>4</id>
-    <var>a</var>
-    <src>5</src>
-    <dst>4</dst>
-  </arc>
-
   <transition>
-    <id>5</id>
     <exp>a = x + y + z</exp>
     <guard>x > y</guard>
     <guard>z > 1</guard>
+    <input name="x" place="2">
+    <input name="15" place="1">
+    <output name="4" place"2">
+    <output name="a" place"3">
   </transition>
 
 </net>
