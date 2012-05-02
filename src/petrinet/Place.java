@@ -49,7 +49,7 @@ public class Place {
 	 * @param val Hodnota, co bude do mista pridana
 	 */
 	public void addValue(int val) {
-		this.values.add(new Integer(val));
+		this.values.add(val);
 	}
 	
 	/**
@@ -95,7 +95,6 @@ public class Place {
 	    try {
 	    	FileWriter out = new FileWriter("foo.xml");
 	        OutputFormat format = OutputFormat.createPrettyPrint();
-	        // TODO: jmeno souboru odvodit od jmena site
 	        XMLWriter writer = new XMLWriter(out, format);
 	        writer.write( document );
 	    	out.close();    

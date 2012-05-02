@@ -52,8 +52,14 @@ public class PetriNet {
     		// mista
     		List<Element> places =  root.elements("place");
     		for(Element place : places) {
-    			// parse mista
-    			// id + spousta tokenu
+    			// vytvoreni mista
+    			Place newPlace = new Place(Integer.parseInt(place.attributeValue("id")));
+    			// misto muze obsahovat spousty hodnot
+    			List <Element> values = place.elements("value");
+    			for(Element value : values) {
+    				newPlace.addValue(Integer.parseInt(value.getText()));
+    			}
+    			this.places.add(newPlace);
     		}
     		// prechody
     		List<Element> transitions = root.elements("transition");

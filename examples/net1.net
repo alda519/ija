@@ -1,18 +1,18 @@
 <petrinet name="pepova sit" author="pepa" version="1" description="prvni pokusna pepikova sit">
 
   <place id="1">
-    <token>3</token>
-    <token>8</token>
-    <token>10</token>
+    <value>3</value>
+    <value>8</value>
+    <value>10</value>
   </place>
 
   <place id="2">
-    <token>5</token>
+    <value>5</value>
   </place>
 
   <place id="3">
-    <token>2</token>
-    <token>1</token>
+    <value>2</value>
+    <value>1</value>
   </place>
 
   <place id="4">
