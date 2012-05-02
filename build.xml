@@ -44,13 +44,13 @@
     </target>
 
     <!-- spusteni klienta -->
-    <target name="client" depends="compile">
+    <target name="client">
         <java jar="dest-client/ija2012-client.jar" fork="true"
         classpath="lib/dom4j-1.5.2.jar" />
     </target>
 
     <!-- spusteni serveru -->
-    <target name="server" depends="compile">
+    <target name="server">
         <java jar="dest-server/ija2012-server.jar" fork="true" 
         classpath="lib/dom4j-1.5.2.jar" />
     </target>
