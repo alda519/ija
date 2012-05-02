@@ -80,17 +80,17 @@ public class PetriNet {
 	    // pridani vsech prechodu
 	    Element transitions = root.addElement("transitions");
 	    for(Transition t : this.transitions) {
-	    t.toXML(transitions);
+	    	t.toXML(transitions);
 	    }
 	    // pridani vsech mist
 	    Element places = root.addElement("places");
 	    for(Place p : this.places) {
-	    p.toXML(places);
+	    	p.toXML(places);
 	    }
 	    // a nakonec seznam simulaci
 	    Element simulations = root.addElement("simulations");
 	    for(String s : this.simulations) {
-	    simulations.addElement("simulation").addText(s);
+	    	simulations.addElement("simulation").addText(s);
 	    }
 	    return doc;
     }
