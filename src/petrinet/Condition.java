@@ -2,6 +2,8 @@ package petrinet;
 
 import java.util.List;
 
+import org.dom4j.Element;
+
 /**
  * Reprezentace podminky v prechodu
  */
@@ -53,4 +55,14 @@ public class Condition {
 		return this.operation.check(op1, op2);
 	}
 	
+	/**
+	 * Vytvoreni XML reprezentace.
+	 * @param trans element do ktereho se obsah vklada
+	 */
+	public void toXML(Element trans) {
+		Element guard = trans.addElement("guard");
+		guard.addAttribute("src", this.src);
+		guard.addAttribute("op", this.operation.toString());
+		guard.addAttribute("dst", this.dst);
+	}
 }

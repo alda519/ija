@@ -3,11 +3,8 @@ package petrinet;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileInputStream;
 
-import java.io.*;
 import org.dom4j.*;
-import org.dom4j.dom.*;
 import org.dom4j.io.*;
 
 public class PetriNet {
@@ -87,35 +84,26 @@ public class PetriNet {
     			for(Element guard : guards ) {
     				newTransition.addGuard(new Condition(guard.attributeValue("src"), guard.attributeValue("op"), guard.attributeValue("dst")));
     			}
-    			// nacteni vstupu
-    			List <Element> inputs = transition.elements("input");
-    			for(Element input : inputs) {
+    			// nacteni hran
+    			List <Element> arcs = transition.elements("arc");
+    			for(Element arc : arcs) {
     				Arc newArc;
-    				Place p = findPlace(Integer.parseInt(input.attributeValue("place")));
+    				Place p = findPlace(Integer.parseInt(arc.attributeValue("place")));
     				// bud je hrana s promennou, nebo konstantou
     				try {
-    					int v = Integer.parseInt(input.attributeValue("name"));
+    					int v = Integer.parseInt(arc.attributeValue("name"));
     					newArc = new ConstArc(p, v);
     				} catch (NumberFormatException e) {
-    					newArc = new VarArc(p, input.attributeValue("name"));
+    					newArc = new VarArc(p, arc.attributeValue("name"));
     				}
-    				// pridat
-    				newTransition.addInArc(newArc);
-    			}
-    			// nacteni vystupu
-    			List <Element> outputs = transition.elements("output");
-    			for(Element output : outputs) {
-    				Arc newArc;
-    				Place p = findPlace(Integer.parseInt(output.attributeValue("place")));
-    				// bud je hrana s promennou, nebo konstantou
-    				try {
-    					int v = Integer.parseInt(output.attributeValue("name"));
-    					newArc = new ConstArc(p, v);
-    				} catch (NumberFormatException e) {
-    					newArc = new VarArc(p, output.attributeValue("name"));
-    				}
-    				// pridat
-    				newTransition.addOutArc(newArc);
+    				// pridat podle io
+    				String io = arc.attributeValue("io");
+    				if(io.equals("in"))
+    					newTransition.addInArc(newArc);
+    				else if(io.equals("out"))
+    					newTransition.addOutArc(newArc);
+    				else
+    					throw new DocumentException("Neplatna hrana");
     			}
     			this.transitions.add(newTransition);
     		}
@@ -146,6 +134,7 @@ public class PetriNet {
 	    	doc = xmlReader.read(file);	
 	    } catch (DocumentException e) {
 	    	System.err.println("Nejde nacist soubor.");
+	    	e.printStackTrace();
 	    	return null;
 	    }
     	return new PetriNet(doc.asXML());
@@ -160,6 +149,8 @@ public class PetriNet {
 	    Element root = doc.addElement( "petrinet" );
 	    root.addAttribute("author", this.author);
 	    root.addAttribute("description", this.description);
+	    root.addAttribute("version", this.version);
+	    root.addAttribute("name", this.name);
 	    // pridani vsech prechodu
 	    Element transitions = root.addElement("transitions");
 	    for(Transition t : this.transitions) {
@@ -177,4 +168,14 @@ public class PetriNet {
 	    }
 	    return doc;
     }
+    
+    
+    public static void main(String [] args) {
+    	
+    	PetriNet net = PetriNetFactory(new File("examples/net1.net"));
+    	
+    	Document doc = net.toXML();
+    	System.out.print(doc.asXML());
+    }
+    
 }

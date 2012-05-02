@@ -19,16 +19,18 @@
   </place>
 
   <transition expr="a = x + y + z">
-    <guard src="x" op="<" dst="y" />
+    <guard src="x" op="&lt;" dst="y" />
     <guard src="y" op="==" dst="x" />
     <guard src="z" op="!=" dst="4" />
-    <guard src="x" op=">=" dst="3" />
+    <guard src="x" op="&gt;=" dst="3" />
 
-    <input name="x" place="2">
-    <input name="15" place="1">
 
-    <output name="4" place"2">
-    <output name="a" place"3">
+    <arc io="in" name="x" place="1" />
+    <arc io="in" name="4" place="2" />
+    <arc io="out" name="y" place="1" />
+    <arc io="out" name="a" place="2" />
+    <arc io="out" name="6" place="1" />
+
   </transition>
 
-</net>
+</petrinet>

@@ -42,4 +42,19 @@ public enum Operation {
 			default: return false;
 		}
 	}
+	
+	/**
+	 * Vraci textovou reprezentaci opetoru
+	 */
+	public String toString() {
+		switch(this) {
+			case LESS: return "<";
+			case GREATER: return ">";
+			case LESSEQ: return "<=";
+			case GREATEREQ: return ">=";
+			case EQUAL: return "==";
+			case NEQUAL: return "!=";
+			default: return "X";
+		}
+	}
 }

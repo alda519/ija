@@ -51,8 +51,9 @@ public class ConstArc implements Arc {
 	
 	/** Generuje XML popis hrany */
 	public void toXML(Element t, String io) {
-		t.addAttribute("io", io);
-		t.addAttribute("name", ""+this.value);
-		t.addAttribute("place", ""+this.place.getId());
+		Element arc = t.addElement("arc");
+		arc.addAttribute("io", io);
+		arc.addAttribute("name", ""+this.value);
+		arc.addAttribute("place", ""+this.place.getId());
 	}
 }

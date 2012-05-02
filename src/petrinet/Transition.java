@@ -23,12 +23,12 @@ public class Transition {
 
 	}
 
-	public void addInArc(Arc a)  {
-	
+	public void addInArc(Arc a) {
+		in.add(a);	
 	}
 
 	public void addOutArc(Arc a) {
-		
+		out.add(a);
 	}
 
 	public void removeArc() {
@@ -119,14 +119,18 @@ public class Transition {
 	public void toXML(Element transitions) {
 		// do seznamu prechodu, se prida dany prechod
 		Element transition = transitions.addElement("transition");
-		// k prechodu se pridaji podminky
 		// operace
+		transition.addAttribute("expr", this.operation);
+		// k prechodu se pridaji podminky
+		for(Condition cond: this.conditions) {
+			cond.toXML(transition);
+		}
 		// seznam vstupu a vystupu
-		for(Arc ina : in ) {
+		for(Arc ina : this.in ) {
 			ina.toXML(transition, "in");			
 		}
-		for(Arc ina : in ) {
-			ina.toXML(transition, "out");			
+		for(Arc outa : this.out ) {
+			outa.toXML(transition, "out");	
 		}
 	}
 }

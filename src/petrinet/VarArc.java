@@ -47,9 +47,10 @@ public class VarArc implements Arc {
 	}
 	
 	/** Generuje XML popis hrany */
-	public void toXML(Element t, String io){
-		t.addAttribute("io", io);
-		t.addAttribute("name", this.name);
-		t.addAttribute("place", ""+this.place.getId());
+	public void toXML(Element t, String io) {
+		Element arc = t.addElement("arc");
+		arc.addAttribute("io", io);
+		arc.addAttribute("name", this.name);
+		arc.addAttribute("place", ""+this.place.getId());
 	}
 }
