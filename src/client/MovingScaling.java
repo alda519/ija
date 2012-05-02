@@ -3,6 +3,7 @@ package client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
@@ -64,6 +65,7 @@ public class MovingScaling extends JPanel {
 
         g2d.setColor(new Color(0, 50, 190));
         // prvne namalovat carecky
+        g2d.setStroke(new BasicStroke(2));
         for(ZEllipse ell : ellipses) {
             //  vsechny startovaci cary z kazde elipsicky, at to tam neni dvakrat
             for(ZLine line : ell.lineStarts) {
