@@ -23,7 +23,8 @@
 
         <!-- kompilace-->
         <javac srcdir="src/" destdir="build" includeantruntime="false"
-            classpath="lib/dom4j-1.6.1.jar"/>
+            classpath="lib/dom4j-1.6.1.jar"
+            encoding="utf-8" />
 
 
         <!-- jar archiv klienta -->
