@@ -16,7 +16,7 @@ public class Transition {
 	protected List <Condition> conditions = new ArrayList<Condition>();
 	
 	/** Vystupni operace */
-	protected String operation;
+	protected String operation = "";
 
 	/** Souradnice pro kresleni */
 	public int x, y;
@@ -52,7 +52,14 @@ public class Transition {
 	public void setExpr(String expr) {
 		this.operation = expr;
 	}
-	
+	/** Vraci operaci prechodu */
+	public String getExpr() {
+		return this.operation;
+	}
+	public String getGuards() {
+		return this.conditions.toString();
+	}
+
 	/**
 	 * Pridani nove straze.
 	 * @param c straz k pridani do prechodu
@@ -63,7 +70,7 @@ public class Transition {
 
 	/** Vektor vybranych cisel z prechodu. */
 	protected int vector [];
-	
+
 	/**
 	 * Pokusi se uskutecnit prechod.
 	 * @return Metoda vraci true, pokud je prechod uskutecnen, jinak false.

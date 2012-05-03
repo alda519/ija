@@ -14,10 +14,10 @@ public class PetriNet {
 	protected List<Transition> transitions = new ArrayList<Transition>();
 
 	/** Atributy site */
-	protected String author;
-	protected String name;
-	protected String description;
-	protected String version;
+	protected String author = "";
+	protected String name = "";
+	protected String description = "";
+	protected String version = "";
 	protected List<String> simulations = new ArrayList<String>();
 
 	/** Konstruktor uplne prazdne site. */
@@ -36,36 +36,6 @@ public class PetriNet {
 	    this.author = author;
     }
 
-    /**
-     * Vyhleda misto podle jeho identifikator
-     * @param id hledany identifikator
-     * @return Place pokud nalezeno, jinak null
-     */
-    public Place findPlace(int id) {
-    	for(Place place : this.places) {
-    		if(id == place.getId())
-    			return place; 
-    	}
-    	return null;
-    }
-    
-    /**
-     * Vraci seznam vsech mist site.
-     * @return seznam mist
-     */
-    public List<Place> getPlaces() {
-    	return this.places;
-    }
-    
-    /**
-     * Vraci seznam vsech prechodu site.
-     * @return seznam prechodu
-     */
-    public List<Transition> getTransitions() {
-    	return this.transitions;
-    }
-    
-    
     /**
      * Konstruktor site z XML popisu.
      * @param xml
@@ -140,6 +110,7 @@ public class PetriNet {
     	}
     }
 
+
     /**
      * Staticka metoda, ktera vraci novou sit vzniklou analzou retezce.
      * @param net retezec s xml popisem site
@@ -148,7 +119,7 @@ public class PetriNet {
     public static PetriNet PetriNetFactory(String net) {
     	return new PetriNet(net);
     }
-    
+
     /**
      * Staticka metoda, ktera vraci novou sit vznikla analyzou souboru.
      * @param file soubor s xml popisem site
@@ -166,7 +137,42 @@ public class PetriNet {
 	    }
     	return new PetriNet(doc.asXML());
     }
-    
+
+    /**
+     * Vyhleda misto podle jeho identifikatoru
+     * @param id hledany identifikator
+     * @return Place pokud nalezeno, jinak null
+     */
+    public Place findPlace(int id) {
+    	for(Place place : this.places) {
+    		if(id == place.getId())
+    			return place; 
+    	}
+    	return null;
+    }
+
+    /**
+     * Vraci seznam vsech mist site.
+     * @return seznam mist
+     */
+    public List<Place> getPlaces() {
+    	return this.places;
+    }
+
+    /**
+     * Vraci seznam vsech prechodu site.
+     * @return seznam prechodu
+     */
+    public List<Transition> getTransitions() {
+    	return this.transitions;
+    }
+
+    // pridavani mist
+    // pridavani prechodu
+    // pridavani hran
+    // odebirani vseho
+
+ 
     /**
      * Vygenerovani XML popisu cele site.
      */
@@ -193,9 +199,8 @@ public class PetriNet {
 	    }
 	    return doc;
     }
-    
-    
-    
+
+
     // zase testovani kod na nic!
     public static void main(String [] args) {
     	
@@ -204,5 +209,4 @@ public class PetriNet {
     	Document doc = net.toXML();
     	System.out.print(doc.asXML());
     }
-    
 }

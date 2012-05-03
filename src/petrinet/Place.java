@@ -108,4 +108,8 @@ public class Place {
 	    }
 	}
 	
+	/** Vrati string se vsemi hodnotami oddelenymi carkou */
+	public String getValues() {
+		return values.toString();
+	}
 }

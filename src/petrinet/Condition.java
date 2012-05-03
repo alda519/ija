@@ -65,4 +65,9 @@ public class Condition {
 		guard.addAttribute("op", this.operation.toString());
 		guard.addAttribute("dst", this.dst);
 	}
+	
+	/** Vraci textovy popis podminky */
+	public String toString() {
+		return src + operation.toString() + dst;
+	}
 }

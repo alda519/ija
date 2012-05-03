@@ -53,7 +53,7 @@ public class ConstArc implements Arc {
 
 	/** Vraci vzdy null, nema jmeno */
 	public String getName() {
-		return null;
+		return ""+this.value;
 	}
 	
 	/** Generuje XML popis hrany */

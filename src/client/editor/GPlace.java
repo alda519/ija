@@ -74,4 +74,9 @@ public class GPlace extends Ellipse2D.Float {
     public boolean contains(Place p) {
     	return p == this.place;
     }
+    
+    /** Vraci retezec vsech hodnot v miste. */
+    public String getValues() {
+    	return this.place.getValues(); 
+    }
 }

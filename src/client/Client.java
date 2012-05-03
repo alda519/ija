@@ -63,12 +63,15 @@ public class Client implements Runnable
 		JMenuItem newFile = new JMenuItem("Nový");
 		JMenuItem openFile = new JMenuItem("Otevřít");
 		JMenuItem saveFile = new JMenuItem("Uložit");
+		JMenuItem closeFile = new JMenuItem("Zavřít");
 		newFile.addActionListener(new AddNetTab());
 		openFile.addActionListener(new OpenFile());
 		saveFile.addActionListener(new SaveFile());
+		closeFile.addActionListener(new CloseFile());
 		menuFile.add(newFile);
 		menuFile.add(openFile);
 		menuFile.add(saveFile);
+		menuFile.add(closeFile);
 		menuFile.add(new JSeparator());
 		
 		JMenuItem konecMenu = new JMenuItem("Konec");
@@ -158,6 +161,18 @@ public class Client implements Runnable
 					e.saveNet(selectedFile);
 					tabs.setTitleAt(i, selectedFile.getName());
 			    }
+			}
+		}
+	}
+
+	/**
+	 * Obsluha zavreni zalozky.
+	 */
+	class CloseFile implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			int i = tabs.getSelectedIndex();
+			if(i != -1) {
+				tabs.remove(i);
 			}
 		}
 	}

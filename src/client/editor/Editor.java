@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
@@ -74,7 +75,7 @@ public class Editor extends JPanel {
     		// prochazi se vsechny hrany kazdeho prechodu
     		for(Arc a : t.getInArcs()) {
     			// vytvori se cara
-    			GArc na = new GArc(t.x + 80, t.y + 40, a.getPlace().x + 40, a.getPlace().y + 40);
+    			GArc na = new GArc(t.x + 80, t.y + 40, a.getPlace().x + 40, a.getPlace().y + 40, a.getName());
     			// ted hledam GPlace, ktery obsahuje a.getPlace()
     			for(GPlace gpl : this.places) {
     				if(gpl.contains(a.getPlace())) {
@@ -86,7 +87,7 @@ public class Editor extends JPanel {
     		}
     		for(Arc a : t.getOutArcs()) {
     			// vytvori se cara
-    			GArc na = new GArc(a.getPlace().x + 40, a.getPlace().y + 40, t.x + 80, t.y + 40);
+    			GArc na = new GArc(a.getPlace().x + 40, a.getPlace().y + 40, t.x + 80, t.y + 40, a.getName());
     			// ted hledam GPlace, ktery obsahuje a.getPlace()
     			for(GPlace gpl : this.places) {
     				if(gpl.contains(a.getPlace())) {
@@ -100,11 +101,12 @@ public class Editor extends JPanel {
     }
     
     /**
-     * Sem musi patrit vykresleni veskereho neporadku, tzn vsech elipsicek.
+     * Prekresleni celeho okna.
      */
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     	g2d.setColor(new Color(255, 0, 0));
         g2d.setStroke(new BasicStroke(4));
         // vstupni hrany tluste cervene
@@ -121,12 +123,34 @@ public class Editor extends JPanel {
         		g2d.draw(ga);
         	}
         }
+        // mista a prechody
         g2d.setColor(new Color(130, 140, 250));
         for(GPlace gp : places) {
-        	g2d.fill(gp);        	
+        	g2d.fill(gp); 
         }
         for(GTransition gt : transitions) {
         	g2d.fill(gt);
+        }
+        // popisky
+        g2d.setColor(new Color(0, 0, 0));
+        for(GPlace gp : places) {
+        	// hodnoty v mistech
+        	g2d.drawString(gp.getValues(), gp.x+5, gp.y+40); 
+        }
+        for(GTransition gt : transitions) {
+        	// straze
+        	g2d.drawString(gt.getGuards(), gt.x+5, gt.y+30);
+        	// operace
+        	g2d.drawString(gt.getExpr(), gt.x+5, gt.y+60);
+        	// popisky hran
+        	for(GArc ga : gt.getArcsIn()) {
+        		// nad stred vypsat
+        		g2d.drawString(ga.desc, (ga.x1 + ga.x2) / 2, (ga.y1 + ga.y2) / 2 - 10); 
+        	}
+        	for(GArc ga : gt.getArcsOut()) {
+        		// pod stred vypsat
+        		g2d.drawString(ga.desc, (ga.x1 + ga.x2) / 2, (ga.y1 + ga.y2) / 2 + 20);
+        	}
         }
     }
 
@@ -161,6 +185,8 @@ public class Editor extends JPanel {
             //ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
             //repaint(); // repaint po pridani
             
+            transitions.add(new GTransition(new Transition()));
+            //repaint
             // TODO: pridat kresleni mist atp.
         }
 
@@ -188,6 +214,10 @@ public class Editor extends JPanel {
         }
     }
 
+    /**
+     * Ulozeni prave editovane site.
+     * @param file Soubor k ulozeni
+     */
     public void saveNet(File file) {
     	try {
 	    	FileWriter out = new FileWriter(file);
@@ -199,15 +229,13 @@ public class Editor extends JPanel {
     		System.err.println("Nelze soubor ulozit.");
     	}
     }
-    
-    /**
-     * Vyvotereni okna atd.
-     */
+
+
     // bordel na smazani pomalu
     public static void main(String[] args) {
 
     	// nacist sit z XML
-    	PetriNet net = PetriNet.PetriNetFactory(new File("examples/net1.net"));
+    	PetriNet net = PetriNet.PetriNetFactory(new File("examples/net1.xml"));
     	// predat editoru
     	
         JFrame frame = new JFrame("Moving and Scaling");

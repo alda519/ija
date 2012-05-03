@@ -66,4 +66,11 @@ public class GTransition  extends Rectangle2D.Float {
         this.transition.y = (int) this.y;
     }
 	
+    /** Vraci operaci prechodu jako retezec */
+    public String getExpr() {
+    	return this.transition.getExpr();
+    }
+    public String getGuards() {
+    	return this.transition.getGuards();
+    }
 }
