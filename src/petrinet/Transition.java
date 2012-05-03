@@ -41,8 +41,8 @@ public class Transition {
 		return this.out;
 	}
 
-	public void removeArc() {
-		
+	public boolean removeArc(Arc a) {
+		return in.remove(a) || out.remove(a);
 	}
 
 	/**

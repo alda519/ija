@@ -70,7 +70,12 @@ public class GTransition  extends Rectangle2D.Float {
     public String getExpr() {
     	return this.transition.getExpr();
     }
+    /** Vraci textovou reprezentaci vsech strazi */
     public String getGuards() {
     	return this.transition.getGuards();
+    }
+    /** Vraci prechod, ktery reprezentuje */
+    public Transition getTransition() {
+    	return this.transition;
     }
 }

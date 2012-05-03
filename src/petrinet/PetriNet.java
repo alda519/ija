@@ -177,6 +177,59 @@ public class PetriNet {
     }
     // pridavani hran
     // odebirani vseho
+    /** Ostraneni prechodu */
+    public void removeTransition(Transition t) {
+    	this.transitions.remove(t);
+    }
+    /** Ostraneni mista */
+    public void removePlace(Place p) {
+    	// TODO: neni tak jednoduche, je treba oddelat vsechny hrany z/do tohoto mista
+    	this.places.remove(p);
+    }
+    
+    /**
+     * Pridani vstupni/vystupni hrany z prechodu t do mista p.
+     * @param t prechod odkud/kam hrana vede
+     * @param p misto odkud/kam hrana vede
+     * @param input true pokud ma byt hrana pro prechod vstupni
+     * @param name hodnota na hrane
+     */
+    public void addArc(Transition t, Place p, boolean input, String name) {
+    	if(input) {
+    		try {
+    			int i = Integer.parseInt(name);
+    			t.addInArc(new ConstArc(p, i));
+    		} catch (NumberFormatException e) {
+    			t.addInArc(new VarArc(p, name));
+    		}
+    	} else {
+    		try {
+    			int i = Integer.parseInt(name);
+    			t.addOutArc(new ConstArc(p, i));
+    		} catch (NumberFormatException e) {
+    			t.addOutArc(new VarArc(p, name));
+    		}
+    	}
+    }
+    
+    /**
+     * Odebere hranu z mista p do prechodu t
+     * @param p misto
+     * @param t prechod
+     * @param input true, pokud ma byt dana hrana vstupni
+     * @return vraci true, pokud hrana byla odebrana, jinak false
+     */
+    public boolean removeArc(Transition t, Place p, boolean input) {
+    	Arc todel = null;
+    	// podle toho, zda je vstupni nebo vystupni se hleda hrana
+    	for(Arc a : (input)?t.getInArcs():t.getOutArcs()) {
+    		if(a.getPlace() == p) {
+    			todel = a;
+    			break;
+    		}
+    	}
+    	return t.removeArc(todel);
+    }
 
  
     /**

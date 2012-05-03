@@ -79,4 +79,8 @@ public class GPlace extends Ellipse2D.Float {
     public String getValues() {
     	return this.place.getValues(); 
     }
+    /** Vraci misto ktere reprezentuje. */
+    public Place getPlace() {
+    	return this.place;
+    }
 }

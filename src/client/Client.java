@@ -261,7 +261,6 @@ public class Client implements Runnable
 
 			prompt.pack();
 			prompt.setVisible(true);
-
 		}
 	}
 

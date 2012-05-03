@@ -50,9 +50,6 @@ public class Editor extends JPanel {
     	this.petrinet = net;
     	setPreferredSize(new Dimension(width, height));
     	
-    	// ke vsem komponentam ze site vygenerovat graficke prdiky
-    	// a potom upravovat oboji?
-    	
         MovingAdapter ma = new MovingAdapter();
 
         //setBackground(new Color(220, 220, 220));
@@ -72,7 +69,7 @@ public class Editor extends JPanel {
     }
 
     /**
-     * Tato metoda procte sit, kterou ma editovat a vytvori pro ni graficke prvky
+     * Tato metoda procte sit, kterou ma editovat a vytvori pro ni graficke prvky,
      * hodi se na restart zobrazeni
      */
     public void reloadNet() {
@@ -167,13 +164,16 @@ public class Editor extends JPanel {
     }
 
     /**
-     * Nastavuje, co se deje, kdyz se hejbe mysou. 
+     * Nastavuje, co se deje, kdyz se hybe mysi. 
      */
     class MovingAdapter extends MouseAdapter {
 
         private int x;
         private int y;
 
+        /**
+         * Obsluha kliknuti mysi do site.
+         */
         public void mousePressed(MouseEvent e) {
             x = e.getX();
             y = e.getY();
@@ -184,39 +184,47 @@ public class Editor extends JPanel {
             for(GPlace p : places) {
             	if(p.isHit(x, y)) {
             		selPlace = p;
-            		return;
             	}
             }
             for(GTransition t : transitions) {
             	if(t.isHit(x, y)) {
             		selTrans = t;
-            		return;
             	}
             }
-            // kdyz kliknu do pole, tak se prida kolesko
-            //ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
-            //repaint(); // repaint po pridani
-            
+
+            // Na zaklade zvolene polozky v menu se deji ruzne veci..
             switch(action) {
             	case EDIT:
             		return;// Nedeje se nic, pravdepodobne jde jen o posun
             	case ADDPLACE:
+            		if(selTrans != null || selPlace != null) {
+            			return;
+            		}
             		Place newP = new Place(1);
                     newP.x = x - 40;
                     newP.y = y - 40;
                     petrinet.addPlace(newP);
             		break;
             	case ADDTRANSITION:
+            		if(selTrans != null || selPlace != null) {
+            			return;
+            		}
             		Transition newT = new Transition();
                     newT.x = x - 80;
                     newT.y = y - 40;
                     petrinet.addTransition(newT);
             		break;
             	case ARCEDIT:
-            		// tohle bude kreslit hrany kde nejsou a rusit kde jsou
+                    // tohle bude kreslit hrany kde nejsou a rusit kde jsou
             		break;
             	case DELETE:
             		// Tohle bude killit prechody a mista
+            		if(selTrans != null)
+            			petrinet.removeTransition(selTrans.getTransition());
+            		else if(selPlace != null)
+            			petrinet.removePlace(selPlace.getPlace());
+            		selTrans = null;
+                    selPlace = null;
             		break;
             }
             
@@ -224,27 +232,75 @@ public class Editor extends JPanel {
             repaint();
         }
 
+        /**
+         * Pri tazeni mysi se posouva vybrana komponenta site.
+         */
         // kompromis mezi rychle x pekne
         //public void mouseReleased(MouseEvent e) {
         public void mouseDragged(MouseEvent e) {    		
+
+            // kdyz neni nic vybrano, neni co posouvat
+        	if(selPlace == null && selTrans == null)
+        		return;
+        	// posouvat pri editaci hran neni mozne
+        	if(action == Toolbar.ARCEDIT)
+        		return;
         	
         	int dx = e.getX() - x;
             int dy = e.getY() - y;
-            
-        	if(selPlace == null && selTrans == null)
-        		return;
 
         	if(selPlace != null) {
         		selPlace.addX(dx);
                 selPlace.addY(dy);
-        	}
-        	if(selTrans != null) {
+        	} else if(selTrans != null) {
         		selTrans.addX(dx);
         		selTrans.addY(dy);
         	}
             repaint();
             x += dx;
             y += dy;
+        }
+        
+        /**
+         * Dokonceni nove hrany.
+         */
+        public void mouseReleased(MouseEvent e) {
+        	int x = e.getX();
+            int y = e.getY();
+        	// jen pri kresleni hrany
+        	if(action != Toolbar.ARCEDIT)
+        		return;
+        	GPlace endPlace= null;
+        	GTransition endTrans = null;
+        	// vyhledani, kde hrana konci
+        	for(GPlace p : places) {
+            	if(p.isHit(x, y)) {
+            		endPlace = p;
+            	}
+            }
+            for(GTransition t : transitions) {
+            	if(t.isHit(x, y)) {
+            		endTrans = t;
+            	}
+            }
+            // pridat nebo zrusit hranu
+            if(selTrans != null && endPlace != null) {
+            	if(!petrinet.removeArc(selTrans.getTransition(), endPlace.getPlace(), false)) {
+            		String name = JOptionPane.showInputDialog(null, "Nová hrana", "Hodnota/proměnná na hraně", JOptionPane.PLAIN_MESSAGE);
+            		if(name != null) {
+            			petrinet.addArc(selTrans.getTransition(), endPlace.getPlace(), false, name);
+            		}
+            	}
+            } else if (selPlace != null && endTrans != null) {
+            	if(!petrinet.removeArc(endTrans.getTransition(), selPlace.getPlace(), true)) {
+            		String name = JOptionPane.showInputDialog(null, "Nová hrana", "Hodnota/proměnná na hraně", JOptionPane.PLAIN_MESSAGE);
+            		if(name != null) {
+            			petrinet.addArc(endTrans.getTransition(), selPlace.getPlace(), true, name);
+            		}
+            	}
+            }
+            reloadNet();
+            repaint();
         }
     }
 
@@ -258,9 +314,7 @@ public class Editor extends JPanel {
 	    	action = Toolbar.getAction(name);
 	    }
     }
-    
-    
-    
+
     /**
      * Ulozeni prave editovane site.
      * @param file Soubor k ulozeni
