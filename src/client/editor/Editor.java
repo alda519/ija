@@ -186,8 +186,8 @@ public class Editor extends JPanel {
             //repaint(); // repaint po pridani
             
             Transition newT = new Transition();
-            newT.x = x;
-            newT.y = y;
+            newT.x = x - 80;
+            newT.y = y - 40;
             petrinet.addTransition(newT);
             reloadNet();
             repaint();
