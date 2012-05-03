@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="pepa" description="prvni pokusna pepikova sit" version="1" name="pepova sit">
+  <transition expr="a = x + y + z" x="315" y="196">
+    <guard src="x" op="&lt;" dst="y"/>
+    <guard src="y" op="X" dst="x"/>
+    <guard src="z" op="!=" dst="4"/>
+    <guard src="x" op="&gt;=" dst="3"/>
+    <arc io="in" name="x" place="1"/>
+    <arc io="in" name="4" place="2"/>
+    <arc io="out" name="y" place="1"/>
+    <arc io="out" name="a" place="2"/>
+    <arc io="out" name="6" place="3"/>
+    <arc io="in" name="7" place="4"/>
+  </transition>
+  <place id="1" x="353" y="344">
+    <value>3</value>
+    <value>8</value>
+    <value>10</value>
+  </place>
+  <place id="2" x="216" y="34">
+    <value>5</value>
+  </place>
+  <place id="3" x="342" y="35">
+    <value>2</value>
+    <value>1</value>
+  </place>
+  <place id="4" x="489" y="44"/>
+  <simulations/>
+</petrinet>
