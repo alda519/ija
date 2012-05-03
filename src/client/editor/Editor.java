@@ -199,7 +199,7 @@ public class Editor extends JPanel {
             
             switch(action) {
             	case EDIT:
-            		break;
+            		return;// Nedeje se nic, pravdepodobne jde jen o posun
             	case ADDPLACE:
             		Place newP = new Place(1);
                     newP.x = x - 40;
@@ -213,20 +213,21 @@ public class Editor extends JPanel {
                     petrinet.addTransition(newT);
             		break;
             	case ARCEDIT:
+            		// tohle bude kreslit hrany kde nejsou a rusit kde jsou
             		break;
             	case DELETE:
+            		// Tohle bude killit prechody a mista
             		break;
             }
             
             reloadNet();
             repaint();
-            // TODO: pridat kresleni mist atp.
         }
 
         // kompromis mezi rychle x pekne
         //public void mouseReleased(MouseEvent e) {
-        public void mouseDragged(MouseEvent e) {
-
+        public void mouseDragged(MouseEvent e) {    		
+        	
         	int dx = e.getX() - x;
             int dy = e.getY() - y;
             
