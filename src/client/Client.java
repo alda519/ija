@@ -117,6 +117,7 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event) {
 			tabs.addTab("Síť " + c, new Editor(new PetriNet()));
+			tabs.setSelectedIndex(tabs.getTabCount()-1);
 			c += 1;
 		}
 	}
