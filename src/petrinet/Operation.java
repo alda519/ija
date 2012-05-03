@@ -21,7 +21,7 @@ public enum Operation {
 			return LESSEQ;
 		} else if (op.equals(">=")){
 			return GREATEREQ;
-		} else if (op.equals("=")) {
+		} else if (op.equals("==")) {
 			return EQUAL;
 		} else if (op.equals("!=")) {
 			return NEQUAL;
