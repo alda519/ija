@@ -168,6 +168,9 @@ public class PetriNet {
     }
 
     // pridavani mist
+    public void addPlace(Place p) {
+    	this.places.add(p);
+    }
     // pridavani prechodu
     public void addTransition(Transition t) {
     	this.transitions.add(t);

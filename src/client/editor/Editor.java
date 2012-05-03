@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Dimension;
@@ -24,7 +26,9 @@ import java.util.*;
 
 public class Editor extends JPanel {
 
-    private PetriNet petrinet;
+    protected PetriNet petrinet;
+    
+    protected Toolbar action = Toolbar.EDIT;
     
     /** Minimalni a autualni rozmery plochy */
     private final int MINWIDTH = 800;
@@ -55,6 +59,14 @@ public class Editor extends JPanel {
         addMouseMotionListener(ma);
         addMouseListener(ma);
 
+        /** Toolbar */
+        JComboBox modeSel = new JComboBox( new String [] {"Editace", "Kreslení míst",
+        		"Kreslení přechodů", "Editace hran", "Rušení objektů",} );
+        modeSel.addActionListener(new ChangeMode());
+        add(modeSel);
+        add(new JButton("Simulovat krok"));
+        add(new JButton("Simulovat úplně"));
+        
         //setDoubleBuffered(true);
         reloadNet();
     }
@@ -185,10 +197,27 @@ public class Editor extends JPanel {
             //ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
             //repaint(); // repaint po pridani
             
-            Transition newT = new Transition();
-            newT.x = x - 80;
-            newT.y = y - 40;
-            petrinet.addTransition(newT);
+            switch(action) {
+            	case EDIT:
+            		break;
+            	case ADDPLACE:
+            		Place newP = new Place(1);
+                    newP.x = x - 40;
+                    newP.y = y - 40;
+                    petrinet.addPlace(newP);
+            		break;
+            	case ADDTRANSITION:
+            		Transition newT = new Transition();
+                    newT.x = x - 80;
+                    newT.y = y - 40;
+                    petrinet.addTransition(newT);
+            		break;
+            	case ARCEDIT:
+            		break;
+            	case DELETE:
+            		break;
+            }
+            
             reloadNet();
             repaint();
             // TODO: pridat kresleni mist atp.
@@ -218,6 +247,19 @@ public class Editor extends JPanel {
         }
     }
 
+    /**
+     * Zmena editacniho modu vyberem z listu
+     */
+    class ChangeMode implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	JComboBox cb = (JComboBox)e.getSource();
+	        String name = (String)cb.getSelectedItem();
+	    	action = Toolbar.getAction(name);
+	    }
+    }
+    
+    
+    
     /**
      * Ulozeni prave editovane site.
      * @param file Soubor k ulozeni
