@@ -7,8 +7,6 @@ import java.awt.BasicStroke;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileWriter;
@@ -66,6 +64,8 @@ public class Editor extends JPanel {
      * hodi se na restart zobrazeni
      */
     public void reloadNet() {
+    	places = new ArrayList<GPlace>();
+    	transitions = new ArrayList<GTransition>();
     	for(Place p : this.petrinet.getPlaces()) {
     		places.add(new GPlace(p));
     	}
@@ -185,8 +185,12 @@ public class Editor extends JPanel {
             //ellipses.add(new ZEllipse(x-20,y-20,40,40,255));
             //repaint(); // repaint po pridani
             
-            transitions.add(new GTransition(new Transition()));
-            //repaint
+            Transition newT = new Transition();
+            newT.x = x;
+            newT.y = y;
+            petrinet.addTransition(newT);
+            reloadNet();
+            repaint();
             // TODO: pridat kresleni mist atp.
         }
 

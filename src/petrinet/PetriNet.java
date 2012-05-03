@@ -169,6 +169,9 @@ public class PetriNet {
 
     // pridavani mist
     // pridavani prechodu
+    public void addTransition(Transition t) {
+    	this.transitions.add(t);
+    }
     // pridavani hran
     // odebirani vseho
 

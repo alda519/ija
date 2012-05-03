@@ -60,14 +60,19 @@ public class Client implements Runnable
 		// menu bar
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuFile = new JMenu("Soubor");
+		menuFile.setMnemonic('S');
 		JMenuItem newFile = new JMenuItem("Nový");
 		JMenuItem openFile = new JMenuItem("Otevřít");
 		JMenuItem saveFile = new JMenuItem("Uložit");
 		JMenuItem closeFile = new JMenuItem("Zavřít");
 		newFile.addActionListener(new AddNetTab());
+		newFile.setMnemonic('N');
 		openFile.addActionListener(new OpenFile());
+		openFile.setMnemonic('O');
 		saveFile.addActionListener(new SaveFile());
+		saveFile.setMnemonic('U');
 		closeFile.addActionListener(new CloseFile());
+		closeFile.setMnemonic('Z');
 		menuFile.add(newFile);
 		menuFile.add(openFile);
 		menuFile.add(saveFile);
@@ -75,11 +80,14 @@ public class Client implements Runnable
 		menuFile.add(new JSeparator());
 		
 		JMenuItem konecMenu = new JMenuItem("Konec");
+		konecMenu.setMnemonic('K');
 		konecMenu.addActionListener(new KonecTlacitko());
 		menuFile.add(konecMenu);
 
 		JMenu menuServer = new JMenu("Server");
+		menuServer.setMnemonic('r');
 		connect = new JMenuItem("Připojit");
+		connect.setMnemonic('P');
 		connect.addActionListener(new ClientConnect());
 		menuServer.add(connect);
 		menuServer.add(new JSeparator());
@@ -87,14 +95,18 @@ public class Client implements Runnable
 		JMenuItem serUp = new JMenuItem("Nahrát síť");
 		JMenuItem serSim = new JMenuItem("Simulovat síť");
 		serDown.setEnabled(false);
+		serDown.setMnemonic('S');
 		serUp.setEnabled(false);
+		serUp.setMnemonic('N');
 		serSim.setEnabled(false);
+		serSim.setMnemonic('M');
 		menuServer.add(serDown);
 		menuServer.add(serUp);
 		menuServer.add(serSim);
 
 		JMenu menuHelp = new JMenu("Nápověda");
-		menuHelp.setEnabled(false);
+		menuHelp.setMnemonic('N');
+		//menuHelp.setEnabled(false);
 
 		menuBar.add(menuFile);
 		menuBar.add(menuServer);
