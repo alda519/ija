@@ -286,14 +286,14 @@ public class Editor extends JPanel {
             // pridat nebo zrusit hranu
             if(selTrans != null && endPlace != null) {
             	if(!petrinet.removeArc(selTrans.getTransition(), endPlace.getPlace(), false)) {
-            		String name = JOptionPane.showInputDialog(null, "Nová hrana", "Hodnota/proměnná na hraně", JOptionPane.PLAIN_MESSAGE);
+            		String name = JOptionPane.showInputDialog(null, "Hodnota/proměnná na hraně", "Nová hrana", JOptionPane.PLAIN_MESSAGE);
             		if(name != null) {
             			petrinet.addArc(selTrans.getTransition(), endPlace.getPlace(), false, name);
             		}
             	}
             } else if (selPlace != null && endTrans != null) {
             	if(!petrinet.removeArc(endTrans.getTransition(), selPlace.getPlace(), true)) {
-            		String name = JOptionPane.showInputDialog(null, "Nová hrana", "Hodnota/proměnná na hraně", JOptionPane.PLAIN_MESSAGE);
+            		String name = JOptionPane.showInputDialog(null, "Hodnota/proměnná na hraně", "Nová hrana", JOptionPane.PLAIN_MESSAGE);
             		if(name != null) {
             			petrinet.addArc(endTrans.getTransition(), selPlace.getPlace(), true, name);
             		}
