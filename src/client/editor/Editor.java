@@ -105,20 +105,23 @@ public class Editor extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(new Color(130, 140, 250));
-        g2d.setStroke(new BasicStroke(2));
+    	g2d.setColor(new Color(255, 0, 0));
+        g2d.setStroke(new BasicStroke(4));
+        // vstupni hrany tluste cervene
         for(GTransition gt : transitions) {
-        	g2d.setColor(new Color(255, 0, 0));
-            g2d.setStroke(new BasicStroke(4));
         	for(GArc ga : gt.getArcsIn()) {
         		g2d.draw(ga);
         	}
-        	g2d.setColor(new Color(0, 0, 255));
-            g2d.setStroke(new BasicStroke(2));
+        }
+        // vystupni tenke, modre
+    	g2d.setColor(new Color(0, 0, 255));
+        g2d.setStroke(new BasicStroke(2));
+        for(GTransition gt : transitions) {
         	for(GArc ga : gt.getArcsOut()) {
         		g2d.draw(ga);
         	}
         }
+        g2d.setColor(new Color(130, 140, 250));
         for(GPlace gp : places) {
         	g2d.fill(gp);        	
         }
