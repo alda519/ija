@@ -1,9 +1,12 @@
 package client.editor;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -191,6 +194,13 @@ public class Editor extends JPanel {
             		selTrans = t;
             	}
             }
+            
+            if(e.getButton() == MouseEvent.BUTTON3) {
+            	System.out.println("button #");
+            	editTransition();
+            	editPlace();
+            	return;
+            }
 
             // Na zaklade zvolene polozky v menu se deji ruzne veci..
             switch(action) {
@@ -230,6 +240,61 @@ public class Editor extends JPanel {
             
             reloadNet();
             repaint();
+        }
+        
+        /**
+         * Editacni okno na prechody.
+         */
+        public void editTransition() {
+        	// pridavani.odebirani strazi
+        	// nastaveni vyrazu
+        	JFrame trEdit = new JFrame("Editace přechodu");
+        	trEdit.setSize(300, 300);
+        	trEdit.setLayout(new GridLayout(0, 1));
+        	//trEdit.setAlwaysOnTop(true);
+        	trEdit.setLocationRelativeTo(null);
+
+			JLabel exprLab = new JLabel("Operace: ");
+			JTextField expr = new JTextField("expr", 20);
+			trEdit.add(exprLab);
+			trEdit.add(expr); //
+			//trEdit.add(new JSeparator());
+			
+        	JLabel newGLab = new JLabel("Nová stráž:");
+        	trEdit.add(newGLab);
+        	JTextField src  = new JTextField("src", 5);
+        	trEdit.add(src);
+        	JComboBox opList = new JComboBox(new String [] { "<", ">", "<=", ">=", "==", "!="} );
+        	trEdit.add(opList);
+        	JTextField dst = new JTextField("dst", 5);
+        	trEdit.add(dst);
+
+			JButton addButton = new JButton("Přidat stráž");
+			trEdit.add(addButton);
+			//trEdit.add(new JSeparator());
+
+        	JComboBox guards = new JComboBox(new String [] {"A", "B", "C", "D", "E", "F"});
+        	//guards.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        	//guards.setLayoutOrientation(JList.VERTICAL);
+        	trEdit.add(new JScrollPane(guards));
+        	
+			JButton remButton = new JButton("Odebrat stráž");
+			trEdit.add(remButton, BorderLayout.SOUTH);
+			//trEdit.add(new JSeparator());
+			
+			JButton okButton = new JButton("OK");
+			trEdit.add(okButton);
+			
+			//trEdit.pack();
+			trEdit.setResizable(false);
+			trEdit.setVisible(true);
+        }
+ 
+        /**
+         * Editacni okno na mista.
+         */
+        public void editPlace() {
+        	// pridavani/odebirani cisel
         }
 
         /**
@@ -331,6 +396,17 @@ public class Editor extends JPanel {
     	}
     }
 
+    /**
+     * Trida pro editaci vlastnosti prechodu. Vytvori dialogove okno a uvidi se.
+     */
+    class TransitionEditor implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			JFrame dialog = new JFrame("Úprava přechodu");
+			dialog.setVisible(true);
+		}
+    	
+    }
 
     // bordel na smazani pomalu
     public static void main(String[] args) {

@@ -36,18 +36,19 @@ public class Client implements Runnable
 	public final int DEFAULT_WIDTH = 800;
 	/** Implicitni vyska okna */
 	public final int DEFAULT_HEIGTH = 600;
-	
+
 	/** Kazdy klient se bude dorozumivat se serverem skrz Protocol */
 	protected Protocol protocol;
-	
+
 	protected JFrame window;
 	protected JFrame dialog;
 	protected JTabbedPane tabs;
-	
+
 	/** Zda uz jsem pripojen */
 	protected boolean connectedFlag = false;
+
 	/**
-	 * Konstruktor.
+	 * Vytovri okno klienta, menu, pripravi zalozky atd.
 	 */
 	public Client()
 	{
@@ -139,7 +140,8 @@ public class Client implements Runnable
 	class OpenFile implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			// prompt o jmeno souboru
-			JFileChooser fileChooser = new JFileChooser(".");
+			JFileChooser fileChooser = new JFileChooser("examples");
+			fileChooser.setApproveButtonText("Otevřít");
 			int status = fileChooser.showOpenDialog(null);
 			if (status == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
@@ -165,7 +167,8 @@ public class Client implements Runnable
 			int i = tabs.getSelectedIndex();
 			if(i != -1) {
 				// prompt o jmeno souboru
-				JFileChooser fileChooser = new JFileChooser(".");
+				JFileChooser fileChooser = new JFileChooser("examples");
+				fileChooser.setApproveButtonText("Uložit");
 				int status = fileChooser.showOpenDialog(null);
 				if (status == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
@@ -206,13 +209,13 @@ public class Client implements Runnable
 	protected JCheckBox register;
 	protected JMenuItem connect;
 	/**
-	 * Udalost pripojeni.
+	 * Obsluha tlacitka pripojit z menu. Vytvori okno konfigurace prihlaseni na server.
 	 */
 	class ClientConnect implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			// hackity hack, pokud uz jsem pripojen, nepujde to znovu
+			// hackity hack, pokud uz jsem pripojen, bylo tlacitko zmneno na odpojit, tedy se odpoji
 			if(connectedFlag) {
 				try { protocol.close(); } catch (Exception e) {}
 				connectedFlag = false;
@@ -252,9 +255,9 @@ public class Client implements Runnable
 			prompt.add(new JLabel("")); // hackity hack, jen vycpavka
 			
 			JButton confirm = new JButton("Připojit");
-			confirm.addActionListener(new ClientReallyWannaConnect());
+			confirm.addActionListener(new ProceedConnection());
 			JButton cancel = new JButton("Zrušit");
-			cancel.addActionListener(new KillMePlease());
+			cancel.addActionListener(new CloseConnectDialog());
 
 			prompt.add(confirm);
 			prompt.add(cancel);
@@ -267,7 +270,7 @@ public class Client implements Runnable
 	/**
 	 * Uzavre okynko.
 	 */
-	class KillMePlease implements ActionListener
+	class CloseConnectDialog implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
@@ -276,9 +279,9 @@ public class Client implements Runnable
 	}
 
 	/**
-	 * Tohle se stane po potvrzeni tlacitka pripojit.
+	 * Obsluha potvrzeni zadosti o pripojeni na server z konfig. okna.
 	 */
-	class ClientReallyWannaConnect implements ActionListener
+	class ProceedConnection implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
@@ -302,7 +305,7 @@ public class Client implements Runnable
 		try {
 			SocketAddress sockaddr = new InetSocketAddress(hostname, port);
 			sock = new Socket();
-			sock.connect(sockaddr, 5000);
+			sock.connect(sockaddr, 5000); // to je timeout tech 5000
 			//sock = new Socket(sockaddr, port);
 			protocol = new Protocol(sock);
 		} catch (IOException e){ 
