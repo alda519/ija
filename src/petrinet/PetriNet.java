@@ -1,5 +1,6 @@
 package petrinet;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -167,23 +168,39 @@ public class PetriNet {
     	return this.transitions;
     }
 
-    // pridavani mist
+    /** Prida do site misto */
     public void addPlace(Place p) {
+    	// TODO: kontrola unikatnosti cisla, duplicity zahodit/predelat
     	this.places.add(p);
     }
-    // pridavani prechodu
+
+    /** Pridavani prechodu do site */
     public void addTransition(Transition t) {
     	this.transitions.add(t);
     }
-    // pridavani hran
-    // odebirani vseho
+
     /** Ostraneni prechodu */
     public void removeTransition(Transition t) {
     	this.transitions.remove(t);
     }
+    
     /** Ostraneni mista */
     public void removePlace(Place p) {
     	// TODO: neni tak jednoduche, je treba oddelat vsechny hrany z/do tohoto mista
+    	for(Transition t : this.transitions) {
+    		for(Iterator <Arc> iter = t.getInArcs().iterator(); iter.hasNext(); ) {
+    			Arc a = iter.next();
+    			if(a.getPlace() == p) {
+    				iter.remove();
+    			}
+    		}
+    		for(Iterator <Arc> iter = t.getOutArcs().iterator(); iter.hasNext(); ) {
+    			Arc a = iter.next();
+    			if(a.getPlace() == p) {
+    				iter.remove();
+    			}
+    		}
+    	}
     	this.places.remove(p);
     }
     
