@@ -17,8 +17,11 @@ public class Transition {
 	
 	/** Vystupni operace */
 	protected String operation;
-	
-	
+
+	/** Souradnice pro kresleni */
+	public int x, y;
+
+
 	public Transition() {
 
 	}
@@ -121,6 +124,8 @@ public class Transition {
 		Element transition = transitions.addElement("transition");
 		// operace
 		transition.addAttribute("expr", this.operation);
+		transition.addAttribute("x", ""+this.x);
+		transition.addAttribute("y", ""+this.y);
 		// k prechodu se pridaji podminky
 		for(Condition cond: this.conditions) {
 			cond.toXML(transition);

@@ -3,6 +3,15 @@ package petrinet;
 import java.util.List;
 import java.util.ArrayList;
 
+
+// Ukolem teto tridy bude rozparsovat string s vyrazem ve tvaru x = a + b - c + d - e - f
+// a vratit hodnotu
+// kterou to ziska tak, ze to dostane pole hodnot (int [])
+// a cislo k promenne priradi dle vyhledaneho prechodu
+// no nebudue to uplne easy
+
+// NEBO! vymyslet to jinak lip !
+
 /**
  * Trida pro zpracovani vypoctu v prechodu
  */

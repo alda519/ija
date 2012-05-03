@@ -20,7 +20,10 @@ public class Place {
 	protected List <Integer> values = new ArrayList<Integer>();
 	/** Identifikator mista. */
 	protected int id;
-	
+
+	/** Souradnice pro kresleni */
+	public int x, y;
+
 	/**
 	 * Konstruktor
 	 * @param id identifikator mista
@@ -69,6 +72,8 @@ public class Place {
 		// do seznamu mist, se prida misto s danym id
 		Element place = places.addElement("place");
 		place.addAttribute("id", ""+id);
+		place.addAttribute("x", ""+this.x);
+		place.addAttribute("y", ""+this.y);
 		// do mista se pridaji vsechny hodnoty
 		for(Integer i : values) {
 			Element val = place.addElement("value");

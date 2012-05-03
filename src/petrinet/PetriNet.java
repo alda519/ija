@@ -20,6 +20,10 @@ public class PetriNet {
 	protected String version;
 	protected List<String> simulations = new ArrayList<String>();
 
+	/** Konstruktor uplne prazdne site. */
+	public PetriNet() {
+	}
+
     /**
      * Vytvoreni nove site.
      * @param name nazev site
@@ -46,6 +50,23 @@ public class PetriNet {
     }
     
     /**
+     * Vraci seznam vsech mist site.
+     * @return seznam mist
+     */
+    public List<Place> getPlaces() {
+    	return this.places;
+    }
+    
+    /**
+     * Vraci seznam vsech prechodu site.
+     * @return seznam prechodu
+     */
+    public List<Transition> getTransitions() {
+    	return this.transitions;
+    }
+    
+    
+    /**
      * Konstruktor site z XML popisu.
      * @param xml
      */
@@ -65,6 +86,9 @@ public class PetriNet {
     		for(Element place : places) {
     			// vytvoreni mista
     			Place newPlace = new Place(Integer.parseInt(place.attributeValue("id")));
+    			// nastaveni umisteni
+    			newPlace.x = Integer.parseInt(place.attributeValue("x"));
+    			newPlace.y = Integer.parseInt(place.attributeValue("y"));
     			// misto muze obsahovat spousty hodnot
     			List <Element> values = place.elements("value");
     			for(Element value : values) {
@@ -77,6 +101,9 @@ public class PetriNet {
     		for(Element transition : transitions) {
     			// vytvoreni noveho prechodu
     			Transition newTransition = new Transition();
+    			// nastaveni polohy
+    			newTransition.x = Integer.parseInt(transition.attributeValue("x"));
+    			newTransition.y = Integer.parseInt(transition.attributeValue("y"));
     			// nastaveni vystupni operace
     			newTransition.setExpr(transition.attributeValue("expr"));
     			// nacteni strazi
@@ -170,6 +197,8 @@ public class PetriNet {
     }
     
     
+    
+    // zase testovani kod na nic!
     public static void main(String [] args) {
     	
     	PetriNet net = PetriNetFactory(new File("examples/net1.net"));
