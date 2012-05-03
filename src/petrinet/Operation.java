@@ -7,6 +7,11 @@ public enum Operation {
 
 	LESS, GREATER, LESSEQ, GREATEREQ, EQUAL, NEQUAL, UNKNOWN;
 	
+	/**
+	 * Prevadi text na operator.
+	 * @param op textova reprezentace operaotu
+	 * @return vraci vyctovou hodnotu
+	 */
 	public static Operation getOperation(String op) {
 		if(op.equals("<")) {
 			return LESS;

@@ -6,7 +6,7 @@
 package client;
 
 import java.io.IOException;
-
+import java.io.File;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.InetSocketAddress;
@@ -20,8 +20,8 @@ import java.awt.event.*;
 import javax.swing.SwingUtilities;
 
 import protocol.Protocol;
-import client.petrinet.GPlace;
-
+import client.editor.Editor;
+import petrinet.PetriNet;
 
 /**
  * Trida klienta.
@@ -68,8 +68,8 @@ public class Client implements Runnable
 		JMenuItem openFile = new JMenuItem("Otevřít");
 		JMenuItem saveFile = new JMenuItem("Uložit");
 		newFile.addActionListener(new AddNetTab());
-		openFile.setEnabled(false);
-		saveFile.setEnabled(false);
+		openFile.addActionListener(new OpenFile());
+		saveFile.addActionListener(new SaveFile());
 		menuFile.add(newFile);
 		menuFile.add(openFile);
 		menuFile.add(saveFile);
@@ -116,8 +116,51 @@ public class Client implements Runnable
 	class AddNetTab implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event) {
-			tabs.addTab("Síť " + c, new MovingScaling());
+			tabs.addTab("Síť " + c, new Editor(new PetriNet()));
 			c += 1;
+		}
+	}
+
+	/**
+	 * Obsluha otevreni souboru z menu.
+	 */
+	class OpenFile implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			// prompt o jmeno souboru
+			JFileChooser fileChooser = new JFileChooser(".");
+			int status = fileChooser.showOpenDialog(null);
+			if (status == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				int i = tabs.getSelectedIndex();
+				// pokud neni zadny tab, vytvori se
+				if(i == -1) {
+					tabs.addTab("novy", new Editor(PetriNet.PetriNetFactory(selectedFile)));
+				} else {
+					// jinak se jen nastavi nova sit
+					tabs.remove(i);
+					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile)), i);
+					tabs.setSelectedIndex(i);
+				}
+		    }
+		}
+	}
+
+	/**
+	 * Obsluha ulozeni souboru z menu.
+	 */
+	class SaveFile implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			// prompt o jmeno souboru
+			JFileChooser fileChooser = new JFileChooser(".");
+			int status = fileChooser.showOpenDialog(null);
+			if (status == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				int i = tabs.getSelectedIndex();
+				if(i != -1) {
+					Editor e = (Editor) tabs.getComponentAt(i);
+					e.saveNet(selectedFile);
+				}
+		    }
 		}
 	}
 

@@ -179,14 +179,12 @@ public class PetriNet {
 	    root.addAttribute("version", this.version);
 	    root.addAttribute("name", this.name);
 	    // pridani vsech prechodu
-	    Element transitions = root.addElement("transitions");
 	    for(Transition t : this.transitions) {
-	    	t.toXML(transitions);
+	    	t.toXML(root);
 	    }
 	    // pridani vsech mist
-	    Element places = root.addElement("places");
 	    for(Place p : this.places) {
-	    	p.toXML(places);
+	    	p.toXML(root);
 	    }
 	    // a nakonec seznam simulaci
 	    Element simulations = root.addElement("simulations");
