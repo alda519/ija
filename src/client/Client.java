@@ -134,11 +134,11 @@ public class Client implements Runnable
 				int i = tabs.getSelectedIndex();
 				// pokud neni zadny tab, vytvori se
 				if(i == -1) {
-					tabs.addTab("novy", new Editor(PetriNet.PetriNetFactory(selectedFile)));
+					tabs.addTab(selectedFile.getName(), new Editor(PetriNet.PetriNetFactory(selectedFile)));
 				} else {
 					// jinak se jen nastavi nova sit
 					tabs.remove(i);
-					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile)), i);
+					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile)), selectedFile.getName(), i);
 					tabs.setSelectedIndex(i);
 				}
 		    }
@@ -150,17 +150,18 @@ public class Client implements Runnable
 	 */
 	class SaveFile implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			// prompt o jmeno souboru
-			JFileChooser fileChooser = new JFileChooser(".");
-			int status = fileChooser.showOpenDialog(null);
-			if (status == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = fileChooser.getSelectedFile();
-				int i = tabs.getSelectedIndex();
-				if(i != -1) {
+			int i = tabs.getSelectedIndex();
+			if(i != -1) {
+				// prompt o jmeno souboru
+				JFileChooser fileChooser = new JFileChooser(".");
+				int status = fileChooser.showOpenDialog(null);
+				if (status == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
 					Editor e = (Editor) tabs.getComponentAt(i);
 					e.saveNet(selectedFile);
-				}
-		    }
+					tabs.setTitleAt(i, selectedFile.getName());
+			    }
+			}
 		}
 	}
 
