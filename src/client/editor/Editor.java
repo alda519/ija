@@ -69,9 +69,34 @@ public class Editor extends JPanel {
     		places.add(new GPlace(p));
     	}
     	for(Transition t : this.petrinet.getTransitions()) {
-    		transitions.add(new GTransition(t));
+    		GTransition ngt = new GTransition(t);
+    		transitions.add(ngt);
+    		// prochazi se vsechny hrany kazdeho prechodu
+    		for(Arc a : t.getInArcs()) {
+    			// vytvori se cara
+    			GArc na = new GArc(t.x + 80, t.y + 40, a.getPlace().x + 40, a.getPlace().y + 40);
+    			// ted hledam GPlace, ktery obsahuje a.getPlace()
+    			for(GPlace gpl : this.places) {
+    				if(gpl.contains(a.getPlace())) {
+    					// do togo gpalcu tu hranu taky pridam
+    					gpl.addOutArc(na);
+    				}
+    			}
+    			ngt.addArcIn(na);
+    		}
+    		for(Arc a : t.getOutArcs()) {
+    			// vytvori se cara
+    			GArc na = new GArc(a.getPlace().x + 40, a.getPlace().y + 40, t.x + 80, t.y + 40);
+    			// ted hledam GPlace, ktery obsahuje a.getPlace()
+    			for(GPlace gpl : this.places) {
+    				if(gpl.contains(a.getPlace())) {
+    					// do togo gpalcu tu hranu taky pridam
+    					gpl.addInArc(na);
+    				}
+    			}
+    			ngt.addArcOut(na);
+    		} 
     	}
-    	//TODO naloadovat cary
     }
     
     /**
@@ -82,14 +107,24 @@ public class Editor extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(new Color(130, 140, 250));
         g2d.setStroke(new BasicStroke(2));
-        // TODO: vykreslit cary
+        for(GTransition gt : transitions) {
+        	g2d.setColor(new Color(255, 0, 0));
+            g2d.setStroke(new BasicStroke(4));
+        	for(GArc ga : gt.getArcsIn()) {
+        		g2d.draw(ga);
+        	}
+        	g2d.setColor(new Color(0, 0, 255));
+            g2d.setStroke(new BasicStroke(2));
+        	for(GArc ga : gt.getArcsOut()) {
+        		g2d.draw(ga);
+        	}
+        }
         for(GPlace gp : places) {
         	g2d.fill(gp);        	
         }
         for(GTransition gt : transitions) {
         	g2d.fill(gt);
         }
-        //g2d.draw(line);
     }
 
     /**
@@ -165,6 +200,7 @@ public class Editor extends JPanel {
     /**
      * Vyvotereni okna atd.
      */
+    // bordel na smazani pomalu
     public static void main(String[] args) {
 
     	// nacist sit z XML

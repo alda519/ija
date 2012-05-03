@@ -27,9 +27,8 @@
 
     <arc io="in" name="x" place="1" />
     <arc io="in" name="4" place="2" />
-    <arc io="out" name="y" place="1" />
-    <arc io="out" name="a" place="2" />
-    <arc io="out" name="6" place="1" />
+    <arc io="out" name="y" place="3" />
+    <arc io="out" name="a" place="4" />
 
   </transition>
 

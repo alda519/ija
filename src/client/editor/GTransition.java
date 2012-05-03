@@ -29,6 +29,12 @@ public class GTransition  extends Rectangle2D.Float {
     public void addArcOut(GArc line) {
         arcsOut.add(line);
     }
+    public List<GArc> getArcsIn() {
+    	return this.arcsIn;
+    }
+    public List<GArc> getArcsOut() {
+    	return this.arcsOut;
+    }
 
     public boolean isHit(float x, float y) {
         if (getBounds2D().contains(x, y)) {

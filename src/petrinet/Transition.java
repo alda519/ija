@@ -23,7 +23,6 @@ public class Transition {
 
 
 	public Transition() {
-
 	}
 
 	public void addInArc(Arc a) {
@@ -34,10 +33,18 @@ public class Transition {
 		out.add(a);
 	}
 
+	public List<Arc> getInArcs() {
+		return this.in;
+	}
+
+	public List<Arc> getOutArcs() {
+		return this.out;
+	}
+
 	public void removeArc() {
 		
 	}
-	
+
 	/**
 	 * Nastaveni vyrazu pro vypocet vystupu
 	 * @param expr vyraz

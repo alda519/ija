@@ -43,7 +43,14 @@ public class ConstArc implements Arc {
 	public int getValue(int i) {
 		return this.place.getValue(i);
 	}
-	
+
+	/**
+	 * Vraci misto odkud/kam vede.
+	 */
+	public Place getPlace() {
+		return this.place;
+	}
+
 	/** Vraci vzdy null, nema jmeno */
 	public String getName() {
 		return null;

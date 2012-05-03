@@ -22,7 +22,10 @@ public interface Arc {
 	
 	/** Vraci jmeno hrany */
 	public String getName();
-	
+
+	/** Vraci misto odkud/kam vede */
+	public Place getPlace();
+
 	/** Generuje XML popis hrany */
 	public void toXML(Element t, String io);
 }

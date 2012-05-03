@@ -33,11 +33,10 @@ public class GPlace extends Ellipse2D.Float {
 		setFrame(x, y, RADIUS, RADIUS);
 	}
 
-    public void addArcIn(GArc line) {
+    public void addInArc(GArc line) {
         arcsIn.add(line);
     }
-
-    public void addArcOut(GArc line) {
+    public void addOutArc(GArc line) {
         arcsOut.add(line);
     }
 
@@ -69,5 +68,10 @@ public class GPlace extends Ellipse2D.Float {
             line.addY2(y);
         }
         this.place.y = (int) this.y;
+    }
+
+    /** Vraci true, pokud tato hranu reprezentuje dane misto */
+    public boolean contains(Place p) {
+    	return p == this.place;
     }
 }

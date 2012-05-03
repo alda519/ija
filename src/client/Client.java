@@ -11,13 +11,9 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.InetSocketAddress;
 
-// grafika
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.SwingUtilities;
 
 import protocol.Protocol;
 import client.editor.Editor;

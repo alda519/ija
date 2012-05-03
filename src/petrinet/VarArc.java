@@ -34,7 +34,7 @@ public class VarArc implements Arc {
 	public int getOptions() {
 		return this.place.size();
 	}
-	
+
 	/**
 	 * Vraci hodnotu z mista na danem indexu
 	 */
@@ -45,7 +45,14 @@ public class VarArc implements Arc {
 	public String getName() {
 		return name;
 	}
-	
+
+	/**
+	 * Vraci misto odkud/kam vede.
+	 */
+	public Place getPlace() {
+		return this.place;
+	}
+
 	/** Generuje XML popis hrany */
 	public void toXML(Element t, String io) {
 		Element arc = t.addElement("arc");
