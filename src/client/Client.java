@@ -14,8 +14,12 @@ import java.io.File;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.InetSocketAddress;
+import java.util.List;
+
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -108,13 +112,12 @@ public class Client implements Runnable
 		menuServer.add(connect);
 		menuServer.add(new JSeparator());
 		JMenuItem serDown= new JMenuItem("Stáhnou síť");
-		JMenuItem serUp = new JMenuItem("Nahrát síť");
-		JMenuItem serSim = new JMenuItem("Simulovat síť");
-		serDown.setEnabled(false);
 		serDown.setMnemonic('S');
-		serUp.setEnabled(false);
+		serDown.addActionListener(new ListServerNets());
+		JMenuItem serUp = new JMenuItem("Nahrát síť");
 		serUp.setMnemonic('N');
-		serSim.setEnabled(false);
+		serUp.addActionListener(new UploadNet());
+		JMenuItem serSim = new JMenuItem("Simulovat síť");
 		serSim.setMnemonic('M');
 		menuServer.add(serDown);
 		menuServer.add(serUp);
@@ -364,6 +367,60 @@ public class Client implements Runnable
 		} else {
 			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + root.attributeValue("expl") , "Chyba", JOptionPane.ERROR_MESSAGE);
 			try { protocol.close(); } catch (Exception e) {}
+		}
+	}
+
+	/**
+	 * Zobrazeni seznamu siti ze serveru.
+	 */
+	class ListServerNets implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			protocol.sendMeNetsList();
+			Document doc = protocol.getMessage();
+			Element root = doc.getRootElement();
+			if(root.getName().equals("netslist")) {
+				JFrame netlist = new JFrame("Sítě na serveru");
+				netlist.setSize(280, 320);
+				netlist.setLocationRelativeTo(null);
+				netlist.setLayout(new FlowLayout());
+				// sestaveni stromu siti a jejich verzi
+				DefaultMutableTreeNode top = new DefaultMutableTreeNode("Seznam sítí");
+				for(Element net : (List<Element>) root.elements("net")) {
+					DefaultMutableTreeNode item = new DefaultMutableTreeNode(net.attributeValue("name"));
+					for(Element version : (List<Element>)net.elements("version")) {
+						item.add(new DefaultMutableTreeNode(version.attributeValue("name")));
+					}
+					top.add(item);
+				}
+				JTree tree = new JTree(top);
+		        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+				//JList list = new JList(new String [] {"1", "2", "3" });
+
+				JScrollPane scpane = new JScrollPane(tree);
+				scpane.setPreferredSize(new Dimension(250, 250));
+				netlist.add(scpane);
+				netlist.add(new JButton("OK"));
+				netlist.setResizable(false);
+				netlist.setVisible(true);
+				netlist.addWindowListener(new WindowAdapter() { // TODO toto pouzivat casteji
+					public void windowClosing(WindowEvent e) {
+						System.out.println("Zavira se!");
+				    }
+				});
+			}
+		}
+	}
+
+	/**
+	 * Ulozeni site na server.
+	 */
+	class UploadNet implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int i = tabs.getSelectedIndex();
+			Editor editor = (Editor) tabs.getComponentAt(i);
+			protocol.sendDocument(editor.getNet().toXML());
 		}
 	}
 

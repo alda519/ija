@@ -442,6 +442,14 @@ public class Editor extends JPanel {
     	}
     }
 
+    /**
+     * Ziskani petriho site.
+     * @return vraci upravovanou petriho sit.
+     */
+    public PetriNet getNet() {
+    	return this.petrinet;
+    }
+
     protected JTextField newName;
     protected JTextField newDesc;
     protected JFrame netEditor;

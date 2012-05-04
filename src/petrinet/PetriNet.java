@@ -306,6 +306,13 @@ public class PetriNet {
     public String getAuthor() {
     	return this.author;
     }
+    /**
+     * Nastaveni jmena autora.
+     * @param auth jmeno autora site
+     */
+    public void setAuthor(String auth) {
+    	this.author = auth;
+    }
 
     /**
      * Ziskani verze.

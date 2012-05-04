@@ -10,13 +10,18 @@
 package server;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
+
 import protocol.Protocol;
 //import server.simulator.Simulator;
 //import server.Users;
@@ -30,11 +35,14 @@ public class Server implements Runnable
 {
 	/** Implicitni cislo portu */
 	static final int DEFAULT_PORT = 3030;
-	
+
 	/** Server komunikuje pres Protocol */
 	protected Protocol protocol;
 	/** Databaze uzivatelu */
 	protected Users users; 
+
+	/** Jmeno prave prihlaseneho uzivatele */
+	protected String username;
 
 	/**
 	 * Vytvoreni nove instance Serveru pro obsluhu klienta.
@@ -102,6 +110,7 @@ public class Server implements Runnable
 		// overeni uzivatele
 		if(users.authenticate(name, password)) {
 			protocol.sendOk();
+			username = name;
 		} else {
 			protocol.sendError("Neexistující uživatel, nebo chybné heslo.");
 		}
@@ -117,6 +126,7 @@ public class Server implements Runnable
 		// snad se ho povede registrovat
 		if(users.register(name, password)) {
 			protocol.sendOk();
+			username = name;
 		} else {
 			protocol.sendError("Nebylo možné uživatele registrovat.");
 		}
@@ -127,8 +137,33 @@ public class Server implements Runnable
 	 * @param doc dokument se siti k ulozeni
 	 */
 	protected void saveNet(Document doc) {
+		// nacteni site
 		PetriNet pn = new PetriNet(doc);
-		pn.toXML();
+		// nacteni jmena
+		String name = pn.getName();
+		// nastaveni autora
+		pn.setAuthor(username);
+		// zjisteni a nastaveni verze
+		File dir = new File("examples/storage/" + name);
+		String version;
+		if(dir.exists()) {
+			version = "" + (dir.listFiles().length + 1);
+		} else {
+			dir.mkdir();
+			version = "1";
+		}
+		pn.setVersion(version);
+		// a konecne ulozeni
+		File file = new File("examples/storage/" + name + "/" + version);
+		try {
+	    	FileWriter out = new FileWriter(file);
+	        OutputFormat format = OutputFormat.createPrettyPrint();
+	        XMLWriter writer = new XMLWriter(out, format);
+	        writer.write(pn.toXML());
+	    	out.close();
+    	} catch (IOException e) {
+    		System.err.println("Nelze soubor ulozit.");
+    	}
 	}
 
 	/**
@@ -136,8 +171,19 @@ public class Server implements Runnable
 	 */
 	protected void sendNetsList() {
 		File path = new File("examples/storage/");
-		File files [] = path.listFiles();
-		protocol.sendNetsList(files);
+		Document doc = DocumentHelper.createDocument();
+		Element netslist = doc.addElement("netslist");
+		// projit vsechny slozky - site
+		for(File folder : path.listFiles()) {
+			Element net = netslist.addElement("net");
+			net.addAttribute("name", folder.getName());
+			// a v nich soubory - verze
+			for(File file : folder.listFiles()) {
+				Element version = net.addElement("version");
+				version.addAttribute("name", file.getName());
+			}
+		}
+		protocol.sendDocument(doc);
 	}
 
 	/**

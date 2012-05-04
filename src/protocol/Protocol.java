@@ -88,17 +88,15 @@ public class Protocol
 	}
 
 	/** Odeslani seznamu siti*/
-	public void sendNetsList(File files []) {
-		Document doc = DocumentHelper.createDocument();
-		Element netslist = doc.addElement("netslist");
-		for(File file : files) {
-			Element net = netslist.addElement("net");
-			net.addAttribute("name", file.getName());
-		}
-		System.out.println(doc.asXML());
-		//sendMessage(doc.asXML());
+	public void sendDocument(Document doc) {
+		sendMessage(doc.asXML());
+		//System.out.println(doc.asXML());
 	}
 
+	/** Zadost o seznam siti */
+	public void sendMeNetsList() {
+		sendMessage("<netslist />");
+	}
 	/**
 	 * Ukonceni komunikace
 	 * @throws IOException
