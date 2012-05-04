@@ -21,6 +21,9 @@ public class PetriNet {
 	protected String version = "";
 	protected List<String> simulations = new ArrayList<String>();
 
+	/** pocitadlo mist, slouzi k pridelovani novych cisel */
+	protected int placeCnt = -1;
+
 	/** Konstruktor uplne prazdne site. */
 	public PetriNet() {
 	}
@@ -56,7 +59,10 @@ public class PetriNet {
     		List<Element> places =  root.elements("place");
     		for(Element place : places) {
     			// vytvoreni mista
-    			Place newPlace = new Place(Integer.parseInt(place.attributeValue("id")));
+    			int id = Integer.parseInt(place.attributeValue("id"));
+    			if(id > this.placeCnt)
+    				this.placeCnt = id;
+    			Place newPlace = new Place(id);
     			// nastaveni umisteni
     			newPlace.x = Integer.parseInt(place.attributeValue("x"));
     			newPlace.y = Integer.parseInt(place.attributeValue("y"));
@@ -170,7 +176,8 @@ public class PetriNet {
 
     /** Prida do site misto */
     public void addPlace(Place p) {
-    	// TODO: kontrola unikatnosti cisla, duplicity zahodit/predelat
+    	// nastaveni unikatniho id, tuto metodu stejne pouziva jen editor
+    	p.setId(++this.placeCnt);
     	this.places.add(p);
     }
 

@@ -81,6 +81,12 @@ public class Client implements Runnable
 		menuFile.add(closeFile);
 		menuFile.add(new JSeparator());
 		
+		JMenuItem theme = new JMenuItem("Změnit vzhled");
+		theme.setMnemonic('v');
+		theme.addActionListener(new ChangeTheme());
+		menuFile.add(theme);
+		menuFile.add(new JSeparator());
+
 		JMenuItem konecMenu = new JMenuItem("Konec");
 		konecMenu.setMnemonic('K');
 		konecMenu.addActionListener(new KonecTlacitko());
@@ -135,6 +141,21 @@ public class Client implements Runnable
 		}
 	}
 
+	/**
+	 * Obsluha zmeny vzhledu.
+	 */
+	class ChangeTheme implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			JFileChooser fileChooser = new JFileChooser("examples/themes");
+			fileChooser.setApproveButtonText("Otevřít");
+			int status = fileChooser.showOpenDialog(null);
+			if (status == JFileChooser.APPROVE_OPTION) {
+				Theme.loadTheme(fileChooser.getSelectedFile());
+				tabs.repaint();
+			}
+		}
+	}
+	
 	/**
 	 * Obsluha otevreni souboru z menu.
 	 */

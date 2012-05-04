@@ -2,6 +2,7 @@ package client.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
@@ -45,13 +46,17 @@ public class Editor extends JPanel {
     private GPlace selPlace;
     private GTransition selTrans;
     
+    /** Okna na upravu prechodu a mist. */
+    private JFrame trEdit;
+    private JFrame plEdit;
+
     /**
      * Jen nastaveni zpracovani udalosti a vytvoreni elipsicky
      */
     public Editor(PetriNet net) {
     	this.petrinet = net;
     	setPreferredSize(new Dimension(width, height));
-    	
+
         MovingAdapter ma = new MovingAdapter();
 
         //setBackground(new Color(220, 220, 220));
@@ -65,7 +70,7 @@ public class Editor extends JPanel {
         add(modeSel);
         add(new JButton("Simulovat krok"));
         add(new JButton("Simulovat úplně"));
-        
+
         //setDoubleBuffered(true);
         reloadNet();
     }
@@ -117,6 +122,7 @@ public class Editor extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setFont(new Font(Theme.FONT, Font.PLAIN, Theme.FONT_SIZE));
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     	g2d.setColor(new Color(Theme.ARC_IN_R, Theme.ARC_IN_G, Theme.ARC_IN_B));
         g2d.setStroke(new BasicStroke(4));
@@ -249,9 +255,12 @@ public class Editor extends JPanel {
          * Editacni okno na prechody.
          */
         public void editTransition() {
+        	// pokud uz je nejaky prechod upravovan, nebude se nic delat
+        	if(trEdit != null)
+        		return;
         	// pridavani.odebirani strazi
         	// nastaveni vyrazu
-        	JFrame trEdit = new JFrame("Editace přechodu");
+        	trEdit = new JFrame("Editace přechodu");
         	trEdit.setSize(300, 300);
         	trEdit.setLayout(new GridLayout(0, 1));
         	//trEdit.setAlwaysOnTop(true);
@@ -280,9 +289,9 @@ public class Editor extends JPanel {
         	//guards.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         	//guards.setLayoutOrientation(JList.VERTICAL);
         	trEdit.add(new JScrollPane(guards));
-        	
+
 			JButton remButton = new JButton("Odebrat stráž");
-			trEdit.add(remButton, BorderLayout.SOUTH);
+			trEdit.add(remButton);
 			//trEdit.add(new JSeparator());
 			
 			JButton okButton = new JButton("OK");
@@ -297,7 +306,29 @@ public class Editor extends JPanel {
          * Editacni okno na mista.
          */
         public void editPlace() {
+        	// pokud uz je nejake misto upravovano, nebude se nic delat
+        	if(plEdit != null)
+        		return;
         	// pridavani/odebirani cisel
+        	plEdit = new JFrame("Úprava místa");
+        	plEdit.setLayout(new GridLayout(0, 1));
+        	plEdit.setSize(300, 160);
+        	plEdit.setLocationRelativeTo(null);
+        	JLabel newVLab = new JLabel("Nová hodnota:");
+        	plEdit.add(newVLab);
+        	JTextField newVal  = new JTextField("val", 5);
+        	plEdit.add(newVal);
+        	JButton addButton = new JButton("Přidat hodnotu");
+			plEdit.add(addButton);
+
+			JComboBox values = new JComboBox(new String [] {"1", "5", "10", "11"});
+        	plEdit.add(values);
+        	JButton remButton = new JButton("Odebrat hodnotu");
+			plEdit.add(remButton);
+
+        	JButton okButton = new JButton("OK");
+			plEdit.add(okButton);
+        	plEdit.setVisible(true);
         }
 
         /**

@@ -42,9 +42,13 @@ public class Place {
 		return this.values.get(index);
 	}
 	
-	/** Vraci id */
+	/** Vraci id mista */
 	public int getId() {
 		return id;
+	}
+	/** Nastavi id mistu */
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	/**

@@ -3,5 +3,5 @@
     <arc-out red="185" green="0" blue="155" />
     <place red="255" green="190" blue="220" />
     <transition red="255" green="190" blue="220" />
-    <text red="255" green="0" blue="0" />
+    <text red="255" green="0" blue="0" font="Serif" size="12" />
 </theme>

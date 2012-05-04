@@ -35,8 +35,11 @@ public class Theme {
 	public static int TEXT_G;
 	public static int TEXT_B;
 
+	/** Font */
+	public static String FONT = "Serif";
+	public static int FONT_SIZE = 12;
+
 	public static void loadTheme(File file) {
-		// TODO: parserem prohnat xmlko a nastavit tej hodnoty
 		try {
 			SAXReader xmlReader = new SAXReader();
 			Document doc = xmlReader.read(file);
@@ -64,6 +67,8 @@ public class Theme {
 			TEXT_R = Integer.parseInt(el.attributeValue("red"));
 			TEXT_G = Integer.parseInt(el.attributeValue("green"));
 			TEXT_B = Integer.parseInt(el.attributeValue("blue"));
+			FONT = el.attributeValue("font");
+			FONT_SIZE = Integer.parseInt(el.attributeValue("size"));
 		} catch (DocumentException e) {
 			System.err.print("Nevalidni XML dokumnet");
 		} catch (NumberFormatException e) {
