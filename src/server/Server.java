@@ -12,13 +12,14 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
+import org.dom4j.Document;
+import org.dom4j.Element;
 import protocol.Protocol;
 //import server.simulator.Simulator;
 //import server.Users;
+import petrinet.PetriNet;
 
 /**
  * Hlavni trida serveru.
@@ -56,39 +57,27 @@ public class Server implements Runnable
 	public void run()
 	{
 		System.out.println("Client thread "+ Thread.currentThread().getName() +" spawned...");
-		
-		// no a tady teda konecne budu prijimat zpravy a nejak to sezvejkavat
-		String msg;
+		Document doc;
 		// smycka zpracovani zprav
-		while((msg = protocol.getMessage()) != null) {
-			System.out.println(msg);
-			// zpracovani typu zpravy
-			String msgType = Protocol.getMessageType(msg);
+		while((doc = protocol.getMessage()) != null) {
+			//System.out.println(msg);
+			Element root = doc.getRootElement();
+			String msgType = root.getName();
 			if(msgType.equals("login")) {
-				String name = Protocol.getProperty(msg, "name");
-				String password = Protocol.getProperty(msg, "password");
-				// overeni uzivatele
-				if(users.authenticate(name, password)) {
-					protocol.sendMessage("<ok />");
-				} else {
-					protocol.sendMessage("<failed>Neexistující uživatel, nebo chybné heslo.</failed>");;
-				}
+				login(root);
 			} else if(msgType.equals("register")) {
-				String name = Protocol.getProperty(msg, "name");
-				String password = Protocol.getProperty(msg, "password");
-				// snad se ho povede registrovat
-				if(users.register(name, password)) {
-					protocol.sendMessage("<ok />");
-				} else {
-					protocol.sendMessage("<failed>Nebylo možné uživatele registrovat.</failed>");
-				}
+				register(root);
+			} else if(msgType.equals("petrinet")) {
+				saveNet(doc);
 			} else if(msgType.equals("...")) {
-				// pro kazdou zpravu nejaka akce...
-				System.out.println("Nechapu ..." + msg);
-			} else {
-				// Nerozumim takej zprave
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
+			} else if(msgType.equals("...")) {
 			}
-			// getnets, getnet, putnet, simulate, -- neco jako <simstep>cislo</>
 		}
 
 		System.out.println("Client disconneted");
@@ -97,6 +86,45 @@ public class Server implements Runnable
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Prihlaceni uzivatele.
+	 * @param root root element zpravy od klienta
+	 */
+	protected void login(Element root) {
+		String name = root.attributeValue("name");
+		String password = root.attributeValue("password");
+		// overeni uzivatele
+		if(users.authenticate(name, password)) {
+			protocol.sendOk();
+		} else {
+			protocol.sendError("Neexistující uživatel, nebo chybné heslo.");
+		}
+	}
+
+	/**
+	 * Prihlaceni uzivatele.
+	 * @param root root element zpravy od klienta
+	 */
+	protected void register(Element root) {
+		String name = root.attributeValue("name");
+		String password = root.attributeValue("password");
+		// snad se ho povede registrovat
+		if(users.register(name, password)) {
+			protocol.sendOk();
+		} else {
+			protocol.sendError("Nebylo možné uživatele registrovat.");
+		}
+	}
+
+	/**
+	 * Ulozeni prijate site.
+	 * @param doc dokument se siti k ulozeni
+	 */
+	protected void saveNet(Document doc) {
+		PetriNet pn = new PetriNet(doc);
+		pn.toXML();
 	}
 
 	/**
@@ -127,5 +155,4 @@ public class Server implements Runnable
             service.execute(new Server(clientsck, users));
         }
 	}
-
 }

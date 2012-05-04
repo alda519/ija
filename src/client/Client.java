@@ -16,6 +16,10 @@ import java.net.SocketAddress;
 import java.net.InetSocketAddress;
 
 import javax.swing.*;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -338,10 +342,7 @@ public class Client implements Runnable
 			System.err.println(e.getMessage());
 			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
 			return;
-		} /*catch ( e) {
-			System.err.println(e.getMessage());
-			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
-		}*/
+		}
 
 		// podle zaskrtnuti checkboxu se registruje/prihlasuje
 		if(register.isSelected()) {
@@ -351,15 +352,17 @@ public class Client implements Runnable
 			System.out.println("A chci se jen prihlasit");
 			login(logn.getText(), new String(pass.getPassword()));
 		}
-		
+
 		// podle odpovedi se pozna, zda se prihlasit povedlo nebo ne
-		String response = protocol.getMessage();
-		if(Protocol.getMessageType(response).equals("ok")) {
+		Document response = protocol.getMessage();
+		Element root = response.getRootElement();
+
+		if(root.getName().equals("ok")) {
 			connect.setText("Odpojit");
 			dialog.dispose();
 			connectedFlag = true;
 		} else {
-			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + Protocol.getContent(response), "Chyba", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + root.attributeValue("expl") , "Chyba", JOptionPane.ERROR_MESSAGE);
 			try { protocol.close(); } catch (Exception e) {}
 		}
 	}
@@ -369,7 +372,7 @@ public class Client implements Runnable
 	 */
 	public void login(String login, String password)
 	{
-		protocol.sendMessage("<login> <name>" + login + "</name> \n <password>" + password + "</password> </login>");
+		protocol.sendMessage("<login name=\"" + login + "\" password=\"" + password + "\" />");
 	}
 
 	/**
@@ -377,7 +380,7 @@ public class Client implements Runnable
 	 */
 	public void register(String login, String password)
 	{
-		protocol.sendMessage("<register> <name>"+login+"</name> \n <password>"+password+"</password> </register>");
+		protocol.sendMessage("<register name=\"" + login + "\" password=\"" + password + "\" />");
 	}
 
 	/**

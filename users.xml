@@ -4,7 +4,6 @@
   <user login="alfa" password="beta"/>  
   <user login="jojo" password="papa"/>  
   <user login="tydyt" password="badum"/>  
-  <user login="loo" password="pop"/>
-  <user login="hoho" password="pop"/>
-  <user login="hoho" />
+  <user login="loo" password="pop"/>  
+  <user login="new" password="popik"/>
 </users>

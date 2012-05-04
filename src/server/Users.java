@@ -60,16 +60,12 @@ public class Users
             Element root = this.doc.getRootElement();
             if(! root.getName().equals("users"))
             	throw new DocumentException("Neplatny soubor s uzivateli");
-            Iterator elementIterator = root.elementIterator();
-            // iterace pres obsah dokumentu
-            while(elementIterator.hasNext()){
-                Element element = (Element) elementIterator.next();
-                if(! element.getName().equals("user"))
-                	throw new DocumentException("Neplatny soubor s uzivateli");
-                
-                // zjisteni jmena a hesla z atributu
-                String login = element.attributeValue("login");
-                String password = element.attributeValue("password");
+            
+            List<Element> users = root.elements("user");
+            for(Element user : users) {
+            	// zjisteni jmena a hesla z atributu
+                String login = user.attributeValue("login");
+                String password = user.attributeValue("password");
                 // pridani uzivatele do seznamu
                 if(login == null || password == null)
                     throw new DocumentException("Neplatny soubor s uzivateli");
@@ -102,7 +98,6 @@ public class Users
             return false;
         } else {
             add(name, password);
-            // TODO: zapsat noveho uzivatele i do souboru
             Element root = this.doc.getRootElement();
             Element newUser = root.addElement("user");
             newUser.addAttribute("login", name);
@@ -115,7 +110,7 @@ public class Users
     	        writer.write(this.doc);
     	    	out.close();    
     	    } catch (IOException w) {
-    	    	System.out.println("Sit se nepovedlo ulozit!");
+    	    	System.out.println("Uzivatele se nepovedlo ulozit!");
     	    	return false;
     	    }
             return true;

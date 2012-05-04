@@ -454,16 +454,25 @@ public class Editor extends JPanel {
 			netEditor.setLocationRelativeTo(null);
 			netEditor.setSize(300, 200);
 			netEditor.setLayout(new GridLayout(0, 1));
-			newName = new JTextField(petrinet.getName());
-			JTextField cnstAuth = new JTextField(petrinet.getAuthor());
-			newDesc = new JTextField(petrinet.getDescription());
+
 			netEditor.add(new JLabel("Jméno sítě:"));
+			newName = new JTextField(petrinet.getName());
 			netEditor.add(newName);
+
 			netEditor.add(new JLabel("Autor: "));
+			JTextField cnstAuth = new JTextField(petrinet.getAuthor());
 			cnstAuth.setEnabled(false);
 			netEditor.add(cnstAuth);
+
 			netEditor.add(new JLabel("Popis sítě:"));
+			newDesc = new JTextField(petrinet.getDescription());
 			netEditor.add(newDesc);
+
+			netEditor.add(new JLabel("Verze sítě:"));
+			JTextField cnstVers = new JTextField(petrinet.getVersion());
+			cnstVers.setEnabled(false);
+			netEditor.add(cnstVers);
+
 			JButton okButton = new JButton("OK");
 			okButton.addActionListener(new NetPropertySet());
 			netEditor.add(okButton);

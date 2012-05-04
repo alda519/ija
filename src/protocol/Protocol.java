@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 
-import java.util.Iterator;
-import org.dom4j.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.DocumentException;
@@ -44,13 +42,12 @@ public class Protocol
 	 * Prijme zpravu.
 	 * @return Vraci string se zpravou.
 	 */
-	public String getMessage()
-	{
+	public Document getMessage() {
 		try {
-			return dis.readUTF();
+			return DocumentHelper.parseText(dis.readUTF());
+		} catch (DocumentException e) {
+			return null;
 		} catch (IOException e) {
-			// proste uz dosla data na vstupu, tak to zamlcim a reknu, ze nic 
-			// e.printStackTrace();
 			return null;
 		}
 	}
@@ -68,6 +65,14 @@ public class Protocol
 		}
 	}
 
+	public void sendOk() {
+		sendMessage("<ok />");
+	}
+	
+	public void sendError(String expl) {
+		sendMessage("<failed expl=\"" + expl + "\" />");
+	}
+	
 	/**
 	 * Ukonceni komunikace
 	 * @throws IOException
@@ -78,62 +83,5 @@ public class Protocol
 		socket = null;
 		dis = null;
 		dos = null;
-	}
-
-	/**
-	 * Zjisti typ zpravy.
-	 * @param msg Zprava
-	 * @return Nazev root elementu ze zpravy
-	 */
-	public static String getMessageType(String msg)
-	{
-		try {
-			Document doc = DocumentHelper.parseText(msg);
-			return doc.getRootElement().getName();
-		} catch (DocumentException e) {
-			// blba zprava, nerozumim
-		}
-		return null;
-	}
-
-	/**
-	 * Vrací obsah taky property, který je hned v root.
-	 * @param msg
-	 * @param property
-	 * @return vraci neco
-	 */
-	// TODO: tohle je zvracene, k cemu to je?!?!!
-	public static String getProperty(String msg, String property)
-	{
-		try {
-			Document doc = DocumentHelper.parseText(msg);
-			Element root = doc.getRootElement();
-			Iterator i = root.elementIterator();
-			while(i.hasNext()) {
-				Element element = (Element)i.next();
-				if(element.getName().equals(property)) {
-					return element.getText();
-				}
-			}
-		} catch (DocumentException e) {
-			System.out.println(e.getMessage());
-		}
-		return null;
-	}
-
-	/**
-	 * Vrací obsah root elementu
-	 * @param msg
-	 * @return vraci obsah root elementu
-	 */
-	public static String getContent(String msg)
-	{
-		try {
-			Document doc = DocumentHelper.parseText(msg);
-			return doc.getRootElement().getText();
-		} catch (DocumentException e) {
-			System.out.println(e.getMessage());
-		}
-		return null;
 	}
 }

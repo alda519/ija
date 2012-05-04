@@ -53,9 +53,12 @@ public class PetriNet {
      * Konstruktor site z XML popisu.
      * @param xml
      */
-    public PetriNet(String xml) {
+    public PetriNet(String xml) throws DocumentException {
+  		this(DocumentHelper.parseText(xml));
+    }
+    
+    public PetriNet(Document doc) {
     	try {
-    		Document doc = DocumentHelper.parseText(xml);
     		Element root = doc.getRootElement();
     		if(! root.getName().equals("petrinet"))
     			throw new DocumentException();
@@ -133,7 +136,11 @@ public class PetriNet {
      * @return vraci novou sit
      */
     public static PetriNet PetriNetFactory(String net) {
-    	return new PetriNet(net);
+    	try {
+    		return new PetriNet(net);
+    	} catch (DocumentException e) {
+    		return null;
+    	}
     }
 
     /**
@@ -145,13 +152,13 @@ public class PetriNet {
     	Document doc;
     	try {
 	    	SAXReader xmlReader = new SAXReader();
-	    	doc = xmlReader.read(file);	
+	    	doc = xmlReader.read(file);
+	    	return new PetriNet(doc.asXML());
 	    } catch (DocumentException e) {
 	    	System.err.println("Nejde nacist soubor.");
 	    	e.printStackTrace();
 	    	return null;
 	    }
-    	return new PetriNet(doc.asXML());
     }
 
     /**
@@ -244,7 +251,7 @@ public class PetriNet {
     		}
     	}
     }
-    
+
     /**
      * Odebere hranu z mista p do prechodu t
      * @param p misto
@@ -296,8 +303,22 @@ public class PetriNet {
      * Ziskani jmena autora site.
      * @return jmeno autora
      */
-    public String getAuthor(){
+    public String getAuthor() {
     	return this.author;
+    }
+
+    /**
+     * Ziskani verze.
+     * @return vraci verzi
+     */
+    public String getVersion() {
+    	return this.version;
+    }
+    /**
+     * Nastaveni verze.
+     */
+    public void setVersion(String v) {
+    	this.version = v;
     }
 
 
