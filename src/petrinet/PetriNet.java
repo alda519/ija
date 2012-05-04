@@ -37,7 +37,7 @@ public class PetriNet {
     public PetriNet(String name, String author, String description) {
 	    this.author = author;
 	    this.name = name;
-	    this.author = author;
+	    this.description = description;
     }
 
     /**
@@ -255,7 +255,43 @@ public class PetriNet {
     	return t.removeArc(todel);
     }
 
- 
+    /**
+     * Nastaveni popisu site.
+     * @param d novy popisek
+     */
+    public void setDescription(String d) {
+    	this.description = d;
+    }
+    /**
+     * Nastaveni nazvu site.
+     * @param n novy nazev site
+     */
+    public void setName(String n) {
+    	this.name = n;
+    }
+    /**
+     * Ziskani popisu site.
+     * @return vraci popis site
+     */
+    public String getDescription() {
+    	return this.description;
+    }
+    /**
+     * Ziskani jmena site.
+     * @return vraci jmeno site
+     */
+    public String getName() {
+    	return this.name;
+    }
+    /**
+     * Ziskani jmena autora site.
+     * @return jmeno autora
+     */
+    public String getAuthor(){
+    	return this.author;
+    }
+
+
     /**
      * Vygenerovani XML popisu cele site.
      */

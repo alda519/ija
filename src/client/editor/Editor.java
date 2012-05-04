@@ -68,6 +68,10 @@ public class Editor extends JPanel {
         		"Kreslení přechodů", "Editace hran", "Rušení objektů",} );
         modeSel.addActionListener(new ChangeMode());
         add(modeSel);
+        JButton editButton = new JButton("Upravit");
+        editButton.addActionListener(new NetPropertyEditor());
+        add(editButton);
+
         add(new JButton("Simulovat krok"));
         add(new JButton("Simulovat úplně"));
 
@@ -79,7 +83,7 @@ public class Editor extends JPanel {
      * Tato metoda procte sit, kterou ma editovat a vytvori pro ni graficke prvky,
      * hodi se na restart zobrazeni
      */
-    public void reloadNet() {
+    protected void reloadNet() {
     	places = new ArrayList<GPlace>();
     	transitions = new ArrayList<GTransition>();
     	for(Place p : this.petrinet.getPlaces()) {
@@ -430,16 +434,43 @@ public class Editor extends JPanel {
     	}
     }
 
+    protected JTextField newName;
+    protected JTextField newDesc;
+    protected JFrame netEditor;
     /**
-     * Trida pro editaci vlastnosti prechodu. Vytvori dialogove okno a uvidi se.
+     * Obsluha udalosti zmeny vlastnosti site. Dialogove okno.
      */
-    class TransitionEditor implements ActionListener {
-
+    class NetPropertyEditor implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			JFrame dialog = new JFrame("Úprava přechodu");
-			dialog.setVisible(true);
+			netEditor = new JFrame("Upravit síť");
+			netEditor.setLocationRelativeTo(null);
+			netEditor.setSize(300, 200);
+			netEditor.setLayout(new GridLayout(0, 1));
+			newName = new JTextField(petrinet.getName());
+			JTextField cnstAuth = new JTextField(petrinet.getAuthor());
+			newDesc = new JTextField(petrinet.getDescription());
+			netEditor.add(new JLabel("Jméno sítě:"));
+			netEditor.add(newName);
+			netEditor.add(new JLabel("Autor: "));
+			cnstAuth.setEnabled(false);
+			netEditor.add(cnstAuth);
+			netEditor.add(new JLabel("Popis sítě:"));
+			netEditor.add(newDesc);
+			JButton okButton = new JButton("OK");
+			okButton.addActionListener(new NetPropertySet());
+			netEditor.add(okButton);
+			netEditor.setVisible(true);
 		}
-    	
+    }
+    /**
+     * Obsluha udalosti zmeny vlastnosti site. Potvrzeni zmeny.
+     */
+    class NetPropertySet implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			petrinet.setDescription(newDesc.getText());
+			petrinet.setName(newName.getText());
+			netEditor.dispose();
+		}
     }
 
     // bordel na smazani pomalu
