@@ -1,0 +1,7 @@
+<theme>
+    <arc-in red="255" green="0" blue="0" />
+    <arc-out red="0" green="0" blue="255" />
+    <place red="160" green="160" blue="160" />
+    <transition red="160" green="160" blue="160" />
+    <text red="0" green="0" blue="0" />
+</theme>

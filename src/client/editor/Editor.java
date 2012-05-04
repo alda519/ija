@@ -2,7 +2,6 @@ package client.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dialog.ModalExclusionType;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
@@ -119,7 +118,7 @@ public class Editor extends JPanel {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    	g2d.setColor(new Color(255, 0, 0));
+    	g2d.setColor(new Color(Theme.ARC_IN_R, Theme.ARC_IN_G, Theme.ARC_IN_B));
         g2d.setStroke(new BasicStroke(4));
         // vstupni hrany tluste cervene
         for(GTransition gt : transitions) {
@@ -128,23 +127,25 @@ public class Editor extends JPanel {
         	}
         }
         // vystupni tenke, modre
-    	g2d.setColor(new Color(0, 0, 255));
+    	g2d.setColor(new Color(Theme.ARC_OUT_R, Theme.ARC_OUT_G, Theme.ARC_OUT_B));
         g2d.setStroke(new BasicStroke(2));
         for(GTransition gt : transitions) {
         	for(GArc ga : gt.getArcsOut()) {
         		g2d.draw(ga);
         	}
         }
-        // mista a prechody
-        g2d.setColor(new Color(130, 140, 250));
+        // mista
+        g2d.setColor(new Color(Theme.PLACE_R, Theme.PLACE_G, Theme.PLACE_B));
         for(GPlace gp : places) {
         	g2d.fill(gp); 
         }
+        // prechody
+        g2d.setColor(new Color(Theme.TRANSITION_R, Theme.TRANSITION_G, Theme.TRANSITION_B));
         for(GTransition gt : transitions) {
         	g2d.fill(gt);
         }
         // popisky
-        g2d.setColor(new Color(0, 0, 0));
+        g2d.setColor(new Color(Theme.TEXT_R, Theme.TEXT_G, Theme.TEXT_B));
         for(GPlace gp : places) {
         	// hodnoty v mistech
         	g2d.drawString(gp.getValues(), gp.x+5, gp.y+40); 
@@ -197,8 +198,10 @@ public class Editor extends JPanel {
             
             if(e.getButton() == MouseEvent.BUTTON3) {
             	System.out.println("button #");
-            	editTransition();
-            	editPlace();
+            	if(selTrans != null)
+            		editTransition();
+            	else if(selPlace != null)
+            		editPlace();
             	return;
             }
 
@@ -210,7 +213,7 @@ public class Editor extends JPanel {
             		if(selTrans != null || selPlace != null) {
             			return;
             		}
-            		Place newP = new Place(1);
+            		Place newP = new Place(0);
                     newP.x = x - 40;
                     newP.y = y - 40;
                     petrinet.addPlace(newP);

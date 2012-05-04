@@ -17,6 +17,7 @@ import java.awt.event.*;
 
 import protocol.Protocol;
 import client.editor.Editor;
+import client.editor.Theme;
 import petrinet.PetriNet;
 
 /**
@@ -359,6 +360,8 @@ public class Client implements Runnable
 	 */
 	public static void main(String[] args)
 	{
+		// defaultni tema je hardcoded, takze netreba nacitat
+		//Theme.loadTheme(new File("examples/themes/default.xml"));
         System.setProperty("file.encoding", "UTF-8");
 		SwingUtilities.invokeLater(new Client());
 	}
