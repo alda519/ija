@@ -347,10 +347,10 @@ public class Client implements Runnable
 		// podle zaskrtnuti checkboxu se registruje/prihlasuje
 		if(register.isSelected()) {
 			System.out.println("A chci se regnout!");
-			register(logn.getText(), new String(pass.getPassword()));
+			protocol.sendRegister(logn.getText(), new String(pass.getPassword()));
 		} else {
 			System.out.println("A chci se jen prihlasit");
-			login(logn.getText(), new String(pass.getPassword()));
+			protocol.sendLogin(logn.getText(), new String(pass.getPassword()));
 		}
 
 		// podle odpovedi se pozna, zda se prihlasit povedlo nebo ne
@@ -365,22 +365,6 @@ public class Client implements Runnable
 			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + root.attributeValue("expl") , "Chyba", JOptionPane.ERROR_MESSAGE);
 			try { protocol.close(); } catch (Exception e) {}
 		}
-	}
-
-	/**
-	 * Prihlaseni na server.
-	 */
-	public void login(String login, String password)
-	{
-		protocol.sendMessage("<login name=\"" + login + "\" password=\"" + password + "\" />");
-	}
-
-	/**
-	 * Registrace.
-	 */
-	public void register(String login, String password)
-	{
-		protocol.sendMessage("<register name=\"" + login + "\" password=\"" + password + "\" />");
 	}
 
 	/**

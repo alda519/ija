@@ -65,14 +65,26 @@ public class Protocol
 		}
 	}
 
+	/** Odesila potvrzeni */
 	public void sendOk() {
 		sendMessage("<ok />");
 	}
-	
+
+	/** Odesle chybovou zpravu s vysvetlenim */
 	public void sendError(String expl) {
 		sendMessage("<failed expl=\"" + expl + "\" />");
 	}
-	
+
+	/** Zprava prihlaseni na server */
+	public void sendLogin(String login, String password) {
+		sendMessage("<login name=\"" + login + "\" password=\"" + password + "\" />");
+	}
+
+	/** Zprava registrace. */
+	public void sendRegister(String login, String password) {
+		sendMessage("<register name=\"" + login + "\" password=\"" + password + "\" />");
+	}
+
 	/**
 	 * Ukonceni komunikace
 	 * @throws IOException
