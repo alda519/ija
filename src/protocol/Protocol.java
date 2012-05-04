@@ -7,6 +7,7 @@ package protocol;
 
 import java.net.Socket;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
@@ -14,6 +15,7 @@ import java.io.DataInputStream;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
 
 /**
  * Trida zastresujici abstrakci nad komunikaci klienta se serverem.
@@ -83,6 +85,18 @@ public class Protocol
 	/** Zprava registrace. */
 	public void sendRegister(String login, String password) {
 		sendMessage("<register name=\"" + login + "\" password=\"" + password + "\" />");
+	}
+
+	/** Odeslani seznamu siti*/
+	public void sendNetsList(File files []) {
+		Document doc = DocumentHelper.createDocument();
+		Element netslist = doc.addElement("netslist");
+		for(File file : files) {
+			Element net = netslist.addElement("net");
+			net.addAttribute("name", file.getName());
+		}
+		System.out.println(doc.asXML());
+		//sendMessage(doc.asXML());
 	}
 
 	/**

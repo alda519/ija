@@ -9,6 +9,7 @@
 
 package server;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -56,31 +57,34 @@ public class Server implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println("Client thread "+ Thread.currentThread().getName() +" spawned...");
 		Document doc;
 		// smycka zpracovani zprav
 		while((doc = protocol.getMessage()) != null) {
-			//System.out.println(msg);
 			Element root = doc.getRootElement();
 			String msgType = root.getName();
 			if(msgType.equals("login")) {
-				login(root);
+				login(root); // prihlaseni uzivatele
 			} else if(msgType.equals("register")) {
-				register(root);
+				register(root); // registrace uzivatele
 			} else if(msgType.equals("petrinet")) {
-				saveNet(doc);
+				saveNet(doc); // ulozeni prijite site
+			} else if(msgType.equals("netslist")) {
+				sendNetsList(); // seznam siti
+			} else if(msgType.equals("getnet")) {
+				// odeslat konretni verzi site
+			} else if(msgType.equals("sim-start")) {
+				// zahajeni simulace
+			} else if(msgType.equals("sim-step")) {
+				// krok simulace
+			} else if(msgType.equals("sim-run")) {
+				// cela simulace
+			} else if(msgType.equals("sim-end")) {
+				// ukonceni simulace
 			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
-			} else if(msgType.equals("...")) {
+				// ???
 			} else if(msgType.equals("...")) {
 			}
 		}
-
-		System.out.println("Client disconneted");
 		try {
 			protocol.close();
 		} catch(IOException e) {
@@ -128,6 +132,15 @@ public class Server implements Runnable
 	}
 
 	/**
+	 * Odeslani seznamu siti ulozenych na serveru klientovi.
+	 */
+	protected void sendNetsList() {
+		File path = new File("examples/storage/");
+		File files [] = path.listFiles();
+		protocol.sendNetsList(files);
+	}
+
+	/**
 	 * Server se spusti bud na portu zadanem jako parametr nebo na defaultnim.
 	 * Prijima klienty a vytvari pro ne instance serveru.
 	 * @param args Jedinym parametrem je cislo portu, defaultne 3030
@@ -144,8 +157,6 @@ public class Server implements Runnable
         int port = (args.length > 0)?Integer.parseInt(args[0]):DEFAULT_PORT;
         socket = new ServerSocket(port);
 
-        System.out.println("Startuju server na " + port);
-        
         // vytvoreni thread poolu
         Executor service = Executors.newCachedThreadPool();
 
