@@ -100,8 +100,9 @@ public class Protocol
 	 * Vrací obsah taky property, který je hned v root.
 	 * @param msg
 	 * @param property
-	 * @return
+	 * @return vraci neco
 	 */
+	// TODO: tohle je zvracene, k cemu to je?!?!!
 	public static String getProperty(String msg, String property)
 	{
 		try {
@@ -123,7 +124,7 @@ public class Protocol
 	/**
 	 * Vrací obsah root elementu
 	 * @param msg
-	 * @return
+	 * @return vraci obsah root elementu
 	 */
 	public static String getContent(String msg)
 	{

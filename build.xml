@@ -60,7 +60,8 @@
     <target name="doc">
         <javadoc packagenames="*" encoding="utf-8"
             sourcepath="src"
-            destdir="doc">
+            destdir="doc"
+            classpath="lib/dom4j-1.5.2.jar">
         </javadoc>
     </target>
 

@@ -94,7 +94,7 @@ public class Users
      * Uzivatel bude pridan do prave nactene databaze, tak bude zapsan do souboru na disk.
      * @param name jmeno noveho uzivatele
      * @param password heslo noveho uzivatele
-     * @reutrn vraci true, pokud byl uzivatrel pridan, jinak false
+     * @return vraci true, pokud byl uzivatrel pridan, jinak false
      */
     public boolean register(String name, String password)
     {

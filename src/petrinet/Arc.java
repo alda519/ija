@@ -19,7 +19,7 @@ public interface Arc {
 	/**
 	 * Metoda vraci true, pokud je parametr x pripustna hodnota pro hranu. 
 	 * @param x
-	 * @return
+	 * @return vraci true pokud je hodnota pripustna, jinak false
 	 */
 	public boolean ok(int x);
 
