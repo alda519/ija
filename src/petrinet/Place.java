@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Reprezentace mista.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package petrinet;
 
 import java.io.FileWriter;

@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Trida uchovavajici aktualni nastaveni vzhledu.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package client.editor;
 
 import java.io.File;

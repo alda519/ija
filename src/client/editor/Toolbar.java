@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Vycet modu editoru.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package client.editor;
 
 public enum Toolbar {

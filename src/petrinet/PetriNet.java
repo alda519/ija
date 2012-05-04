@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Trida reprezentujici Petriho sit.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package petrinet;
 
 import java.util.Iterator;

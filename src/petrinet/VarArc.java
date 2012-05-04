@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Reprezantace hrany s promennou.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package petrinet;
 
 import org.dom4j.Element;

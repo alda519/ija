@@ -1,6 +1,14 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Editor Petriho site, soucast klienta.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package client.editor;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;

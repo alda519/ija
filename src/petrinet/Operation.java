@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Vycet operatoru ve strazich.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package petrinet;
 
 /**

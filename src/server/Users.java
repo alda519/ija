@@ -1,6 +1,10 @@
-/* IJA - Simulator Petriho s	iti
- * xcupak04
- * xdujic01
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Databaze uzivatelu a autentizace.
+ *
+ * @author xcupak04
+ * @author xdujic01
  */
 
 package server;
@@ -12,9 +16,7 @@ import java.io.IOException;
 
 
 import java.util.*;
-//import java.io.*;
 import org.dom4j.*;
-//import org.dom4j.dom.*;
 import org.dom4j.io.*;
 
 

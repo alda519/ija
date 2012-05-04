@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Graficky prvek pro misto.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package client.editor;
 
 import java.awt.geom.Ellipse2D;

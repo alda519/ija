@@ -1,6 +1,10 @@
-/* IJA - Simulator Petriho siti
- * xcupak04
- * xdujic01
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Simulator, soucast serveru.
+ *
+ * @author xcupak04
+ * @author xdujic01
  */
 
 package server.simulator;

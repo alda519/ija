@@ -1,3 +1,12 @@
+/**
+ * IJA - Simulator Petriho siti
+ *
+ * Graficky prvek pro prechod.
+ *
+ * @author xcupak04
+ * @author xdujic01
+ */
+
 package client.editor;
 
 import java.awt.geom.Rectangle2D;
