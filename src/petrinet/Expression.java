@@ -51,7 +51,11 @@ public class Expression {
 					continue;
 				} else {
 					// jinak je to kladna hodnota
-					plus.add(x);
+					try {
+						this.base += Integer.parseInt(x);
+					} catch (NumberFormatException e) {
+						plus.add(x);
+					}
 				}
 			} else {
 				// dalsi se pricita/odecita dle znaminka
@@ -60,24 +64,21 @@ public class Expression {
 				if((inPlus < inMinus && inPlus != -1) || (inMinus == -1)) {
 					// odliseni konstant od promennych
 					try {
-						this.base += Integer.parseInt(rParts[i].trim());
+						this.base += Integer.parseInt(x);
 					} catch (NumberFormatException e) {
-						plus.add(rParts[i].trim());
+						plus.add(x);
 					}
 					index = inPlus + 1;
 				} else {
 					try {
-						this.base -= Integer.parseInt(rParts[i].trim());
+						this.base -= Integer.parseInt(x);
 					} catch (NumberFormatException e) {
-						minus.add(rParts[i].trim());
+						minus.add(x);
 					}
 					index = inMinus + 1;
 				}
 			}
 		}
-		//System.out.println(plus);
-		//System.out.println(minus);
-		//System.out.println(base);
 	}
 
 	/**

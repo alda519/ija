@@ -332,7 +332,6 @@ public class PetriNet {
     public void stepSim() {
     	for(Transition t : transitions) {
     		if(t.tryTransition()) {
-    			System.out.println("Povedlo se");
     			break;
     		}
     	}
