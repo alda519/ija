@@ -41,7 +41,7 @@ public class Server implements Runnable
 	/** Databaze uzivatelu */
 	protected Users users; 
 
-	/** Jmeno prave prihlaseneho uzivatele */
+	/** Jmeno prave prihlaseneho uzivatele. Pokud je null, neni prihlaseny. */
 	protected String username;
 
 	/**
@@ -70,27 +70,33 @@ public class Server implements Runnable
 		while((doc = protocol.getMessage()) != null) {
 			Element root = doc.getRootElement();
 			String msgType = root.getName();
-			if(msgType.equals("login")) {
-				login(root); // prihlaseni uzivatele
-			} else if(msgType.equals("register")) {
-				register(root); // registrace uzivatele
-			} else if(msgType.equals("petrinet")) {
-				saveNet(doc); // ulozeni prijite site
-			} else if(msgType.equals("netslist")) {
-				sendNetsList(); // seznam siti
-			} else if(msgType.equals("getnet")) {
-				// odeslat konretni verzi site
-			} else if(msgType.equals("sim-start")) {
-				// zahajeni simulace
-			} else if(msgType.equals("sim-step")) {
-				// krok simulace
-			} else if(msgType.equals("sim-run")) {
-				// cela simulace
-			} else if(msgType.equals("sim-end")) {
-				// ukonceni simulace
-			} else if(msgType.equals("...")) {
-				// ???
-			} else if(msgType.equals("...")) {
+			if(username == null) {
+				// prihlasit a registrovat se muze jen neprihlaseny
+				if(msgType.equals("login")) {
+					login(root); // prihlaseni uzivatele
+				} else if(msgType.equals("register")) {
+					register(root); // registrace uzivatele
+				}
+			} else {
+				// pracovat se sitemi smi jen prihlaseny
+				if(msgType.equals("petrinet")) {
+					saveNet(doc); // ulozeni prijite site
+				} else if(msgType.equals("netslist")) {
+					sendNetsList(); // seznam siti
+				} else if(msgType.equals("getnet")) {
+					sendNet(root); // odeslat konretni verzi site
+				} else if(msgType.equals("sim-start")) {
+					// zahajeni simulace
+				} else if(msgType.equals("sim-step")) {
+					// krok simulace
+				} else if(msgType.equals("sim-run")) {
+					// cela simulace
+				} else if(msgType.equals("sim-end")) {
+					// ukonceni simulace
+				} else if(msgType.equals("...")) {
+					// ???
+				} else if(msgType.equals("...")) {
+				}
 			}
 		}
 		try {
@@ -184,6 +190,19 @@ public class Server implements Runnable
 			}
 		}
 		protocol.sendDocument(doc);
+	}
+
+	/**
+	 * Odeslani klientovi vybrane site.
+	 * @param root root element zpravy zadajici o sit
+	 */
+	protected void sendNet(Element root) {
+		// ziskat nazev a verzi;
+		String version = root.attributeValue("version");
+		String name = root.attributeValue("name");
+		File file = new File("examples/storage/" + name + "/" + version);
+		PetriNet pn = PetriNet.PetriNetFactory(file);
+		protocol.sendDocument(pn.toXML());
 	}
 
 	/**

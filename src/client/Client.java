@@ -19,9 +19,11 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.awt.*;
@@ -370,6 +372,8 @@ public class Client implements Runnable
 		}
 	}
 
+	JTree tree;
+	JFrame netlist;
 	/**
 	 * Zobrazeni seznamu siti ze serveru.
 	 */
@@ -381,7 +385,7 @@ public class Client implements Runnable
 			Document doc = protocol.getMessage();
 			Element root = doc.getRootElement();
 			if(root.getName().equals("netslist")) {
-				JFrame netlist = new JFrame("Sítě na serveru");
+				netlist = new JFrame("Sítě na serveru");
 				netlist.setSize(280, 320);
 				netlist.setLocationRelativeTo(null);
 				netlist.setLayout(new FlowLayout());
@@ -394,14 +398,16 @@ public class Client implements Runnable
 					}
 					top.add(item);
 				}
-				JTree tree = new JTree(top);
+				tree = new JTree(top);
 		        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 				//JList list = new JList(new String [] {"1", "2", "3" });
 
 				JScrollPane scpane = new JScrollPane(tree);
 				scpane.setPreferredSize(new Dimension(250, 250));
 				netlist.add(scpane);
-				netlist.add(new JButton("OK"));
+				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new DownloadNet());
+				netlist.add(okButton);
 				netlist.setResizable(false);
 				netlist.setVisible(true);
 				netlist.addWindowListener(new WindowAdapter() { // TODO toto pouzivat casteji
@@ -421,6 +427,40 @@ public class Client implements Runnable
 			int i = tabs.getSelectedIndex();
 			Editor editor = (Editor) tabs.getComponentAt(i);
 			protocol.sendDocument(editor.getNet().toXML());
+		}
+	}
+
+	/**
+	 * Obsluha udalosti zadosti o sit ze serveru.
+	 */
+	class DownloadNet implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			DefaultMutableTreeNode select = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+			TreeNode path [] = select.getPath();
+			// pokud je vybrana verze, odesle se zadost a sit se zobrazi
+			System.out.println(path.length);
+			if(path.length == 3) {
+				DefaultMutableTreeNode net = (DefaultMutableTreeNode) path[1];
+				DefaultMutableTreeNode version = (DefaultMutableTreeNode) path[2];
+				Document doc = DocumentHelper.createDocument();
+				Element querry = doc.addElement("getnet");
+				querry.addAttribute("name", (String)net.getUserObject());
+				querry.addAttribute("version", (String)version.getUserObject());
+				protocol.sendDocument(doc);
+				doc = protocol.getMessage();
+				// tedka tu sit vzit a napchat do editoru
+				int i = tabs.getSelectedIndex();
+				// pokud neni zadny tab, vytvori se
+				if(i == -1) {
+					tabs.addTab((String)net.getUserObject(), new Editor(new PetriNet(doc)));
+				} else {
+					// jinak se jen nastavi nova sit
+					tabs.remove(i);
+					tabs.add(new Editor(new PetriNet(doc)), (String)net.getUserObject(), i);
+					tabs.setSelectedIndex(i);
+				}
+				netlist.dispose();
+			}
 		}
 	}
 

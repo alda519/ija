@@ -40,13 +40,11 @@ public class PetriNet {
     /**
      * Vytvoreni nove site.
      * @param name nazev site
-     * @param author jmeno autora
-     * @param description popis site
+     * @param version verze site
      */
-    public PetriNet(String name, String author, String description) {
-	    this.author = author;
+    public PetriNet(String name, String version) {
 	    this.name = name;
-	    this.description = description;
+	    this.version = version;
     }
 
     /**
