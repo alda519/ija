@@ -11,6 +11,7 @@ package petrinet;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.dom4j.Element;
 
@@ -34,22 +35,43 @@ public class Transition {
 	public Transition() {
 	}
 
+	/**
+	 * Pridani vstupni hrany do prechodu
+	 * @param a vstupni hrana
+	 */
 	public void addInArc(Arc a) {
 		in.add(a);	
 	}
 
+	/**
+	 * Pridani vystupni hrany do prechodu
+	 * @param a vystupni hrana
+	 */
 	public void addOutArc(Arc a) {
 		out.add(a);
 	}
 
+	/**
+	 * Ziskani vsech vstupnich hran
+	 * @return seznam vstupnich hran
+	 */
 	public List<Arc> getInArcs() {
 		return this.in;
 	}
 
+	/**
+	 * Ziskani vsech vystupnich hran
+	 * @return seznam vystupnich hran
+	 */
 	public List<Arc> getOutArcs() {
 		return this.out;
 	}
 
+	/**
+	 * Odstraneni hrany
+	 * @param a hrana k odstraneni
+	 * @return vraci true pokud se dana hrana odstranila, jinak false
+	 */
 	public boolean removeArc(Arc a) {
 		return in.remove(a) || out.remove(a);
 	}
@@ -65,8 +87,13 @@ public class Transition {
 	public String getExpr() {
 		return this.operation;
 	}
+	/** Vraci textove vsechny sve straze */
 	public String getGuards() {
 		return this.conditions.toString();
+	}
+	/** Vraci vektor vsech strazi */
+	public Vector<Condition> getListGuards() {
+		return new Vector<Condition>(this.conditions);
 	}
 
 	/**
@@ -75,6 +102,13 @@ public class Transition {
 	 */
 	public void addGuard(Condition c) {
 		this.conditions.add(c);
+	}
+	/**
+	 * Odebrani straze
+	 * @param c straz k odstraneni
+	 */
+	public void dropGuard(Condition c) {
+		this.conditions.remove(c);
 	}
 
 	/** Vektor vybranych cisel z prechodu. */

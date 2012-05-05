@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -74,7 +75,9 @@ public class Place {
 	 */
 	public void removeValue(int val) {
 		int index = this.values.indexOf(val);
-		this.values.remove(index);
+		if(index != -1) {
+			this.values.remove(index);
+		}
 	}
 	
 	/**
@@ -124,5 +127,10 @@ public class Place {
 	/** Vrati string se vsemi hodnotami oddelenymi carkou */
 	public String getValues() {
 		return values.toString();
+	}
+
+	/** Vrati vektor vsech hodnot */
+	public Vector<Integer> getListValues() {
+		return new Vector<Integer>(values);
 	}
 }

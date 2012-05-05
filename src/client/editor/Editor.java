@@ -268,7 +268,12 @@ public class Editor extends JPanel {
             reloadNet();
             repaint();
         }
-        
+
+        JTextField newExpr; // input s novovou funkci
+        JTextField src; // vstup pro nove straze
+        JComboBox opList;
+        JTextField dst;
+        JComboBox guards; // vyber straze k odstraneni
         /**
          * Editacni okno na prechody.
          */
@@ -285,33 +290,34 @@ public class Editor extends JPanel {
         	trEdit.setLocationRelativeTo(null);
 
 			JLabel exprLab = new JLabel("Operace: ");
-			JTextField expr = new JTextField("expr", 20);
+			newExpr = new JTextField(selTrans.getExpr(), 20);
 			trEdit.add(exprLab);
-			trEdit.add(expr); //
+			trEdit.add(newExpr); //
 			trEdit.add(new JSeparator());
 
         	JLabel newGLab = new JLabel("Nová stráž:");
         	trEdit.add(newGLab);
-        	JTextField src  = new JTextField("src", 5);
+        	src  = new JTextField("", 5);
         	trEdit.add(src);
-        	JComboBox opList = new JComboBox(new String [] { "<", ">", "<=", ">=", "==", "!="} );
+        	opList = new JComboBox(new String [] { "<", ">", "<=", ">=", "==", "!="} );
         	trEdit.add(opList);
-        	JTextField dst = new JTextField("dst", 5);
+        	dst = new JTextField("", 5);
         	trEdit.add(dst);
 			JButton addButton = new JButton("Přidat stráž");
+			addButton.addActionListener(new NewGuard());
 			trEdit.add(addButton);
 			trEdit.add(new JSeparator());
 
-        	JComboBox guards = new JComboBox(new String [] {"A", "B", "C", "D", "E", "F"});
-        	//guards.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        	//guards.setLayoutOrientation(JList.VERTICAL);
+			guards = new JComboBox( selTrans.getTransition().getListGuards() );
         	trEdit.add(guards);
 
 			JButton remButton = new JButton("Odebrat stráž");
+			remButton.addActionListener(new DropGuard());
 			trEdit.add(remButton);
 			trEdit.add(new JSeparator());
 
 			JButton okButton = new JButton("OK");
+			okButton.addActionListener(new SetTransitionExpr());
 			trEdit.add(okButton);
 
 			//trEdit.pack();
@@ -324,7 +330,39 @@ public class Editor extends JPanel {
 			    }
 			});
         }
+        /** Obsluha nastaveni vyrazu v prechodu */
+        class SetTransitionExpr implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		selTrans.getTransition().setExpr(newExpr.getText());
+        		trEdit.dispose();
+        		trEdit = null;
+        		repaint();
+        	}
+        }
+        /** Obsluha pridani straze prechodu */
+        class NewGuard implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		Condition c = new Condition(src.getText(), (String)opList.getSelectedItem() ,dst.getText());
+        		selTrans.getTransition().addGuard(c);
+        		guards.addItem(c);
+        		repaint();
+        	}
+        }
+        /** Obsluha odstraneni straze prechodu */
+        class DropGuard implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		Condition c = (Condition) guards.getSelectedItem();
+        		if(c != null) {
+        			selTrans.getTransition().dropGuard(c);
+        			guards.removeItem(c);
+        		}
+        		repaint();
+        	}
+        }
+        
  
+        JTextField newVal; // input pole s hodnout k pridani
+        JComboBox values; // vyber hodnoty k odebrani
         /**
          * Editacni okno na mista.
          */
@@ -339,20 +377,23 @@ public class Editor extends JPanel {
         	plEdit.setLocationRelativeTo(null);
         	JLabel newVLab = new JLabel("Nová hodnota:");
         	plEdit.add(newVLab);
-        	JTextField newVal  = new JTextField("val", 5);
+        	newVal  = new JTextField("", 5);
         	plEdit.add(newVal);
         	JButton addButton = new JButton("Přidat hodnotu");
 			plEdit.add(addButton);
+			addButton.addActionListener(new NewValue());
 			plEdit.add(new JSeparator());
 
-			JComboBox values = new JComboBox(new String [] {"1", "5", "10", "11"});
+			values = new JComboBox( selPlace.getPlace().getListValues() );
         	plEdit.add(values);
         	JButton remButton = new JButton("Odebrat hodnotu");
+        	remButton.addActionListener(new DropValue());
 			plEdit.add(remButton);
 			plEdit.add(new JSeparator());
 
         	JButton okButton = new JButton("OK");
 			plEdit.add(okButton);
+			okButton.addActionListener(new PlaceEditEnd());
         	plEdit.setVisible(true);
 
         	plEdit.addWindowListener(new WindowAdapter() {
@@ -361,6 +402,37 @@ public class Editor extends JPanel {
 			    }
 			});
         }
+        /** Obsluha ukonceni editace mista */
+        class PlaceEditEnd implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		plEdit.dispose();
+        		plEdit = null;
+        		repaint();
+        	}
+        }
+        /** Obsluha pridani straze prechodu */
+        class NewValue implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+        			Integer v = Integer.parseInt(newVal.getText());
+        			selPlace.getPlace().addValue(v);
+        			values.addItem(v);
+        		} catch (NumberFormatException ex) {}
+        		repaint();
+        	}
+        }
+        /** Obsluha odstraneni straze prechodu */
+        class DropValue implements ActionListener {
+        	public void actionPerformed(ActionEvent e) {
+        		Integer v = (Integer)values.getSelectedItem();
+        		if(v != null) {
+        			selPlace.getPlace().removeValue(v);
+        		}
+        		values.removeItem(v);
+        		repaint();      			
+        	}
+        }
+
 
         /**
          * Pri tazeni mysi se posouva vybrana komponenta site.
