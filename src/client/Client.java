@@ -351,10 +351,8 @@ public class Client implements Runnable
 
 		// podle zaskrtnuti checkboxu se registruje/prihlasuje
 		if(register.isSelected()) {
-			System.out.println("A chci se regnout!");
 			protocol.sendRegister(logn.getText(), new String(pass.getPassword()));
 		} else {
-			System.out.println("A chci se jen prihlasit");
 			protocol.sendLogin(logn.getText(), new String(pass.getPassword()));
 		}
 
@@ -429,6 +427,9 @@ public class Client implements Runnable
 			if(!connectedFlag)
 				return;
 			int i = tabs.getSelectedIndex();
+			if(i == -1) {
+				return;
+			}
 			Editor editor = (Editor) tabs.getComponentAt(i);
 			protocol.sendDocument(editor.getNet().toXML());
 		}

@@ -147,6 +147,9 @@ public class Server implements Runnable
 		PetriNet pn = new PetriNet(doc);
 		// nacteni jmena
 		String name = pn.getName();
+		if(name.equals("")) {
+			name = "noname";
+		}
 		// nastaveni autora
 		pn.setAuthor(username);
 		// zjisteni a nastaveni verze
@@ -183,6 +186,9 @@ public class Server implements Runnable
 		for(File folder : path.listFiles()) {
 			Element net = netslist.addElement("net");
 			net.addAttribute("name", folder.getName());
+			if(!folder.isDirectory()) {
+				continue;
+			}
 			// a v nich soubory - verze
 			for(File file : folder.listFiles()) {
 				Element version = net.addElement("version");
