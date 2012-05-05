@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="loo" description="G" version="1" name="trojka">
+  <place id="5" x="362" y="206"/>
+  <place id="6" x="236" y="211"/>
+  <place id="7" x="278" y="89"/>
+  <simulations/>
+</petrinet>
