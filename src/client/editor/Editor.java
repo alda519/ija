@@ -37,26 +37,31 @@ import java.util.*;
 
 public class Editor extends JPanel {
 
+	/** Editovana sit */
     protected PetriNet petrinet;
-    
+
+    /** Mod editoru */
     protected Toolbar action = Toolbar.EDIT;
-    
+
     /** Minimalni a autualni rozmery plochy */
-    private final int MINWIDTH = 800;
-    private final int MINHEIGHT = 800;
-    private int width = MINWIDTH;
-    private int height = MINHEIGHT;
+    protected final int MINWIDTH = 800;
+    protected final int MINHEIGHT = 800;
+    protected int width = MINWIDTH;
+    protected int height = MINHEIGHT;
 
     /* seznamy mist a prechodu */
-    private List<GPlace> places = new ArrayList<GPlace>();
-    private List<GTransition> transitions = new ArrayList<GTransition>();
-    
-    private GPlace selPlace;
-    private GTransition selTrans;
-    
+    protected List<GPlace> places = new ArrayList<GPlace>();
+    protected List<GTransition> transitions = new ArrayList<GTransition>();
+
+    protected GPlace selPlace;
+    protected GTransition selTrans;
+
     /** Okna na upravu prechodu a mist. */
-    private JFrame trEdit;
-    private JFrame plEdit;
+    protected JFrame trEdit;
+    protected JFrame plEdit;
+
+    /** true pokud je povolena simulace, jinak false */
+    protected boolean simulationEnabled = true;
 
     /**
      * Jen nastaveni zpracovani udalosti a vytvoreni elipsicky
@@ -487,6 +492,7 @@ public class Editor extends JPanel {
 			netEditor.setVisible(true);
 		}
     }
+
     /**
      * Obsluha udalosti zmeny vlastnosti site. Potvrzeni zmeny.
      */
@@ -524,5 +530,4 @@ public class Editor extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-	
 }
