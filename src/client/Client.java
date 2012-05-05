@@ -381,6 +381,8 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			if(!connectedFlag)
+				return;
 			protocol.sendMeNetsList();
 			Document doc = protocol.getMessage();
 			Element root = doc.getRootElement();
@@ -424,6 +426,8 @@ public class Client implements Runnable
 	 */
 	class UploadNet implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			if(!connectedFlag)
+				return;
 			int i = tabs.getSelectedIndex();
 			Editor editor = (Editor) tabs.getComponentAt(i);
 			protocol.sendDocument(editor.getNet().toXML());
@@ -435,10 +439,14 @@ public class Client implements Runnable
 	 */
 	class DownloadNet implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			if(!connectedFlag)
+				return;
 			DefaultMutableTreeNode select = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+			// nic neni vybrano? konec
+			if(select == null)
+				return;
 			TreeNode path [] = select.getPath();
 			// pokud je vybrana verze, odesle se zadost a sit se zobrazi
-			System.out.println(path.length);
 			if(path.length == 3) {
 				DefaultMutableTreeNode net = (DefaultMutableTreeNode) path[1];
 				DefaultMutableTreeNode version = (DefaultMutableTreeNode) path[2];
