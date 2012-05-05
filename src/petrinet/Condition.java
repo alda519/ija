@@ -55,7 +55,7 @@ public class Condition {
 			// vyhledat druhou hodnotu
 			for(int i = 0; i < arcs.size(); ++i) {
 				Arc a = arcs.get(i);
-				if(a.getName().equals(src)) {
+				if(a.getName().equals(dst)) {
 					op2 = vector[i];
 				}
 			}
