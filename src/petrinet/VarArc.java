@@ -50,7 +50,7 @@ public class VarArc implements Arc {
 	public int getValue(int i) {
 		return this.place.getValue(i);
 	}
-	
+
 	public String getName() {
 		return name;
 	}

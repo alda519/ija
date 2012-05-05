@@ -33,22 +33,21 @@ public class Condition {
 	}
 
 	/**
-	 * Test splneni podminky.
+	 * Test splneni podminky. Pokud se podminka tyka neexistujiciho vstupu,
+	 * je vzdy povazovana za nesplnenou.
 	 * @return Vraci true, pokud je podminka splnena, jinak false.
 	 */
 	public boolean valid(int vector[], List<Arc> arcs) {
-		int op1, op2;
-		op1 = 0;
-		op2 = 0;
-		
+		Integer op1, op2;
+		op1 = null;
+		op2 = null;
 		// vyhledat hodnotu pro zdrojovy operand
 		for(int i = 0; i < arcs.size(); ++i) {
 			Arc a = arcs.get(i);
 			if(a.getName().equals(src)) {
-				op1 = a.getValue(i);
+				op1 = vector[i];
 			}
 		}
-		
 		// druha hodnota muze byt cislice nebo jmeno promenne zase
 		try {
 			op2 = Integer.parseInt(dst);
@@ -57,10 +56,13 @@ public class Condition {
 			for(int i = 0; i < arcs.size(); ++i) {
 				Arc a = arcs.get(i);
 				if(a.getName().equals(src)) {
-					op2 = a.getValue(i);
+					op2 = vector[i];
 				}
 			}
 		}
+		// pokud se podminka tyka neexistujiciho vstupu, neni splnena
+		if(op1 == null || op2 == null)
+			return false;
 		return this.operation.check(op1, op2);
 	}
 	
