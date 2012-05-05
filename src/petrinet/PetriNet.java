@@ -326,6 +326,17 @@ public class PetriNet {
     	this.version = v;
     }
 
+    /**
+     * Pokud udelat krok simulace.
+     */
+    public void stepSim() {
+    	for(Transition t : transitions) {
+    		if(t.tryTransition()) {
+    			System.out.println("Povedlo se");
+    			break;
+    		}
+    	}
+    }
 
     /**
      * Vygenerovani XML popisu cele site.
@@ -355,10 +366,10 @@ public class PetriNet {
     }
 
 
-    // zase testovani kod na nic!
+    // TODO: zase testovani kod na nic! smazat
     public static void main(String [] args) {
     	
-    	PetriNet net = PetriNetFactory(new File("examples/net1.net"));
+    	PetriNet net = PetriNetFactory(new File("examples/net1.xml"));
     	
     	Document doc = net.toXML();
     	System.out.print(doc.asXML());

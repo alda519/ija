@@ -87,7 +87,9 @@ public class Editor extends JPanel {
         editButton.addActionListener(new NetPropertyEditor());
         add(editButton);
 
-        add(new JButton("Simulovat krok"));
+        JButton stepButton = new JButton("Simulovat krok");
+        stepButton.addActionListener(new StepSim());
+        add(stepButton);
         add(new JButton("Simulovat úplně"));
 
         //setDoubleBuffered(true);
@@ -514,6 +516,17 @@ public class Editor extends JPanel {
 	    	JComboBox cb = (JComboBox)e.getSource();
 	        String name = (String)cb.getSelectedItem();
 	    	action = Toolbar.getAction(name);
+	    }
+    }
+
+    /**
+     * Obsluha zahajeni kroku simulace
+     */
+    class StepSim implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	petrinet.stepSim();
+	    	reloadNet();
+	    	repaint();
 	    }
     }
 
