@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileWriter;
@@ -220,7 +222,6 @@ public class Editor extends JPanel {
             }
             
             if(e.getButton() == MouseEvent.BUTTON3) {
-            	System.out.println("button #");
             	if(selTrans != null)
             		editTransition();
             	else if(selPlace != null)
@@ -278,7 +279,7 @@ public class Editor extends JPanel {
         	// pridavani.odebirani strazi
         	// nastaveni vyrazu
         	trEdit = new JFrame("Editace přechodu");
-        	trEdit.setSize(300, 300);
+        	trEdit.setSize(300, 320);
         	trEdit.setLayout(new GridLayout(0, 1));
         	//trEdit.setAlwaysOnTop(true);
         	trEdit.setLocationRelativeTo(null);
@@ -287,8 +288,8 @@ public class Editor extends JPanel {
 			JTextField expr = new JTextField("expr", 20);
 			trEdit.add(exprLab);
 			trEdit.add(expr); //
-			//trEdit.add(new JSeparator());
-			
+			trEdit.add(new JSeparator());
+
         	JLabel newGLab = new JLabel("Nová stráž:");
         	trEdit.add(newGLab);
         	JTextField src  = new JTextField("src", 5);
@@ -297,26 +298,31 @@ public class Editor extends JPanel {
         	trEdit.add(opList);
         	JTextField dst = new JTextField("dst", 5);
         	trEdit.add(dst);
-
 			JButton addButton = new JButton("Přidat stráž");
 			trEdit.add(addButton);
-			//trEdit.add(new JSeparator());
+			trEdit.add(new JSeparator());
 
         	JComboBox guards = new JComboBox(new String [] {"A", "B", "C", "D", "E", "F"});
         	//guards.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         	//guards.setLayoutOrientation(JList.VERTICAL);
-        	trEdit.add(new JScrollPane(guards));
+        	trEdit.add(guards);
 
 			JButton remButton = new JButton("Odebrat stráž");
 			trEdit.add(remButton);
-			//trEdit.add(new JSeparator());
-			
+			trEdit.add(new JSeparator());
+
 			JButton okButton = new JButton("OK");
 			trEdit.add(okButton);
-			
+
 			//trEdit.pack();
 			trEdit.setResizable(false);
 			trEdit.setVisible(true);
+
+			trEdit.addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent e) {
+					trEdit = null;
+			    }
+			});
         }
  
         /**
@@ -329,7 +335,7 @@ public class Editor extends JPanel {
         	// pridavani/odebirani cisel
         	plEdit = new JFrame("Úprava místa");
         	plEdit.setLayout(new GridLayout(0, 1));
-        	plEdit.setSize(300, 160);
+        	plEdit.setSize(300, 200);
         	plEdit.setLocationRelativeTo(null);
         	JLabel newVLab = new JLabel("Nová hodnota:");
         	plEdit.add(newVLab);
@@ -337,15 +343,23 @@ public class Editor extends JPanel {
         	plEdit.add(newVal);
         	JButton addButton = new JButton("Přidat hodnotu");
 			plEdit.add(addButton);
+			plEdit.add(new JSeparator());
 
 			JComboBox values = new JComboBox(new String [] {"1", "5", "10", "11"});
         	plEdit.add(values);
         	JButton remButton = new JButton("Odebrat hodnotu");
 			plEdit.add(remButton);
+			plEdit.add(new JSeparator());
 
         	JButton okButton = new JButton("OK");
 			plEdit.add(okButton);
         	plEdit.setVisible(true);
+
+        	plEdit.addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent e) {
+					plEdit = null;
+			    }
+			});
         }
 
         /**
