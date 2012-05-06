@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="loo" description="pocitadlo" version="2" name="counter">
+  <transition expr="x = a + 1" x="314" y="116">
+    <arc io="in" name="a" place="0"/>
+    <arc io="out" name="x" place="1"/>
+  </transition>
+  <transition expr="x = a+1" x="307" y="342">
+    <arc io="in" name="a" place="1"/>
+    <arc io="out" name="x" place="0"/>
+  </transition>
+  <place id="0" x="133" y="231">
+    <value>1</value>
+  </place>
+  <place id="1" x="541" y="232"/>
+  <simulations/>
+</petrinet>

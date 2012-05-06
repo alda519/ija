@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="loo" description="nic" version="1" name="testnet">
+  <transition expr="v = a" x="150" y="226">
+    <guard src="a" op="&gt;" dst="4"/>
+    <guard src="a" op="&lt;" dst="7"/>
+    <arc io="in" name="a" place="0"/>
+    <arc io="out" name="v" place="2"/>
+  </transition>
+  <transition expr="x = a - 1" x="405" y="227">
+    <guard src="a" op="!=" dst="8"/>
+    <arc io="in" name="a" place="1"/>
+    <arc io="out" name="x" place="2"/>
+  </transition>
+  <place id="0" x="183" y="56">
+    <value>1</value>
+    <value>4</value>
+    <value>5</value>
+    <value>7</value>
+  </place>
+  <place id="1" x="447" y="60">
+    <value>1</value>
+    <value>8</value>
+    <value>3</value>
+    <value>8</value>
+  </place>
+  <place id="2" x="305" y="381"/>
+  <simulations/>
+</petrinet>

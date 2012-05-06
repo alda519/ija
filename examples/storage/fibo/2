@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="loo" description="nic" version="2" name="fibo">
+  <transition expr="y = a + b" x="110" y="309">
+    <arc io="in" name="a" place="0"/>
+    <arc io="in" name="b" place="1"/>
+    <arc io="out" name="b" place="2"/>
+    <arc io="out" name="y" place="3"/>
+  </transition>
+  <transition expr="" x="256" y="34">
+    <arc io="in" name="x" place="2"/>
+    <arc io="out" name="x" place="0"/>
+  </transition>
+  <transition expr="" x="322" y="355">
+    <arc io="in" name="x" place="3"/>
+    <arc io="out" name="x" place="1"/>
+  </transition>
+  <place id="0" x="17" y="131">
+    <value>0</value>
+  </place>
+  <place id="1" x="113" y="147">
+    <value>1</value>
+  </place>
+  <place id="2" x="373" y="239"/>
+  <place id="3" x="181" y="451"/>
+  <simulations/>
+</petrinet>

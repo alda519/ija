@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<petrinet author="loo" description="fibonaccioho posloupnost" version="1" name="fibo">
+  <transition expr="x = a + b" x="169" y="195">
+    <arc io="in" name="b" place="0"/>
+    <arc io="in" name="a" place="4"/>
+    <arc io="out" name="b" place="4"/>
+    <arc io="out" name="x" place="0"/>
+    <arc io="out" name="x" place="5"/>
+  </transition>
+  <place id="0" x="366" y="48">
+    <value>1</value>
+  </place>
+  <place id="4" x="55" y="43">
+    <value>0</value>
+  </place>
+  <place id="5" x="7" y="431"/>
+  <simulations/>
+</petrinet>
