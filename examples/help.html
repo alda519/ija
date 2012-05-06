@@ -1,0 +1,61 @@
+<html>
+<body>
+<h1>IJA 2012 - Simulátor Petriho sítí </h1>
+
+<h2>Autoři</h2>
+
+<ul>
+    <li>xcupak04, Michal Cupák</li>
+    <li>xdujic01, Aleš Dujíček</li>
+</ul>
+
+<h2>Ovládání</h2>
+
+Vytvořit novou síť, načíst síť z disku nebo ji uložit je možné z nabídky <i>Soubor</i>. Nabídka <i>Server</i> umožňuje přihlášení uživatele na server, stažení uložené sítě ze serveru nebo nahrání sítě na server.
+
+<h3>Editace</h3>
+
+Otevřenou síť je možné modifikovat. Editační okno má několik módů:
+<ul>
+    <li>Editace - klikání myší nemá žádný účinek</li>
+    <li>Kreslení míst - kliknutím do prázdného místa plochy se vytvoří místo</li>
+    <li>Kreslení přechodů - kliknutím do prázdného místa plochy se vytvoří přechod</li>
+    <li>Editace hran - při tažení myší z místa na přechod nebo naopak dojde k vytvoření nebo zrušení hrany</li>
+    <li>Rušení objektů - při kliknutí myší na místo nebo přechod dojde k jeho smazání</li>
+</ul>
+
+<p>
+    Při stisku pravého tlačítka nad místem nebo přechodem dojde k otevření dialogového okna pro úravu daného objektu.
+</p>
+
+<p>
+    Do míst je možné přidávat nebo odebírat hodnoty.
+</p>
+
+<p>
+    U přechodů je možné nastavit operaci a přidávat a odebírat stráže.
+</p>
+
+
+
+
+<h3>Simulace</h3>
+
+<p>
+    Simulace se zahajuje tlačítky <i>Krok simulace</i> a <i>Simulace</i>. Simulovat je možné jen sítě stažené ze serveru. První tlačítko provede jeden krok simulace, druhé kroků 100.
+</p>
+
+<p>
+    Změny provedené v síti během simulace nejsou posílány serveru, tedy po každém kroku dojde k obnovení sítě ze serveru.
+</p>
+
+<p>
+    Při vyhodnocování výstupu přechodu se postupuje následovně. Výstup přes hranu s konstantou je tato konstanta. Výstup přes hranu s proměnnou, která má stejný identifikátor jako některá vstupní hrana, je hodnota, která byla pro přechod přijata přes takovou vstupní hranu. Hrany označené neznámým identifikátorem neprodukují výstup. Pokud má výstupní proměnná operace přechodu stejný identifikátor jako některá vstupní, je na výstupu výsledek operace.
+</p>
+
+<h2>Poděkování</h2>
+
+Děkujeme.
+
+</body>
+</html>

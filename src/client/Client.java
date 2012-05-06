@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.*;
@@ -471,8 +472,22 @@ public class Client implements Runnable
 	class ShowHelp implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFrame help = new JFrame("Nápověda");
-			help.setSize(500, 500);
+			help.setSize(600, 700);
 			help.setLocationRelativeTo(null);
+	        JEditorPane htmlPane = new JEditorPane();
+	        htmlPane.setEditable(false);
+	        String s = "help.html";
+	        URL helpURL = getClass().getResource(s);
+	    
+	        if (helpURL != null) {
+	            try { htmlPane.setPage(helpURL); } catch (IOException ex) {}
+	        } else { //null url
+	            htmlPane.setText("Nápověda nenalezena...");
+	        }
+	        JScrollPane htmlView =  new JScrollPane(htmlPane);
+	        htmlView.setMinimumSize(new Dimension(400, 400));
+	        help.setPreferredSize(new Dimension(400, 400));
+	        help.add(htmlView);
 			help.setVisible(true);
 		}
 	}

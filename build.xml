@@ -26,6 +26,8 @@
             classpath="lib/dom4j-1.6.1.jar"
             encoding="utf-8" />
 
+        <!-- napoveda jeste teda -->
+        <copy file="examples/help.html" todir="build/client/" />
 
         <!-- jar archiv klienta -->
         <jar destfile="dest-client/ija2012-client.jar" basedir="build/">
