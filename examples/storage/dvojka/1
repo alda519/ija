@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<petrinet author="loo" description="G" version="1" name="dvojka">
-  <place id="0" x="185" y="139"/>
-  <place id="1" x="299" y="166"/>
-  <simulations/>
-</petrinet>
