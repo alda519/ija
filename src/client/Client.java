@@ -16,7 +16,6 @@ import java.net.SocketAddress;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -127,7 +126,9 @@ public class Client implements Runnable
 
 		JMenu menuHelp = new JMenu("Nápověda");
 		menuHelp.setMnemonic('N');
-		//menuHelp.setEnabled(false);
+		JMenuItem helpItem = new JMenuItem("Nápověda");
+		helpItem.addActionListener(new ShowHelp());
+		menuHelp.add(helpItem);
 
 		menuBar.add(menuFile);
 		menuBar.add(menuServer);
@@ -470,6 +471,18 @@ public class Client implements Runnable
 				}
 				netlist.dispose();
 			}
+		}
+	}
+
+	/**
+	 * Obsluha zobrazeni napovedy
+	 */
+	class ShowHelp implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JFrame help = new JFrame("Nápověda");
+			help.setSize(500, 500);
+			help.setLocationRelativeTo(null);
+			help.setVisible(true);
 		}
 	}
 
