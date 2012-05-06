@@ -329,12 +329,13 @@ public class PetriNet {
     /**
      * Pokud udelat krok simulace.
      */
-    public void stepSim() {
+    public boolean stepSim() {
     	for(Transition t : transitions) {
     		if(t.tryTransition()) {
-    			break;
+    			return true;
     		}
     	}
+    	return false;
     }
 
     /**

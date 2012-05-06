@@ -29,8 +29,13 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+
+import client.Client;
 
 import petrinet.*;
 
@@ -41,6 +46,8 @@ public class Editor extends JPanel {
 
 	/** Editovana sit */
     protected PetriNet petrinet;
+    /** Klient */
+    protected Client client;
 
     /** Mod editoru */
     protected Toolbar action = Toolbar.EDIT;
@@ -63,13 +70,17 @@ public class Editor extends JPanel {
     protected JFrame plEdit;
 
     /** true pokud je povolena simulace, jinak false */
-    protected boolean simulationEnabled = true;
+    protected boolean simulationEnabled = false;
+    /** true pokud simulace bezi, jinak false */
+    protected boolean simulationRunning = false;
+    protected int simulationNumber;
 
     /**
      * Jen nastaveni zpracovani udalosti a vytvoreni elipsicky
      */
-    public Editor(PetriNet net) {
+    public Editor(PetriNet net, Client client) {
     	this.petrinet = net;
+    	this.client = client;
     	setPreferredSize(new Dimension(width, height));
 
         MovingAdapter ma = new MovingAdapter();
@@ -87,10 +98,12 @@ public class Editor extends JPanel {
         editButton.addActionListener(new NetPropertyEditor());
         add(editButton);
 
-        JButton stepButton = new JButton("Simulovat krok");
+        JButton stepButton = new JButton("Krok simulace");
         stepButton.addActionListener(new StepSim());
         add(stepButton);
-        add(new JButton("Simulovat úplně"));
+        JButton simButton = new JButton("Simulace");
+        simButton.addActionListener(new RunSim());
+        add(simButton);
 
         //setDoubleBuffered(true);
         reloadNet();
@@ -524,12 +537,71 @@ public class Editor extends JPanel {
      */
     class StepSim implements ActionListener {
 	    public void actionPerformed(ActionEvent e) {
-	    	petrinet.stepSim();
+	    	if(client.getProtocol() == null || ! simulationEnabled) {
+	    		return;
+	    	}
+	    	// pokud jeste simulace nebezi, zahajit ji
+	    	if(!simulationRunning) {
+	    		Document doc = DocumentHelper.createDocument();
+		    	Element ss = doc.addElement("sim-start");
+		    	ss.addAttribute("name", petrinet.getName());
+		    	ss.addAttribute("version", petrinet.getVersion());
+		    	client.getProtocol().sendDocument(doc);
+		    	doc = client.getProtocol().getMessage();
+		    	simulationNumber = Integer.parseInt(doc.getRootElement().attributeValue("number"));
+		    	simulationRunning = true;
+	    	}
+	    	Document doc = DocumentHelper.createDocument();
+	    	doc.addElement("sim-step").addAttribute("number", ""+simulationNumber);
+	    	client.getProtocol().sendDocument(doc);
+	    	doc = client.getProtocol().getMessage();
+	    	petrinet = new PetriNet(doc);
 	    	reloadNet();
 	    	repaint();
 	    }
     }
 
+    /**
+     * Obsluha zahajeni cele simulace
+     */
+    class RunSim implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	if(client.getProtocol() == null || ! simulationEnabled) {
+	    		return;
+	    	}
+	    	// pokud jeste simulace nebezi, zahajit ji
+	    	if(!simulationRunning) {
+	    		Document doc = DocumentHelper.createDocument();
+		    	Element ss = doc.addElement("sim-start");
+		    	ss.addAttribute("name", petrinet.getName());
+		    	ss.addAttribute("version", petrinet.getVersion());
+		    	client.getProtocol().sendDocument(doc);
+		    	doc = client.getProtocol().getMessage();
+		    	simulationNumber = Integer.parseInt(doc.getRootElement().attributeValue("number"));
+		    	simulationRunning = true;
+	    	}
+	    	Document doc = DocumentHelper.createDocument();
+	    	doc.addElement("sim-run").addAttribute("number", ""+simulationNumber);
+	    	client.getProtocol().sendDocument(doc);
+	    	doc = client.getProtocol().getMessage();
+	    	petrinet = new PetriNet(doc);
+	    	reloadNet();
+	    	repaint();
+	    }
+    }
+
+    /**
+     * Odeslani serveru, ze uz neni zajem o simulaci
+     */
+    public void endSimulation() {
+    	simulationEnabled = false;
+    	if(simulationRunning && client.getProtocol() != null) {
+	    	Document doc = DocumentHelper.createDocument();
+	    	doc.addElement("sim-end").addAttribute("number", ""+simulationNumber);
+	    	client.getProtocol().sendDocument(doc);
+    	}
+    }
+    
     /**
      * Ulozeni prave editovane site.
      * @param file Soubor k ulozeni
@@ -593,6 +665,13 @@ public class Editor extends JPanel {
     }
 
     /**
+     * Povoli simulaci editovane site
+     */
+    public void enableSimulation() {
+    	this.simulationEnabled = true;
+    }
+
+    /**
      * Obsluha udalosti zmeny vlastnosti site. Potvrzeni zmeny.
      */
     class NetPropertySet implements ActionListener {
@@ -601,32 +680,5 @@ public class Editor extends JPanel {
 			petrinet.setName(newName.getText());
 			netEditor.dispose();
 		}
-    }
-
-    // bordel na smazani pomalu
-    public static void main(String[] args) {
-
-    	// nacist sit z XML
-    	PetriNet net = PetriNet.PetriNetFactory(new File("examples/net1.xml"));
-    	// predat editoru
-    	
-        JFrame frame = new JFrame("Moving and Scaling");
-        // obsah se obali skrolovatkem a muze se kreslit vsude, pro jednoduchost asi vynechame zatim
-        JScrollPane scroo = new JScrollPane(new Editor(net));
-        JScrollPane scroo2 = new JScrollPane(new Editor(net));
-
-        JTabbedPane tabbiky = new JTabbedPane();
-        tabbiky.addTab("zalozka 1", scroo);
-        tabbiky.addTab("zalozka 2", scroo2);
-
-        frame.add(tabbiky);
-        
-        // jak na ty taby blbe?
-        
-        //frame.add(new MovingScaling());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }

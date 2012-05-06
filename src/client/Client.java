@@ -53,6 +53,7 @@ public class Client implements Runnable
 
 	/** Kazdy klient se bude dorozumivat se serverem skrz Protocol */
 	protected Protocol protocol;
+	protected Client client;
 
 	protected JFrame window;
 	protected JFrame dialog;
@@ -66,6 +67,7 @@ public class Client implements Runnable
 	 */
 	public Client()
 	{
+		this.client = this;
 		// vytvoreni hlavniho okna
 		window = new JFrame(APPLICATION_TITLE);
 		window.setSize(DEFAULT_WIDTH, DEFAULT_HEIGTH);
@@ -149,7 +151,7 @@ public class Client implements Runnable
 	class AddNetTab implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event) {
-			tabs.addTab("Síť " + c, new Editor(new PetriNet()));
+			tabs.addTab("Síť " + c, new Editor(new PetriNet(), client));
 			tabs.setSelectedIndex(tabs.getTabCount()-1);
 			c += 1;
 		}
@@ -184,11 +186,11 @@ public class Client implements Runnable
 				int i = tabs.getSelectedIndex();
 				// pokud neni zadny tab, vytvori se
 				if(i == -1) {
-					tabs.addTab(selectedFile.getName(), new Editor(PetriNet.PetriNetFactory(selectedFile)));
+					tabs.addTab(selectedFile.getName(), new Editor(PetriNet.PetriNetFactory(selectedFile), client));
 				} else {
 					// jinak se jen nastavi nova sit
 					tabs.remove(i);
-					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile)), selectedFile.getName(), i);
+					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile), client), selectedFile.getName(), i);
 					tabs.setSelectedIndex(i);
 				}
 		    }
@@ -255,6 +257,7 @@ public class Client implements Runnable
 			if(connectedFlag) {
 				try { protocol.close(); } catch (Exception e) {}
 				connectedFlag = false;
+				protocol = null;
 				connect.setText("Připojit");
 				return;
 			}
@@ -347,6 +350,7 @@ public class Client implements Runnable
 		} catch (IOException e){ 
 			System.err.println(e.getMessage());
 			JOptionPane.showMessageDialog(window, "Nepovedlo se připojit k serveru.", "Problém s připojením", JOptionPane.ERROR_MESSAGE);
+			protocol = null;
 			return;
 		}
 
@@ -367,7 +371,10 @@ public class Client implements Runnable
 			connectedFlag = true;
 		} else {
 			JOptionPane.showMessageDialog(window, "Přihlášení se nezdařilo.\n" + root.attributeValue("expl") , "Chyba", JOptionPane.ERROR_MESSAGE);
-			try { protocol.close(); } catch (Exception e) {}
+			try {
+				protocol.close();
+				protocol = null;
+			} catch (Exception e) {}
 		}
 	}
 
@@ -411,11 +418,6 @@ public class Client implements Runnable
 				netlist.add(okButton);
 				netlist.setResizable(false);
 				netlist.setVisible(true);
-				netlist.addWindowListener(new WindowAdapter() { // TODO toto pouzivat casteji
-					public void windowClosing(WindowEvent e) {
-						System.out.println("Zavira se!");
-				    }
-				});
 			}
 		}
 	}
@@ -461,12 +463,14 @@ public class Client implements Runnable
 				// tedka tu sit vzit a napchat do editoru
 				int i = tabs.getSelectedIndex();
 				// pokud neni zadny tab, vytvori se
+				Editor editor = new Editor(new PetriNet(doc), client);
+				editor.enableSimulation();
 				if(i == -1) {
-					tabs.addTab((String)net.getUserObject(), new Editor(new PetriNet(doc)));
+					tabs.addTab((String)net.getUserObject(), editor);
 				} else {
 					// jinak se jen nastavi nova sit
 					tabs.remove(i);
-					tabs.add(new Editor(new PetriNet(doc)), (String)net.getUserObject(), i);
+					tabs.add(editor, (String)net.getUserObject(), i);
 					tabs.setSelectedIndex(i);
 				}
 				netlist.dispose();
@@ -484,6 +488,11 @@ public class Client implements Runnable
 			help.setLocationRelativeTo(null);
 			help.setVisible(true);
 		}
+	}
+
+	/** Ziskani komunikacniho protokolu */
+	public Protocol getProtocol() {
+		return this.protocol;
 	}
 
 	/**

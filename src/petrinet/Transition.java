@@ -261,7 +261,7 @@ public class Transition {
 		p1.addValue(1);
 		p1.addValue(5);
 		p1.addValue(4);
-		p1.addValue(8);
+		p1.addValue(7);
 		p2.addValue(3);
 		p2.addValue(6);
 		p2.addValue(7);

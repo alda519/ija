@@ -16,6 +16,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.ArrayList;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -43,6 +45,9 @@ public class Server implements Runnable
 
 	/** Jmeno prave prihlaseneho uzivatele. Pokud je null, neni prihlaseny. */
 	protected String username;
+
+	/** Seznam aktivnich simulaci */
+	protected List<PetriNet> simulations = new ArrayList<PetriNet>();
 
 	/**
 	 * Vytvoreni nove instance Serveru pro obsluhu klienta.
@@ -86,13 +91,13 @@ public class Server implements Runnable
 				} else if(msgType.equals("getnet")) {
 					sendNet(root); // odeslat konretni verzi site
 				} else if(msgType.equals("sim-start")) {
-					// zahajeni simulace
+					simStart(root); // zahajeni simulace
 				} else if(msgType.equals("sim-step")) {
-					// krok simulace
+					simStep(root, 1);// krok simulace
 				} else if(msgType.equals("sim-run")) {
-					// cela simulace
+					simStep(root, 100);// cela simulace
 				} else if(msgType.equals("sim-end")) {
-					// ukonceni simulace
+					simEnd(root);// ukonceni simulace
 				} else if(msgType.equals("...")) {
 					// ???
 				} else if(msgType.equals("...")) {
@@ -147,8 +152,10 @@ public class Server implements Runnable
 		PetriNet pn = new PetriNet(doc);
 		// nacteni jmena
 		String name = pn.getName();
+		// pokud neni zadano jmeno, bude vymysleno
 		if(name.equals("")) {
 			name = "noname";
+			pn.setName("noname");
 		}
 		// nastaveni autora
 		pn.setAuthor(username);
@@ -209,6 +216,57 @@ public class Server implements Runnable
 		File file = new File("examples/storage/" + name + "/" + version);
 		PetriNet pn = PetriNet.PetriNetFactory(file);
 		protocol.sendDocument(pn.toXML());
+	}
+
+	/**
+	 * Obsluza zadosti klienta o simulaci
+	 */
+	public void simStart(Element root) {
+		// ziskat nazev a verzi;
+		String version = root.attributeValue("version");
+		String name = root.attributeValue("name");
+		File file = new File("examples/storage/" + name + "/" + version);
+		PetriNet pn = PetriNet.PetriNetFactory(file);
+		simulations.add(pn);
+		int num = simulations.size()-1;
+		// TODO odeslat klientovi potvrzeni s cislem poradne!
+		protocol.sendMessage("<newsim number=\"" + num + "\" />");
+	}
+
+	/**
+	 * Ukonceni simulace klietem
+	 * @param root element zpravy od klienta
+	 */
+	public void simEnd(Element root) {
+		int num = Integer.parseInt(root.attributeValue("number"));
+		// nahrazeni simulace null, kvuli posunu indexu nemohu jen odebrat
+		simulations.remove(num);
+		simulations.add(num, null);
+		// ale mohu od konce odebirat null
+		for(int i = simulations.size(); i > 0; --i) {
+			if(simulations.get(i-1) == null) {
+				simulations.remove(i-1);
+			}
+		}
+	}
+
+	/**
+	 * Odsimulovani `n` kroku klientem urcene simulace 
+	 * @param root element zpravy
+	 * @param n pocet pozadovanych kroku simulace
+	 */
+	public void simStep(Element root, int n) {
+		int num = Integer.parseInt(root.attributeValue("number"));
+		PetriNet pNet = simulations.get(num);
+		// kolik kroku chci krat se zkusi udelat prechod
+		for(int i = 0; i < n; ++i) {
+			// pokud se nepovede najit prechod, nepujde to ani priste
+			if(! pNet.stepSim() ) {
+				break;
+			}
+		}
+		// odeslani vysledneho stavu ke klientovi
+		protocol.sendDocument(pNet.toXML());
 	}
 
 	/**
