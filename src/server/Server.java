@@ -246,6 +246,8 @@ public class Server implements Runnable
 		for(int i = simulations.size(); i > 0; --i) {
 			if(simulations.get(i-1) == null) {
 				simulations.remove(i-1);
+			} else {
+				break;
 			}
 		}
 	}

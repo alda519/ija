@@ -184,15 +184,9 @@ public class Client implements Runnable
 			if (status == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				int i = tabs.getSelectedIndex();
-				// pokud neni zadny tab, vytvori se
-				if(i == -1) {
-					tabs.addTab(selectedFile.getName(), new Editor(PetriNet.PetriNetFactory(selectedFile), client));
-				} else {
-					// jinak se jen nastavi nova sit
-					tabs.remove(i);
-					tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile), client), selectedFile.getName(), i);
-					tabs.setSelectedIndex(i);
-				}
+				// vytvori se nova zalozka s otevrenou siti
+				tabs.add(new Editor(PetriNet.PetriNetFactory(selectedFile), client), selectedFile.getName(), i+1);
+				tabs.setSelectedIndex(i+1);
 		    }
 		}
 	}
@@ -225,6 +219,8 @@ public class Client implements Runnable
 		public void actionPerformed(ActionEvent event) {
 			int i = tabs.getSelectedIndex();
 			if(i != -1) {
+				Editor e = (Editor) tabs.getComponentAt(i);
+				e.endSimulation();
 				tabs.remove(i);
 			}
 		}
@@ -465,14 +461,8 @@ public class Client implements Runnable
 				// pokud neni zadny tab, vytvori se
 				Editor editor = new Editor(new PetriNet(doc), client);
 				editor.enableSimulation();
-				if(i == -1) {
-					tabs.addTab((String)net.getUserObject(), editor);
-				} else {
-					// jinak se jen nastavi nova sit
-					tabs.remove(i);
-					tabs.add(editor, (String)net.getUserObject(), i);
-					tabs.setSelectedIndex(i);
-				}
+				tabs.add(editor, (String)net.getUserObject(), i+1);
+				tabs.setSelectedIndex(i+1);
 				netlist.dispose();
 			}
 		}
