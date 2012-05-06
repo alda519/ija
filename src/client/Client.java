@@ -120,11 +120,8 @@ public class Client implements Runnable
 		JMenuItem serUp = new JMenuItem("Nahrát síť");
 		serUp.setMnemonic('N');
 		serUp.addActionListener(new UploadNet());
-		JMenuItem serSim = new JMenuItem("Simulovat síť");
-		serSim.setMnemonic('M');
 		menuServer.add(serDown);
 		menuServer.add(serUp);
-		menuServer.add(serSim);
 
 		JMenu menuHelp = new JMenu("Nápověda");
 		menuHelp.setMnemonic('N');

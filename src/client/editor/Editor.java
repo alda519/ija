@@ -42,6 +42,9 @@ import petrinet.*;
 import java.util.*;
 
 
+/**
+ * Editor site, jde o panel do zalozek klienta.
+ */
 public class Editor extends JPanel {
 
 	/** Editovana sit */

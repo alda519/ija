@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import petrinet.Transition;
 
+/**
+ * Trida reprezentujici graficky objekt - prechod.
+ */
 public class GTransition  extends Rectangle2D.Float {
 
 	protected final int WIDTH = 160;

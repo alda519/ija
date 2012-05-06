@@ -17,7 +17,6 @@ import petrinet.Place;
 
 /**
  * Graficka reprezentace mista.
- * Je to elipsa.
  */
 public class GPlace extends Ellipse2D.Float {
 

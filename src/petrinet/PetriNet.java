@@ -17,6 +17,9 @@ import java.io.File;
 import org.dom4j.*;
 import org.dom4j.io.*;
 
+/**
+ * Reprezentace Petriho site jako celku. Obsahuje seznamy vsech komponent.
+ */
 public class PetriNet {
 
 	/** Seznamy vsech mist a prechodu v siti */

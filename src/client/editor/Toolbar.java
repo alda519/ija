@@ -9,6 +9,9 @@
 
 package client.editor;
 
+/**
+ * Vycet Toolbar reprezentuje vybranou operaci v nabidce modu editoru.
+ */
 public enum Toolbar {
 
 	EDIT, ADDPLACE, ADDTRANSITION, ARCEDIT, DELETE;
