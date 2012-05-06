@@ -53,6 +53,11 @@ public class Users
     {
     	this.filename = filename;
         File input = new File(filename);
+        if(! input.exists()) {
+        	this.doc = DocumentHelper.createDocument();
+        	this.doc.addElement("users");
+        	return;
+        }
         try {
             SAXReader xmlReader = new SAXReader();
             this.doc = xmlReader.read(input);

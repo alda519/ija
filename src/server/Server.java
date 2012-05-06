@@ -281,7 +281,7 @@ public class Server implements Runnable
         System.setProperty("file.encoding", "UTF-8");
         // nacte se databaze uzivatelu
         Users users = new Users();
-        users.loadUsers("users.xml");
+        users.loadUsers("examples/users.xml");
 
         // vytvoreni serveroveho socketu na portu
         ServerSocket socket;
