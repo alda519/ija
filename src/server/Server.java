@@ -18,6 +18,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -221,6 +224,16 @@ public class Server implements Runnable
 	}
 
 	/**
+	 * Ziskani data a casu. Je potreba pro ukladani kdo kdy spoustel simulace
+	 * @return vrazi soucasny cas a datum v retezci
+	 */
+	private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+	/**
 	 * Obsluza zadosti klienta o simulaci
 	 */
 	public void simStart(Element root) {
@@ -229,7 +242,18 @@ public class Server implements Runnable
 		String name = root.attributeValue("name");
 		File file = new File("examples/storage/" + name + "/" + version);
 		PetriNet pn = PetriNet.PetriNetFactory(file);
+		pn.addSimulation(username + " : " + getDateTime());
 		simulations.add(pn);
+		// a zase ulozit na disk
+		try {
+	    	FileWriter out = new FileWriter(file);
+	        OutputFormat format = OutputFormat.createPrettyPrint();
+	        XMLWriter writer = new XMLWriter(out, format);
+	        writer.write(pn.toXML());
+	    	out.close();
+    	} catch (IOException e) {
+    		System.err.println("Nelze soubor ulozit.");
+    	}
 		int num = simulations.size()-1;
 		// TODO odeslat klientovi potvrzeni s cislem poradne!
 		protocol.sendMessage("<newsim number=\"" + num + "\" />");

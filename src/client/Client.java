@@ -105,7 +105,7 @@ public class Client implements Runnable
 
 		JMenuItem konecMenu = new JMenuItem("Konec");
 		konecMenu.setMnemonic('K');
-		konecMenu.addActionListener(new KonecTlacitko());
+		konecMenu.addActionListener(new CloseApplication());
 		menuFile.add(konecMenu);
 
 		JMenu menuServer = new JMenu("Server");
@@ -227,7 +227,7 @@ public class Client implements Runnable
 	/**
 	 * Reakce na tlacitko ukonceni.
 	 */
-	class KonecTlacitko implements ActionListener
+	class CloseApplication implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event	) {
 			window.dispose();
@@ -301,7 +301,7 @@ public class Client implements Runnable
 	}
 
 	/**
-	 * Uzavre okynko.
+	 * Uzavre dialog prihlaseni na server.
 	 */
 	class CloseConnectDialog implements ActionListener
 	{
@@ -320,13 +320,6 @@ public class Client implements Runnable
 		{
 			connect(addr.getText(), Integer.parseInt(port.getText()));
 		}
-	}
-
-	/**
-	 * Tak tohle pobezi v tom threadu. Asi teda smycka prijimajici zpravy.
-	 */
-	public void run()
-	{
 	}
 
 	/**
@@ -506,6 +499,9 @@ public class Client implements Runnable
 	public Protocol getProtocol() {
 		return this.protocol;
 	}
+
+	// musi byt kvuli rozhranni
+	public void run() {}
 
 	/**
 	 * Spousteci bod klienta.

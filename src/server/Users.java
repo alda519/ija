@@ -41,7 +41,6 @@ public class Users
      */
     public Users()
     {
-        // TODO: synchronizvana kolekce?
         users = new HashMap<String, String>();
     }
 

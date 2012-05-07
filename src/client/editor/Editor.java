@@ -10,6 +10,7 @@
 package client.editor;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -639,30 +640,43 @@ public class Editor extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			netEditor = new JFrame("Upravit síť");
 			netEditor.setLocationRelativeTo(null);
-			netEditor.setSize(300, 200);
-			netEditor.setLayout(new GridLayout(0, 1));
+			netEditor.setSize(300, 460);
+			netEditor.setLayout(new FlowLayout());
 
 			netEditor.add(new JLabel("Jméno sítě:"));
 			newName = new JTextField(petrinet.getName());
+			newName.setPreferredSize(new Dimension(290, 20));
 			netEditor.add(newName);
 
 			netEditor.add(new JLabel("Autor: "));
 			JTextField cnstAuth = new JTextField(petrinet.getAuthor());
 			cnstAuth.setEnabled(false);
+			cnstAuth.setPreferredSize(new Dimension(290, 20));
 			netEditor.add(cnstAuth);
 
 			netEditor.add(new JLabel("Popis sítě:"));
 			newDesc = new JTextField(petrinet.getDescription());
+			newDesc.setPreferredSize(new Dimension(290, 20));
 			netEditor.add(newDesc);
 
 			netEditor.add(new JLabel("Verze sítě:"));
 			JTextField cnstVers = new JTextField(petrinet.getVersion());
 			cnstVers.setEnabled(false);
+			cnstVers.setPreferredSize(new Dimension(290, 20));
 			netEditor.add(cnstVers);
+
+			netEditor.add(new JLabel("Seznam simulací:"));
+			JList sims = new JList(petrinet.getSimulations());
+			sims.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane scrollSims = new JScrollPane(sims);
+			scrollSims.setPreferredSize(new Dimension(290, 200));
+			netEditor.add(scrollSims);
 
 			JButton okButton = new JButton("OK");
 			okButton.addActionListener(new NetPropertySet());
+			okButton.setPreferredSize(new Dimension(290, 20));
 			netEditor.add(okButton);
+
 			netEditor.setVisible(true);
 		}
     }

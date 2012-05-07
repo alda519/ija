@@ -124,12 +124,23 @@ public class PetriNet {
     			}
     			this.transitions.add(newTransition);
     		}
+    		List<Element> sims = root.elements("simulation");
+    		for(Element sim : sims) {
+    			simulations.add(sim.getText());
+    		}
     		// vse ostatni se zahazuje
     	} catch (DocumentException e) {
     		System.err.println("Neplatny dokument se siti.");
     	}
     }
 
+    /**
+     * Prida do seznamu simulaci dalsi.
+     * @param sim jmeno uzivatele a datum
+     */
+    public void addSimulation(String sim) {
+    	simulations.add(sim);
+    }
 
     /**
      * Staticka metoda, ktera vraci novou sit vzniklou analzou retezce.
@@ -210,7 +221,7 @@ public class PetriNet {
     
     /** Ostraneni mista */
     public void removePlace(Place p) {
-    	// TODO: neni tak jednoduche, je treba oddelat vsechny hrany z/do tohoto mista
+    	// je treba zrusit vsechny hrany z/do tohoto mista
     	for(Transition t : this.transitions) {
     		for(Iterator <Arc> iter = t.getInArcs().iterator(); iter.hasNext(); ) {
     			Arc a = iter.next();
@@ -342,6 +353,16 @@ public class PetriNet {
     }
 
     /**
+     * Ziskani seznamu simulaci.
+     * @return vraci pole retezcu vsech simulaci site
+     */
+    public String[] getSimulations() {
+    	String newArray [] = new String [this.simulations.size()];
+    	this.simulations.toArray(newArray);
+    	return newArray;
+    }
+
+    /**
      * Vygenerovani XML popisu cele site.
      */
     public Document toXML() {
@@ -361,20 +382,9 @@ public class PetriNet {
 	    	p.toXML(root);
 	    }
 	    // a nakonec seznam simulaci
-	    Element simulations = root.addElement("simulations");
 	    for(String s : this.simulations) {
-	    	simulations.addElement("simulation").addText(s);
+	    	root.addElement("simulation").addText(s);
 	    }
 	    return doc;
-    }
-
-
-    // TODO: zase testovani kod na nic! smazat
-    public static void main(String [] args) {
-    	
-    	PetriNet net = PetriNetFactory(new File("examples/net1.xml"));
-    	
-    	Document doc = net.toXML();
-    	System.out.print(doc.asXML());
     }
 }
