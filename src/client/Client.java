@@ -395,15 +395,15 @@ public class Client implements Runnable
 				DefaultMutableTreeNode top = new DefaultMutableTreeNode("Seznam sítí");
 				for(Element net : (List<Element>) root.elements("net")) {
 					DefaultMutableTreeNode item = new DefaultMutableTreeNode(net.attributeValue("name"));
-					for(Element version : (List<Element>)net.elements("version")) {
+					List<Element> versions = net.elements("version");
+					for(int i = versions.size()-1; i >= 0; i--) {
+						Element version = versions.get(i);
 						item.add(new DefaultMutableTreeNode(version.attributeValue("name")));
 					}
 					top.add(item);
 				}
 				tree = new JTree(top);
 		        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-				//JList list = new JList(new String [] {"1", "2", "3" });
-
 				JScrollPane scpane = new JScrollPane(tree);
 				scpane.setPreferredSize(new Dimension(250, 250));
 				netlist.add(scpane);
@@ -444,6 +444,10 @@ public class Client implements Runnable
 			if(select == null)
 				return;
 			TreeNode path [] = select.getPath();
+			// pokud je vybrana jen sit, bere se posledni verze - v seznamu prvni
+			if(path.length == 2) {
+				path = ((DefaultMutableTreeNode)select.getFirstChild()).getPath(); 
+			}
 			// pokud je vybrana verze, odesle se zadost a sit se zobrazi
 			if(path.length == 3) {
 				DefaultMutableTreeNode net = (DefaultMutableTreeNode) path[1];
