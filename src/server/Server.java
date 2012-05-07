@@ -169,6 +169,8 @@ public class Server implements Runnable
 			version = "1";
 		}
 		pn.setVersion(version);
+		// vratit sit s doplnenou verzi atd. klientovi
+		protocol.sendDocument(pn.toXML());
 		// a konecne ulozeni
 		File file = new File("examples/storage/" + name + "/" + version);
 		try {

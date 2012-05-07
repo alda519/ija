@@ -429,6 +429,12 @@ public class Client implements Runnable
 			}
 			Editor editor = (Editor) tabs.getComponentAt(i);
 			protocol.sendDocument(editor.getNet().toXML());
+			// server posle sit zpet s doplnenymi informacemi potrebnymi k simulaci
+			Document doc = protocol.getMessage();
+			// stazenou sit zobrazit v editoru
+			Editor newEditor = new Editor(new PetriNet(doc), client);
+			newEditor.enableSimulation();
+			tabs.setComponentAt(i, newEditor);
 		}
 	}
 
@@ -458,7 +464,7 @@ public class Client implements Runnable
 				querry.addAttribute("version", (String)version.getUserObject());
 				protocol.sendDocument(doc);
 				doc = protocol.getMessage();
-				// tedka tu sit vzit a napchat do editoru
+				// stazenou sit zobrazit v editoru
 				int i = tabs.getSelectedIndex();
 				// pokud neni zadny tab, vytvori se
 				Editor editor = new Editor(new PetriNet(doc), client);
